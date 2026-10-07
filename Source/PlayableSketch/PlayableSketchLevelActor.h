@@ -9,6 +9,8 @@
 #include "Layout/PlayableSketchFloorPlan.h"
 #include "PlayableSketchLevelActor.generated.h"
 
+class UMaterialInterface;
+
 UCLASS()
 class PLAYABLESKETCH_API APlayableSketchLevelActor : public AActor
 {
@@ -76,12 +78,51 @@ public:
     UFUNCTION(CallInEditor, Category = "PlayableSketch|Tests")
     void TestFloorPath();
 
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Geometry", meta = (ClampMin = "1.0"))
+    float WallHeightCm = 300.0f;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Geometry", meta = (ClampMin = "1.0"))
+    float WallThicknessCm = 20.0f;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Geometry", meta = (ClampMin = "1.0"))
+    float DoorHeightCm = 220.0f;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Geometry")
+    bool bGenerateOnBeginPlay = true;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Materials")
+    TObjectPtr<UMaterialInterface> WallMaterial = nullptr;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Materials")
+    TObjectPtr<UMaterialInterface> DefaultFloorMaterial = nullptr;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Materials")
+    TObjectPtr<UMaterialInterface> HubFloorMaterial = nullptr;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Materials")
+    TObjectPtr<UMaterialInterface> StartFloorMaterial = nullptr;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Materials")
+    TObjectPtr<UMaterialInterface> GoalFloorMaterial = nullptr;
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Tests")
+    void TestWallSegments();
+
 
 protected:
     virtual void BeginPlay() override;
 
 public:
     virtual void Tick(float DeltaTime) override;
+
+    TArray<FVector2D> PreviewPathPoints;
+
+    void ApplyFloorMaterials();
+    void DrawFloorPathPreview();
+
+    #if WITH_EDITOR
+        virtual bool ShouldTickIfViewportsOnly() const override;
+    #endif
 
 private:
     FPlayableSketchFloorPlan GeneratedFloorPlan;

@@ -204,7 +204,10 @@ bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloo
         Component->SetupAttachment(Owner.GetRootComponent());
         Component->SetRelativeLocation(Location);
         Component->SetRelativeScale3D(Scale);
-        Component->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        Component->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+        Component->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+        Component->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
+        Component->SetGenerateOverlapEvents(false);
         Component->SetCanEverAffectNavigation(false);
 
         Component->ComponentTags.Add(GeneratedFloorTag);
