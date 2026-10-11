@@ -246,11 +246,4 @@ generation failures above remain part of the result and denominator.
 - The fixed benchmark covers ten edits on small, valid fixtures. It does not establish
   scalability or compensate for failed automatic-generation cases.
 
-## Files to include in your fork
 
-Include project source, configuration, required content, `PlayableSketch.uproject`,
-this README, `Scripts/`, `Experiments/manifest.json`, its SHA-256 lock,
-`Experiments/results/` and the preserved `Experiments/archive/`. Keep the existing `.gitignore`. Exclude generated
-`Binaries/`, `Intermediate/`, `Saved/`, `DerivedDataCache/`, `.vs/`, solution files and
-local working folders such as `work/` and `outputs/` when staging your changes.
-No commit or push is performed by the experiment scripts.
