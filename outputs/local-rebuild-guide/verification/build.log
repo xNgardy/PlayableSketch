@@ -1,0 +1,100 @@
+Log started at 10/11/2026 17:29:38 (2026-10-11T14:29:38Z)
+Resolved project argument C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check/PlayableSketch.uproject to C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\PlayableSketch.uproject
+No config file at C:\ProgramData\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+No config file at C:\Users\pisu\AppData\Local\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+No config file at C:\Users\pisu\Documents\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+Configuration will be read from:
+  C:\Users\pisu\AppData\Roaming\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+Reading configuration file from cache (C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\Intermediate\Build\XmlConfigCache.bin): C:\Users\pisu\AppData\Roaming\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+Reading configuration file from cache (C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\Intermediate\Build\XmlConfigCache.bin): C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\Saved\UnrealBuildTool\BuildConfiguration.xml
+Reading configuration file from cache (C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\Intermediate\Build\XmlConfigCache.bin): C:\Users\pisu\AppData\Local\UnrealEngine\Intermediate\Build\UnrealBuildTool.Env.BuildConfiguration.xml
+Log file: C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\build.log
+
+Setting temp directory to 'C:\Users\pisu\AppData\Local\Temp\UnrealBuildTool\9de8e132'
+    Registering build platform: UnrealBuildTool.AndroidPlatformFactory
+    Registering build platform: UnrealBuildTool.IOSPlatformFactory
+    Registering build platform: UnrealBuildTool.LinuxPlatformFactory
+    Registering build platform: UnrealBuildTool.MacPlatformFactory
+    Registering build platform: UnrealBuildTool.TVOSPlatformFactory
+    Registering build platform: UnrealBuildTool.WindowsPlatformFactory
+Found Windows 10 SDK root at C:\Program Files (x86)\Windows Kits\10 (1)
+Found Windows 10 SDK root at C:\Program Files (x86)\Windows Kits\10 (2)
+Found Windows 10 SDK version 10.0.22621.0 at C:\Program Files (x86)\Windows Kits\10
+Found Universal CRT version 10.0.22621.0 at C:\Program Files (x86)\Windows Kits\10
+Found Windows 10 SDK version 10.0.26100.0 at C:\Program Files (x86)\Windows Kits\10
+Found Universal CRT version 10.0.26100.0 at C:\Program Files (x86)\Windows Kits\10
+Win64 Installed SDK(s): MinVersion_Sdk=10.0.19041.0, MaxVersion_Sdk=10.9.99999.0, CurrentVersion_Sdk=10.0.22621.0, Version_AutoSdk=10.0.22621.0, CurrentVersion_AutoSdk=
+        Registering build platform: Win64 - buildable: True
+    Registering build platform: UnrealBuildTool.VisionOSPlatformFactory
+Command line: "C:\Program Files\Epic Games\UE_5.7\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" PlayableSketchEditor Win64 Development "-Project=C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check/PlayableSketch.uproject" -WaitMutex -NoHotReloadFromIDE -NoUBA "-Log=C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check/build.log"
+Old command line arguments:
+-NoUBALocal
+New command line arguments:
+
+Creating makefile for PlayableSketchEditor (command line arguments changed)
+Skipping C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\BuildRules\UE5Rules.dll: File is installed
+Skipping C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\BuildRules\UE5ProgramRules.dll: File is installed
+Found VisualStudio2022 installation: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools (Product=Microsoft.VisualStudio.Product.BuildTools, Version=17.14.37216.2)
+Found VisualStudio2022 installation: C:\Program Files\Microsoft Visual Studio\2022\Community (Product=Microsoft.VisualStudio.Product.Community, Version=17.14.37710.0)
+Found Visual Studio toolchain: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207 (Family=14.44.35207, FamilyRank=0, Version=14.44.35226, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=x64, Error=False, Redist=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Redist\MSVC\14.44.35112)
+Found Visual Studio toolchain: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130 (Family=14.38.33130, FamilyRank=1, Version=14.38.33145, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=x64, Error=False, Redist=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33130)
+Found Visual Studio toolchain: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207 (Family=14.44.35207, FamilyRank=0, Version=14.44.35229, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=x64, Error=False, Redist=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.44.35112)
+Building UnrealEditor - PlayableSketchEditor - Win64 - Development
+Compiler: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe
+Linker: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\link.exe
+Library Manager: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\link.exe
+Resource Compiler: C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\rc.exe
+Using EngineIncludeOrderVersion.Unreal5_4 for target PlayableSketchEditor.Target.cs
+UHT compiled-in object format Default
+UnrealHeaderTool needs to run because SavedTimestamp is older than HeaderFileTimestamp (C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\Source\PlayableSketch\PlayableSketchLevelActor.h) for module PlayableSketch
+Parsing headers for PlayableSketchEditor
+  Running Internal UnrealHeaderTool "C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\PlayableSketch.uproject" "C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\Intermediate\Build\Win64\PlayableSketchEditor\Development\PlayableSketchEditor.uhtmanifest" -WarningsAsErrors -installed
+Reading engine version from file: C:\Program Files\Epic Games\UE_5.7\Engine\Source\Runtime\Launch\Resources\Version.h
+Got engine version 5.7.4
+Step - Exports
+       Exporter Stats skipped
+       Exporter Json skipped
+       Running exporter CodeGen
+UHT processed PlayableSketchEditor in 1.3568044 seconds (0 files written)
+Found 5 shared PCH headers (listed in order of preference):
+	UnrealEd
+	Engine
+	Slate
+	CoreUObject
+	Core
+VerseVMBytecodeGenerator.Generate, generating CPP headers in: 'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode'
+	Writing out generated header file. Changed:False Path:'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode\VVMBytecodeOps.gen.h'
+	Writing out generated header file. Changed:False Path:'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode\VVMBytecodesAndCaptures.gen.h'
+	Writing out generated header file. Changed:False Path:'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode\VVMMakeCapturesFuncs.gen.h'
+	Writing out generated header file. Changed:False Path:'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode\VVMCaptureSwitch.gen.h'
+Deleting outdated item: C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\Binaries\Win64\UnrealEditor-PlayableSketch.pdb
+Deleting outdated item: C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\outputs\local-rebuild-guide\build-check\Intermediate\Build\Win64\x64\UnrealEditor\Development\PlayableSketch\UnrealEditor-PlayableSketch.lib
+Building PlayableSketchEditor...
+Using Visual Studio 2022 14.44.35229 toolchain (C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207) and Windows 10.0.22621.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+[Upgrade]
+[Upgrade] Using backward-compatible include order. The latest version of UE has changed the order of includes, which may require code changes. The current setting is:
+[Upgrade]     IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4
+[Upgrade] Suppress this message by setting 'IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_7;' in PlayableSketchEditor.Target.cs.
+[Upgrade] Alternatively you can set this to 'EngineIncludeOrderVersion.Latest' to always use the latest include order. This will potentially cause compile errors when integrating new versions of the engine.
+[Upgrade]
+[Adaptive Build] Excluded from PlayableSketch unity file: PlayableSketch.cpp, PlayableSketchLevelActor.cpp, PlayableSketchComponentRegistry.cpp, PlayableSketchFloorBuilder.cpp, PlayableSketchWallBuilder.cpp, PlayableSketchWallGeometry.cpp, PlayableSketchCorridorRouter.cpp, PlayableSketchCorridorRouting.cpp, PlayableSketchDoorGenerator.cpp, PlayableSketchLayoutGenerator.cpp, PlayableSketchPlacementSearch.cpp, PlayableSketchGridNavigation.cpp, PlayableSketchGraphAsset.cpp, PlayableSketchValidation.cpp, PlayableSketchAuthoringValidationTests.cpp, PlayableSketchCorridorCandidateTests.cpp, PlayableSketchCorridorRoutingTests.cpp, PlayableSketchDoorTests.cpp, PlayableSketchFloorPlanTests.cpp, PlayableSketchGridNavigationTests.cpp, PlayableSketchLocalRebuildTests.cpp, PlayableSketchPlacementSearchTests.cpp, PlayableSketchRectTests.cpp, PlayableSketchRoomPlacementTests.cpp
+Determining max actions to execute in parallel (6 physical cores, 12 logical cores)
+  Executing up to 6 processes, one per physical core
+  Requested 1.5 GB memory per action, 4.46 GB available: limiting max parallel actions to 2
+Using Parallel executor to run 8 action(s)
+------ Building 8 action(s) started ------
+[1/8] Compile [x64] PlayableSketchAuthoringValidationTests.cpp
+[2/8] Compile [x64] Module.PlayableSketch.cpp
+[3/8] Compile [x64] PlayableSketchFloorBuilder.cpp
+[4/8] Compile [x64] PlayableSketchLevelActor.cpp
+[5/8] Compile [x64] PlayableSketchLocalRebuildTests.cpp
+[6/8] Link [x64] UnrealEditor-PlayableSketch.lib
+   Creating library C:/Users/pisu/Documents/Unreal Projects/PlayableSketch/outputs/local-rebuild-guide/build-check/Intermediate/Build/Win64/x64/UnrealEditor/Development/PlayableSketch/UnrealEditor-PlayableSketch.lib and object C:/Users/pisu/Documents/Unreal Projects/PlayableSketch/outputs/local-rebuild-guide/build-check/Intermediate/Build/Win64/x64/UnrealEditor/Development/PlayableSketch/UnrealEditor-PlayableSketch.exp
+[7/8] Link [x64] UnrealEditor-PlayableSketch.dll
+[8/8] WriteMetadata PlayableSketchEditor.target
+
+Total time in Parallel executor: 7.80 seconds
+WriteFileIfChanged() wrote 0 changed files of 70 requested writes.
+
+Result: Succeeded
+Total execution time: 12.59 seconds

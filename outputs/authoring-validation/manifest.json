@@ -1,0 +1,58 @@
+[
+  {
+    "path": "Source/PlayableSketch/Public/Layout/PlayableSketchFloorPlan.h",
+    "action": "replace"
+  },
+  {
+    "path": "Source/PlayableSketch/Public/SpatialGraph/PlayableSketchRoom.h",
+    "action": "replace"
+  },
+  {
+    "path": "Source/PlayableSketch/Public/SpatialGraph/PlayableSketchConnection.h",
+    "action": "replace"
+  },
+  {
+    "path": "Source/PlayableSketch/Public/SpatialGraph/PlayableSketchGraphAsset.h",
+    "action": "replace"
+  },
+  {
+    "path": "Source/PlayableSketch/Private/SpatialGraph/PlayableSketchGraphAsset.cpp",
+    "action": "add"
+  },
+  {
+    "path": "Source/PlayableSketch/Private/Layout/PlayableSketchLayoutGenerator.cpp",
+    "action": "replace"
+  },
+  {
+    "path": "Source/PlayableSketch/Private/Layout/PlayableSketchDoorGenerator.cpp",
+    "action": "replace"
+  },
+  {
+    "path": "Source/PlayableSketch/PlayableSketch.Build.cs",
+    "action": "replace"
+  },
+  {
+    "path": "Source/PlayableSketch/Public/Validation/PlayableSketchValidation.h",
+    "action": "add"
+  },
+  {
+    "path": "Source/PlayableSketch/Private/Validation/PlayableSketchValidation.cpp",
+    "action": "add"
+  },
+  {
+    "path": "Source/PlayableSketch/PlayableSketchLevelActor.h",
+    "action": "replace"
+  },
+  {
+    "path": "Source/PlayableSketch/PlayableSketchLevelActor.cpp",
+    "action": "replace"
+  },
+  {
+    "path": "Source/PlayableSketch/Public/Validation/Tests/PlayableSketchAuthoringValidationTests.h",
+    "action": "add"
+  },
+  {
+    "path": "Source/PlayableSketch/Private/Validation/Tests/PlayableSketchAuthoringValidationTests.cpp",
+    "action": "add"
+  }
+]

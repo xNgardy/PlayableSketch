@@ -1,0 +1,126 @@
+﻿{
+	"devices": [
+		{
+			"deviceName": "DESKTOP-ASE63IP",
+			"instance": "F7C0729041F045BF048F7AB718251AE3",
+			"instanceName": "DESKTOP-ASE63IP-27240",
+			"platform": "WindowsEditor",
+			"oSVersion": "Windows 10 (22H2) [10.0.19045.6456] ",
+			"model": "Default",
+			"gPU": "NVIDIA GeForce RTX 3070",
+			"cPUModel": "AMD Ryzen 5 5600X 6-Core Processor             ",
+			"rAMInGB": 16,
+			"renderMode": "SM6",
+			"rHI": "",
+			"appInstanceLog": ""
+		}
+	],
+	"reportCreatedOn": "2026.10.11-14.55.31",
+	"succeeded": 3,
+	"succeededWithWarnings": 1,
+	"failed": 0,
+	"notRun": 0,
+	"inProcess": 0,
+	"totalDuration": 0.28660029172897339,
+	"comparisonExported": false,
+	"comparisonExportDirectory": "",
+	"tests": [
+		{
+			"testDisplayName": "Validation",
+			"fullTestPath": "PlayableSketch.Authoring.Validation",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"F7C0729041F045BF048F7AB718251AE3"
+			],
+			"duration": 0.035458996891975403,
+			"dateTime": "2026.10.11-14.55.30",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: [PS-V001] Severity=2 IDs=00000000000000000000000000000001 00000000000000000000000000000002  Position=X=3000.000 Y=300.000 Z=25.000 Message=Room interiors overlap. Move or resize a Room.",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.10.11-14.55.30"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: [PS-V001] Severity=2 IDs=00000000000000000000000000000001 00000000000000000000000000000003  Position=X=3000.000 Y=300.000 Z=25.000 Message=Room interiors overlap. Move or resize a Room.",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.10.11-14.55.30"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "EditorErrors: Insufficient writing permission to save /Engine/Maps/Entry",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.10.11-14.55.30"
+				}
+			],
+			"warnings": 3,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "LocalRebuild",
+			"fullTestPath": "PlayableSketch.Geometry.LocalRebuild",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"F7C0729041F045BF048F7AB718251AE3"
+			],
+			"duration": 0.2284281998872757,
+			"dateTime": "2026.10.11-14.55.30",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ActorLifecycle",
+			"fullTestPath": "PlayableSketch.Navigation.ActorLifecycle",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"F7C0729041F045BF048F7AB718251AE3"
+			],
+			"duration": 0.010558899492025375,
+			"dateTime": "2026.10.11-14.55.31",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "GridAndMetrics",
+			"fullTestPath": "PlayableSketch.Navigation.GridAndMetrics",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"F7C0729041F045BF048F7AB718251AE3"
+			],
+			"duration": 0.012154199182987213,
+			"dateTime": "2026.10.11-14.55.31",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		}
+	]
+}

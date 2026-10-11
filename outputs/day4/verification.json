@@ -1,0 +1,9 @@
+{
+  "editor_build": "Succeeded",
+  "automation_result": "Success",
+  "pass_count": 21,
+  "failures": 0,
+  "expected_warnings": "PS-V001 warnings come from the deliberate invalid-edit fixture.",
+  "engine_version": "5.7.4",
+  "verification_scope": "Isolated project compilation and Unreal Editor automation; real asset save/reopen and visible UI/PIE checks remain manual."
+}

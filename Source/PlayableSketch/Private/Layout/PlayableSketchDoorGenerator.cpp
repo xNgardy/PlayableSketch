@@ -1,8 +1,52 @@
 #include "Layout/PlayableSketchDoorGenerator.h"
 #include "SpatialGraph/PlayableSketchGraphValidator.h"
 
+namespace
+{
+    bool ApplyDoorOverride(
+        const FPlayableSketchPlacedRoom& Room,
+        const FPlayableSketchDoorOverride& Override,
+        int32 CornerMarginCm,
+        FPlayableSketchDoorEndpoint& Door,
+        FString& OutError)
+    {
+        if (!Override.bManual)
+        {
+            return true;
+        }
+
+        if (!FPlayableSketchDoorGenerator::CreateEndpoint(Room, Override.WallSide, Door.WidthCm, CornerMarginCm, Door, OutError))
+        {
+            return false;
+        }
+
+        const bool bHorizontal = Override.WallSide == EPlayableSketchWallSide::North || Override.WallSide == EPlayableSketchWallSide::South;
+        const double LengthCm = bHorizontal ? Room.Bounds.Max.X - Room.Bounds.Min.X : Room.Bounds.Max.Y - Room.Bounds.Min.Y;
+
+        if (!FMath::IsFinite(Override.OffsetCm)
+            || Override.OffsetCm - Door.WidthCm * 0.5 < CornerMarginCm
+            || Override.OffsetCm + Door.WidthCm * 0.5 > LengthCm - CornerMarginCm)
+        {
+            OutError = FString::Printf(TEXT("PS-V002: Manual Door offset does not fit Room %s."), *Room.RoomId.ToString());
+            return false;
+        }
+
+        if (bHorizontal)
+        {
+            Door.PositionCm.X = Room.Bounds.Min.X + Override.OffsetCm;
+        }
+        else
+        {
+            Door.PositionCm.Y = Room.Bounds.Min.Y + Override.OffsetCm;
+        }
+
+        return true;
+    }
+}
+
+
 bool FPlayableSketchDoorGenerator::CreateEndpoint(const FPlayableSketchPlacedRoom& Room, EPlayableSketchWallSide WallSide, double DoorWidthCm,
-        int32 CornerMarginCm, FPlayableSketchDoorEndpoint& OutDoor, FString& OutError)
+    int32 CornerMarginCm, FPlayableSketchDoorEndpoint& OutDoor, FString& OutError)
 {
     OutDoor = FPlayableSketchDoorEndpoint();
     OutError.Reset();
@@ -142,15 +186,21 @@ bool FPlayableSketchDoorGenerator::Generate(const FPlayableSketchGraph& Graph, F
         FPlayableSketchCorridor Corridor;
         Corridor.ConnectionId = Connection.ConnectionId;
 
-        if (!CreateEndpoint(*RoomA, SideA, Connection.DoorWidthCm, CornerMarginCm, Corridor.DoorA, OutError))
+        if (!CreateEndpoint(*RoomA, Connection.DoorASettings.bManual ? Connection.DoorASettings.WallSide : SideA, Connection.DoorWidthCm, CornerMarginCm, Corridor.DoorA, OutError))
         {
             OutError = FString::Printf(TEXT("Connection %s: %s"), *Connection.ConnectionId.ToString(), *OutError);
             return false;
         }
 
-        if (!CreateEndpoint(*RoomB, SideB, Connection.DoorWidthCm, CornerMarginCm, Corridor.DoorB, OutError))
+        if (!CreateEndpoint(*RoomB, Connection.DoorBSettings.bManual ? Connection.DoorBSettings.WallSide : SideB, Connection.DoorWidthCm, CornerMarginCm, Corridor.DoorB, OutError))
         {
             OutError = FString::Printf(TEXT("Connection %s: %s"), *Connection.ConnectionId.ToString(), *OutError);
+            return false;
+        }
+
+        if (!ApplyDoorOverride(*RoomA, Connection.DoorASettings, CornerMarginCm, Corridor.DoorA, OutError)
+            || !ApplyDoorOverride(*RoomB, Connection.DoorBSettings, CornerMarginCm, Corridor.DoorB, OutError))
+        {
             return false;
         }
 

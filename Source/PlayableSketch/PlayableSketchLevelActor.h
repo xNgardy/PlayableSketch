@@ -7,6 +7,9 @@
 #include "SpatialGraph/PlayableSketchGraph.h"
 #include "SpatialGraph/PlayableSketchGraphAsset.h"
 #include "Layout/PlayableSketchFloorPlan.h"
+#include "Validation/PlayableSketchValidation.h"
+#include "Geometry/PlayableSketchComponentRegistry.h"
+#include "Navigation/PlayableSketchNavigation.h"
 #include "PlayableSketchLevelActor.generated.h"
 
 class UMaterialInterface;
@@ -19,13 +22,13 @@ class PLAYABLESKETCH_API APlayableSketchLevelActor : public AActor
 public:
     APlayableSketchLevelActor();
 
-    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Graph")
+    UPROPERTY()
     TArray<FPlayableSketchRoom> Rooms;
 
-    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Graph")
+    UPROPERTY()
     TArray<FPlayableSketchConnection> Connections;
 
-    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Graph")
+    UPROPERTY()
     FPlayableSketchGraph Graph;
 
     UPROPERTY(EditAnywhere, Category = "PlayableSketch|Graph")
@@ -109,6 +112,82 @@ public:
     void TestWallSegments();
 
 
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Authoring")
+    void GenerateLayout();
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Authoring", meta = (DisplayName = "Rebuild Geometry (Full)"))
+    void RebuildGeometry();
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Authoring")
+    void RebuildLocalGeometry();
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Tests")
+    void TestRebuildEquivalence();
+
+    UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Rebuild")
+    FString LastRebuildReport;
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Validation")
+    void ValidateCurrentDesign();
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Tests")
+    void TestAuthoringValidation();
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Authoring")
+    bool bAutoRebuildGeometry = true;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Validation", meta = (ClampMin = "1.0"))
+    float MinCorridorWidthCm = 100.0f;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Validation", meta = (ClampMin = "1.0"))
+    float PawnRadiusCm = 40.0f;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Validation", meta = (ClampMin = "1.0"))
+    float PawnHeightCm = 180.0f;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Validation", meta = (ClampMin = "0.0"))
+    float ClearanceCm = 10.0f;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Navigation", meta = (ClampMin = "1", ClampMax = "1000000"))
+    int32 NavigationMaxCells = 250000;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Navigation")
+    bool bShowNavigationGrid = false;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Navigation")
+    bool bShowBlockedNavigationCells = false;
+
+    UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Navigation")
+    FString NavigationReport = TEXT("No current navigation analysis.");
+
+    UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Navigation")
+    FString NavigationExportPath;
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Navigation")
+    void AnalyzeNavigation();
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Navigation")
+    void ExportNavigationReport();
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Navigation")
+    void RunNavigationExamples();
+
+    UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Preview")
+    FString PreviewStatus = TEXT("Generate Layout to create the first saved placement.");
+
+    UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Preview")
+    bool bPreviewStale = false;
+
+    UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Validation")
+    TArray<FPlayableSketchValidationIssue> LastIssues;
+
+    virtual void OnConstruction(const FTransform& Transform) override;
+
+#if WITH_EDITOR
+    virtual void PostEditUndo() override;
+#endif
+
 protected:
     virtual void BeginPlay() override;
 
@@ -120,10 +199,42 @@ public:
     void ApplyFloorMaterials();
     void DrawFloorPathPreview();
 
-    #if WITH_EDITOR
-        virtual bool ShouldTickIfViewportsOnly() const override;
-    #endif
+#if WITH_EDITOR
+    virtual bool ShouldTickIfViewportsOnly() const override;
+#endif
 
 private:
+
     FPlayableSketchFloorPlan GeneratedFloorPlan;
+    FString LastAttemptSignature;
+    friend class FPlayableSketchLocalRebuildTests;
+    friend class FPlayableSketchNavigationIntegrationTests;
+    friend class FPlayableSketchExperimentRunner;
+    FString PublishedSignature;
+    FString PublishedGlobalSignature;
+    FPlayableSketchComponentRegistry ComponentRegistry;
+    FPlayableSketchUpdateStats LastUpdateStats;
+    double RebuildStartSeconds = 0.0;
+    double ValidationMs = 0.0;
+    double PlanMs = 0.0;
+    FPlayableSketchNavigationResult NavigationResult;
+    bool bNavigationCurrent = false;
+    FPlayableSketchNavigationSettings GetNavigationSettings() const;
+    void RefreshNavigation(const TArray<FPlayableSketchGeometryDescriptor>& Pieces);
+    void ResetNavigation();
+    void DrawNavigationGrid();
+
+    FString GetGlobalRebuildSignature() const;
+    void UpdateGeometry(bool bForceFull);
+
+    FString GetSourceSignature() const;
+    FPlayableSketchValidationSettings GetValidationSettings() const;
+    bool ReadSavedRooms(FPlayableSketchFloorPlan& OutPlan, FString& OutError) const;
+    bool BuildCandidate(FPlayableSketchFloorPlan& Plan, TArray<FPlayableSketchGeometryDescriptor>& Pieces);
+    void PublishCandidate(const FPlayableSketchFloorPlan& Plan, const TArray<FPlayableSketchGeometryDescriptor>& Pieces, bool bFull = true, const FString& Reason = TEXT("Explicit full rebuild"));
+    void InvalidatePreview(const TArray<FPlayableSketchValidationIssue>& Issues, const FString& Status);
+    void FailStage(const TCHAR* Code, const FString& Message);
+    void AnnotateIssues();
+    void LogIssues() const;
+    void DrawValidationIssues();
 };

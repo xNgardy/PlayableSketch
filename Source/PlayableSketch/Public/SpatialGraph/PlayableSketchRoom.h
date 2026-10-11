@@ -18,6 +18,13 @@ enum class EPlayableSketchRoomRole : uint8
     Goal
 };
 
+UENUM(BlueprintType)
+enum class EPlayableSketchPositionMode : uint8
+{
+    Auto,
+    Locked
+};
+
 USTRUCT(BlueprintType)
 struct PLAYABLESKETCH_API FPlayableSketchRoom
 {
@@ -39,6 +46,12 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Room")
     EPlayableSketchRoomRole RoomRole = EPlayableSketchRoomRole::None;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Placement")
+    EPlayableSketchPositionMode PositionMode = EPlayableSketchPositionMode::Auto;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Placement", meta = (EditCondition = "PositionMode == EPlayableSketchPositionMode::Locked"))
+    FVector2D PositionCm = FVector2D::ZeroVector;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dimensions", meta = (ClampMin = "1", UIMin = "100"))
     int32 WidthCm = 600;

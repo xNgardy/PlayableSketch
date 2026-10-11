@@ -71,6 +71,37 @@ bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph,
 
     FPlayableSketchFloorPlan Result;
 
+    TArray<FPlayableSketchPlacedRoom> Occupied;
+
+    for (const FPlayableSketchRoom& Room : Graph.Rooms)
+    {
+        if (Room.PositionMode != EPlayableSketchPositionMode::Locked)
+        {
+            continue;
+        }
+
+        FPlayableSketchPlacedRoom LockedRoom;
+        LockedRoom.RoomId = Room.RoomId;
+        LockedRoom.Bounds = FPlayableSketchRect(Room.PositionCm, Room.PositionCm + FVector2D(Room.WidthCm, Room.DepthCm));
+
+        if (!LockedRoom.Bounds.IsValid())
+        {
+            OutError = FString::Printf(TEXT("Invalid Locked position: Room %s."), *Room.RoomId.ToString());
+            return false;
+        }
+
+        for (const FPlayableSketchPlacedRoom& Existing : Occupied)
+        {
+            if (!LockedRoom.Bounds.HasRequiredGap(Existing.Bounds, RoomGapCm))
+            {
+                OutError = FString::Printf(TEXT("Locked Rooms overlap or violate RoomGapCm: %s and %s."), *Room.RoomId.ToString(), *Existing.RoomId.ToString());
+                return false;
+            }
+        }
+
+        Occupied.Add(LockedRoom);
+    }
+
     double NextX = 0.0;
 
     for (const FGuid& RoomId : Queue)
@@ -91,9 +122,19 @@ bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph,
 
         FPlayableSketchPlacedRoom PlacedRoom;
 
-        if (!FPlayableSketchPlacementSearch::FindPlacement(RoomId, SizeCm, PreferredMinCm, Result.Rooms, GridStepCm, RoomGapCm, MaxPlacementAttempts, PlacedRoom, OutError))
+        if (SourceRoom->PositionMode == EPlayableSketchPositionMode::Locked)
         {
-            return false;
+            PlacedRoom.RoomId = RoomId;
+            PlacedRoom.Bounds = FPlayableSketchRect(SourceRoom->PositionCm, SourceRoom->PositionCm + SizeCm);
+        }
+        else
+        {
+            if (!FPlayableSketchPlacementSearch::FindPlacement(RoomId, SizeCm, PreferredMinCm, Occupied, GridStepCm, RoomGapCm, MaxPlacementAttempts, PlacedRoom, OutError))
+            {
+                return false;
+            }
+
+            Occupied.Add(PlacedRoom);
         }
 
         Result.Rooms.Add(PlacedRoom);

@@ -1,0 +1,536 @@
+Log started at 10/07/2026 19:52:40 (2026-10-07T16:52:40Z)
+Resolved project argument C:/Users/pisu/Documents/Unreal Projects/PlayableSketch/work/day4/validation-project/PlayableSketch.uproject to C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\PlayableSketch.uproject
+No config file at C:\ProgramData\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+No config file at C:\Users\pisu\AppData\Local\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+No config file at C:\Users\pisu\Documents\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+Configuration will be read from:
+  C:\Users\pisu\AppData\Roaming\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+No project scope config file at C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Saved\UnrealBuildTool\BuildConfiguration.xml. Creating default.
+Reading configuration file from: C:\Users\pisu\AppData\Roaming\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+Reading configuration file from: C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Saved\UnrealBuildTool\BuildConfiguration.xml
+Reading configuration file from: C:\Users\pisu\AppData\Local\UnrealEngine\Intermediate\Build\UnrealBuildTool.Env.BuildConfiguration.xml
+Log file: C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\build.log
+
+Setting temp directory to 'C:\Users\pisu\AppData\Local\Temp\UnrealBuildTool\9de8e132'
+    Registering build platform: UnrealBuildTool.AndroidPlatformFactory
+    Registering build platform: UnrealBuildTool.IOSPlatformFactory
+    Registering build platform: UnrealBuildTool.LinuxPlatformFactory
+    Registering build platform: UnrealBuildTool.MacPlatformFactory
+    Registering build platform: UnrealBuildTool.TVOSPlatformFactory
+    Registering build platform: UnrealBuildTool.WindowsPlatformFactory
+Found Windows 10 SDK root at C:\Program Files (x86)\Windows Kits\10 (1)
+Found Windows 10 SDK root at C:\Program Files (x86)\Windows Kits\10 (2)
+Found Windows 10 SDK version 10.0.22621.0 at C:\Program Files (x86)\Windows Kits\10
+Found Universal CRT version 10.0.22621.0 at C:\Program Files (x86)\Windows Kits\10
+Found Windows 10 SDK version 10.0.26100.0 at C:\Program Files (x86)\Windows Kits\10
+Found Universal CRT version 10.0.26100.0 at C:\Program Files (x86)\Windows Kits\10
+Win64 Installed SDK(s): MinVersion_Sdk=10.0.19041.0, MaxVersion_Sdk=10.9.99999.0, CurrentVersion_Sdk=10.0.22621.0, Version_AutoSdk=10.0.22621.0, CurrentVersion_AutoSdk=
+        Registering build platform: Win64 - buildable: True
+    Registering build platform: UnrealBuildTool.VisionOSPlatformFactory
+Command line: "C:\Program Files\Epic Games\UE_5.7\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" PlayableSketchEditor Win64 Development "-Project=C:/Users/pisu/Documents/Unreal Projects/PlayableSketch/work/day4/validation-project/PlayableSketch.uproject" "-Log=C:/Users/pisu/Documents/Unreal Projects/PlayableSketch/work/day4/build.log" -WaitMutex -architecture=x64 -NoUBA
+Creating makefile for PlayableSketchEditor (no existing makefile)
+Skipping C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\BuildRules\UE5Rules.dll: File is installed
+Skipping C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\BuildRules\UE5ProgramRules.dll: File is installed
+Compiling C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Intermediate\Build\BuildRules\PlayableSketchModuleRules.dll: Assembly does not exist
+Found VisualStudio2022 installation: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools (Product=Microsoft.VisualStudio.Product.BuildTools, Version=17.14.37216.2)
+Found VisualStudio2022 installation: C:\Program Files\Microsoft Visual Studio\2022\Community (Product=Microsoft.VisualStudio.Product.Community, Version=17.14.37710.0)
+Found Visual Studio toolchain: C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207 (Family=14.44.35207, FamilyRank=0, Version=14.44.35226, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=x64, Error=False, Redist=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Redist\MSVC\14.44.35112)
+Found Visual Studio toolchain: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130 (Family=14.38.33130, FamilyRank=1, Version=14.38.33145, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=x64, Error=False, Redist=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.38.33130)
+Found Visual Studio toolchain: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207 (Family=14.44.35207, FamilyRank=0, Version=14.44.35229, HostArchitecture=x64, ReleaseChannel=Latest, Architecture=x64, Error=False, Redist=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Redist\MSVC\14.44.35112)
+Building UnrealEditor - PlayableSketchEditor - Win64 - Development
+Compiler: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe
+Linker: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\link.exe
+Library Manager: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\link.exe
+Resource Compiler: C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\rc.exe
+Using EngineIncludeOrderVersion.Unreal5_4 for target PlayableSketchEditor.Target.cs
+UHT compiled-in object format Default
+Parsing headers for PlayableSketchEditor
+  Running Internal UnrealHeaderTool "C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\PlayableSketch.uproject" "C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Intermediate\Build\Win64\PlayableSketchEditor\Development\PlayableSketchEditor.uhtmanifest" -WarningsAsErrors -installed
+Reading engine version from file: C:\Program Files\Epic Games\UE_5.7\Engine\Source\Runtime\Launch\Resources\Version.h
+Got engine version 5.7.4
+Step - Exports
+       Exporter Stats skipped
+       Exporter Json skipped
+       Running exporter CodeGen
+UHT processed PlayableSketchEditor in 1.2337035 seconds (16 files written)
+Found 5 shared PCH headers (listed in order of preference):
+	UnrealEd
+	Engine
+	Slate
+	CoreUObject
+	Core
+VerseVMBytecodeGenerator.Generate, generating CPP headers in: 'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode'
+	Writing out generated header file. Changed:False Path:'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode\VVMBytecodeOps.gen.h'
+	Writing out generated header file. Changed:False Path:'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode\VVMBytecodesAndCaptures.gen.h'
+	Writing out generated header file. Changed:False Path:'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode\VVMMakeCapturesFuncs.gen.h'
+	Writing out generated header file. Changed:False Path:'C:\Program Files\Epic Games\UE_5.7\Engine\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\VerseVMBytecode\VVMCaptureSwitch.gen.h'
+Checking for live coding mutex: Global\LiveCoding_C++Program Files+Epic Games+UE_5.7+Engine+Binaries+Win64+UnrealEditor.exe
+Building PlayableSketchEditor...
+Using Visual Studio 2022 14.44.35229 toolchain (C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207) and Windows 10.0.22621.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+[Upgrade]
+[Upgrade] Using backward-compatible include order. The latest version of UE has changed the order of includes, which may require code changes. The current setting is:
+[Upgrade]     IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4
+[Upgrade] Suppress this message by setting 'IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_7;' in PlayableSketchEditor.Target.cs.
+[Upgrade] Alternatively you can set this to 'EngineIncludeOrderVersion.Latest' to always use the latest include order. This will potentially cause compile errors when integrating new versions of the engine.
+[Upgrade]
+Determining max actions to execute in parallel (6 physical cores, 12 logical cores)
+  Executing up to 6 processes, one per physical core
+  Requested 1.5 GB memory per action, 7.65 GB available: limiting max parallel actions to 5
+Using Parallel executor to run 29 action(s)
+------ Building 29 action(s) started ------
+[1/29] Resource Default.rc2
+[2/29] Compile [x64] SharedPCH.UnrealEd.Project.ValApi.ValExpApi.Cpp20.InclOrderUnreal5_4.cpp
+[3/29] Compile [x64] PerModuleInline.gen.cpp
+[4/29] Compile [x64] PlayableSketch.cpp
+[5/29] Compile [x64] PlayableSketchCorridorRouter.cpp
+[6/29] Compile [x64] PlayableSketchCorridorCandidateTests.cpp
+[7/29] Compile [x64] Module.PlayableSketch.gen.cpp
+[8/29] Compile [x64] PlayableSketchDay4Tests.cpp
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(68,9): error C3878: syntax error: unexpected token 'else' following 'statement-seq'
+        else
+        ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(68,9): note: missing one of:  '}' ?
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(71,13): note: parsing resumes here
+            UE_LOG(LogTemp, Error, TEXT("FAIL: %s"), Name);
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(71,13): error C2059: syntax error: 'while'
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(71,13): error C2065: 'Name': undeclared identifier
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(72,9): error C2059: syntax error: '}'
+        }
+        ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(72,9): error C2143: syntax error: missing ';' before '}'
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(73,5): error C2143: syntax error: missing ';' before '}'
+    };
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(73,5): error C2059: syntax error: '}'
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(77,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    MakeFixture(Graph, Plan);
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(77,16): error C2440: 'initializing': cannot convert from 'initializer list' to 'int'
+    MakeFixture(Graph, Plan);
+               ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(77,16): note: The initializer contains too many elements
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,10): error C2440: 'initializing': cannot convert from 'initializer list' to 'int'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+         ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,10): note: The initializer contains too many elements
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(84,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    Check(!FPlayableSketchValidation::HasErrors(FPlayableSketchValidation::ValidatePlan(Graph, Plan, Pieces, Settings)), TEXT("Valid fixture passes independent validation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(84,5): error C2374: 'Check': redefinition; multiple initialization
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(84,5): error C2086: 'int Check': redefinition
+    Check(!FPlayableSketchValidation::HasErrors(FPlayableSketchValidation::ValidatePlan(Graph, Plan, Pieces, Settings)), TEXT("Valid fixture passes independent validation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(87,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadPlan.Rooms[1].Bounds = FPlayableSketchRect(FVector2D(400.0, 0.0), FVector2D(1000.0, 600.0));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(87,12): error C3484: syntax error: expected '->' before the return type
+    BadPlan.Rooms[1].Bounds = FPlayableSketchRect(FVector2D(400.0, 0.0), FVector2D(1000.0, 600.0));
+           ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(87,13): error C3613: missing return type after '->' ('int' assumed)
+    BadPlan.Rooms[1].Bounds = FPlayableSketchRect(FVector2D(400.0, 0.0), FVector2D(1000.0, 600.0));
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(87,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPlan.Rooms[1].Bounds = FPlayableSketchRect(FVector2D(400.0, 0.0), FVector2D(1000.0, 600.0));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(87,5): error C2371: 'BadPlan': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(86,30): note: see declaration of 'BadPlan'
+    FPlayableSketchFloorPlan BadPlan = Plan;
+                             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(87,13): error C2146: syntax error: missing ';' before identifier 'Rooms'
+    BadPlan.Rooms[1].Bounds = FPlayableSketchRect(FVector2D(400.0, 0.0), FVector2D(1000.0, 600.0));
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(88,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, BadPlan, Pieces, Settings), TEXT("PS-V001"), Graph.Rooms[1].RoomId), TEXT("PS-V001 overlap with ID, position, severity and message"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(88,5): error C2374: 'Check': redefinition; multiple initialization
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(88,5): error C2086: 'int Check': redefinition
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, BadPlan, Pieces, Settings), TEXT("PS-V001"), Graph.Rooms[1].RoomId), TEXT("PS-V001 overlap with ID, position, severity and message"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(90,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPlan = Plan;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(90,5): error C2371: 'BadPlan': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(86,30): note: see declaration of 'BadPlan'
+    FPlayableSketchFloorPlan BadPlan = Plan;
+                             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(91,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadPlan.Corridors[0].DoorA.PositionCm.X -= 10.0;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(91,12): error C3484: syntax error: expected '->' before the return type
+    BadPlan.Corridors[0].DoorA.PositionCm.X -= 10.0;
+           ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(91,13): error C3613: missing return type after '->' ('int' assumed)
+    BadPlan.Corridors[0].DoorA.PositionCm.X -= 10.0;
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(91,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPlan.Corridors[0].DoorA.PositionCm.X -= 10.0;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(91,5): error C2371: 'BadPlan': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(86,30): note: see declaration of 'BadPlan'
+    FPlayableSketchFloorPlan BadPlan = Plan;
+                             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(91,13): error C2146: syntax error: missing ';' before identifier 'Corridors'
+    BadPlan.Corridors[0].DoorA.PositionCm.X -= 10.0;
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(92,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, BadPlan, Pieces, Settings), TEXT("PS-V002"), Graph.Connections[0].ConnectionId), TEXT("PS-V002 invalid Door with metadata"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(92,5): error C2374: 'Check': redefinition; multiple initialization
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(92,5): error C2086: 'int Check': redefinition
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, BadPlan, Pieces, Settings), TEXT("PS-V002"), Graph.Connections[0].ConnectionId), TEXT("PS-V002 invalid Door with metadata"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(95,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadGraph.Connections[0].CorridorWidthCm = 60;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(95,13): error C3484: syntax error: expected '->' before the return type
+    BadGraph.Connections[0].CorridorWidthCm = 60;
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(95,14): error C3613: missing return type after '->' ('int' assumed)
+    BadGraph.Connections[0].CorridorWidthCm = 60;
+             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(95,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadGraph.Connections[0].CorridorWidthCm = 60;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(95,5): error C2371: 'BadGraph': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(94,26): note: see declaration of 'BadGraph'
+    FPlayableSketchGraph BadGraph = Graph;
+                         ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(95,14): error C2146: syntax error: missing ';' before identifier 'Connections'
+    BadGraph.Connections[0].CorridorWidthCm = 60;
+             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(96,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(BadGraph, Plan, Pieces, Settings), TEXT("PS-V003"), Graph.Connections[0].ConnectionId), TEXT("PS-V003 narrow Corridor with metadata"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(96,5): error C2374: 'Check': redefinition; multiple initialization
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(96,5): error C2086: 'int Check': redefinition
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(BadGraph, Plan, Pieces, Settings), TEXT("PS-V003"), Graph.Connections[0].ConnectionId), TEXT("PS-V003 narrow Corridor with metadata"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(98,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPlan = Plan;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(98,5): error C2371: 'BadPlan': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(86,30): note: see declaration of 'BadPlan'
+    FPlayableSketchFloorPlan BadPlan = Plan;
+                             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(99,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadPlan.Corridors[0].Footprints.Reset();
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(99,12): error C3484: syntax error: expected '->' before the return type
+    BadPlan.Corridors[0].Footprints.Reset();
+           ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(99,13): error C3613: missing return type after '->' ('int' assumed)
+    BadPlan.Corridors[0].Footprints.Reset();
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(99,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPlan.Corridors[0].Footprints.Reset();
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(99,5): error C2371: 'BadPlan': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(86,30): note: see declaration of 'BadPlan'
+    FPlayableSketchFloorPlan BadPlan = Plan;
+                             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(99,13): error C2146: syntax error: missing ';' before identifier 'Corridors'
+    BadPlan.Corridors[0].Footprints.Reset();
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(100,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(600.0, 200.0), FVector2D(700.0, 400.0)));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(100,12): error C3484: syntax error: expected '->' before the return type
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(600.0, 200.0), FVector2D(700.0, 400.0)));
+           ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(100,13): error C3613: missing return type after '->' ('int' assumed)
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(600.0, 200.0), FVector2D(700.0, 400.0)));
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(100,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(600.0, 200.0), FVector2D(700.0, 400.0)));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(100,5): error C2371: 'BadPlan': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(86,30): note: see declaration of 'BadPlan'
+    FPlayableSketchFloorPlan BadPlan = Plan;
+                             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(100,13): error C2146: syntax error: missing ';' before identifier 'Corridors'
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(600.0, 200.0), FVector2D(700.0, 400.0)));
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(101,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(900.0, 200.0), FVector2D(1000.0, 400.0)));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(101,12): error C3484: syntax error: expected '->' before the return type
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(900.0, 200.0), FVector2D(1000.0, 400.0)));
+           ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(101,13): error C3613: missing return type after '->' ('int' assumed)
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(900.0, 200.0), FVector2D(1000.0, 400.0)));
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(101,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(900.0, 200.0), FVector2D(1000.0, 400.0)));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(101,5): error C2371: 'BadPlan': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(86,30): note: see declaration of 'BadPlan'
+    FPlayableSketchFloorPlan BadPlan = Plan;
+                             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(101,13): error C2146: syntax error: missing ';' before identifier 'Corridors'
+    BadPlan.Corridors[0].Footprints.Add(FPlayableSketchRect(FVector2D(900.0, 200.0), FVector2D(1000.0, 400.0)));
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(102,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, BadPlan, Pieces, Settings), TEXT("PS-V004"), Graph.Rooms[1].RoomId), TEXT("PS-V004 physical disconnection with metadata"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(102,5): error C2374: 'Check': redefinition; multiple initialization
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(102,5): error C2086: 'int Check': redefinition
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, BadPlan, Pieces, Settings), TEXT("PS-V004"), Graph.Rooms[1].RoomId), TEXT("PS-V004 physical disconnection with metadata"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(106,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BlockingWall.SourceId = Graph.Rooms[0].RoomId;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(106,17): error C3484: syntax error: expected '->' before the return type
+    BlockingWall.SourceId = Graph.Rooms[0].RoomId;
+                ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(106,18): error C3613: missing return type after '->' ('int' assumed)
+    BlockingWall.SourceId = Graph.Rooms[0].RoomId;
+                 ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(106,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BlockingWall.SourceId = Graph.Rooms[0].RoomId;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(106,5): error C2371: 'BlockingWall': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(105,39): note: see declaration of 'BlockingWall'
+    FPlayableSketchGeometryDescriptor BlockingWall;
+                                      ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(106,18): error C2146: syntax error: missing ';' before identifier 'SourceId'
+    BlockingWall.SourceId = Graph.Rooms[0].RoomId;
+                 ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(107,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BlockingWall.bRoom = true;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(107,17): error C3484: syntax error: expected '->' before the return type
+    BlockingWall.bRoom = true;
+                ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(107,18): error C3613: missing return type after '->' ('int' assumed)
+    BlockingWall.bRoom = true;
+                 ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(107,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BlockingWall.bRoom = true;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(107,5): error C2371: 'BlockingWall': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(105,39): note: see declaration of 'BlockingWall'
+    FPlayableSketchGeometryDescriptor BlockingWall;
+                                      ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(107,18): error C2146: syntax error: missing ';' before identifier 'bRoom'
+    BlockingWall.bRoom = true;
+                 ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(108,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BlockingWall.CenterCm = FVector(610.0, 300.0, 100.0);
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(108,17): error C3484: syntax error: expected '->' before the return type
+    BlockingWall.CenterCm = FVector(610.0, 300.0, 100.0);
+                ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(108,18): error C3613: missing return type after '->' ('int' assumed)
+    BlockingWall.CenterCm = FVector(610.0, 300.0, 100.0);
+                 ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(108,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BlockingWall.CenterCm = FVector(610.0, 300.0, 100.0);
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(108,5): error C2371: 'BlockingWall': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(105,39): note: see declaration of 'BlockingWall'
+    FPlayableSketchGeometryDescriptor BlockingWall;
+                                      ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(108,18): error C2146: syntax error: missing ';' before identifier 'CenterCm'
+    BlockingWall.CenterCm = FVector(610.0, 300.0, 100.0);
+                 ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(109,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BlockingWall.SizeCm = FVector(20.0, 150.0, 200.0);
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(109,17): error C3484: syntax error: expected '->' before the return type
+    BlockingWall.SizeCm = FVector(20.0, 150.0, 200.0);
+                ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(109,18): error C3613: missing return type after '->' ('int' assumed)
+    BlockingWall.SizeCm = FVector(20.0, 150.0, 200.0);
+                 ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(109,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BlockingWall.SizeCm = FVector(20.0, 150.0, 200.0);
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(109,5): error C2371: 'BlockingWall': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(105,39): note: see declaration of 'BlockingWall'
+    FPlayableSketchGeometryDescriptor BlockingWall;
+                                      ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(109,18): error C2146: syntax error: missing ';' before identifier 'SizeCm'
+    BlockingWall.SizeCm = FVector(20.0, 150.0, 200.0);
+                 ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(110,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadPieces.Add(BlockingWall);
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(110,14): error C3484: syntax error: expected '->' before the return type
+    BadPieces.Add(BlockingWall);
+             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(110,15): error C3613: missing return type after '->' ('int' assumed)
+    BadPieces.Add(BlockingWall);
+              ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(110,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPieces.Add(BlockingWall);
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(110,5): error C2371: 'BadPieces': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(104,47): note: see declaration of 'BadPieces'
+    TArray<FPlayableSketchGeometryDescriptor> BadPieces = Pieces;
+                                              ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(110,15): error C2146: syntax error: missing ';' before identifier 'Add'
+    BadPieces.Add(BlockingWall);
+              ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(111,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, Plan, BadPieces, Settings), TEXT("PS-V005"), Graph.Connections[0].ConnectionId), TEXT("PS-V005 Door blocked by Wall with metadata"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(111,5): error C2374: 'Check': redefinition; multiple initialization
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(111,5): error C2086: 'int Check': redefinition
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, Plan, BadPieces, Settings), TEXT("PS-V005"), Graph.Connections[0].ConnectionId), TEXT("PS-V005 Door blocked by Wall with metadata"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(113,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPieces = Pieces;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(113,5): error C2371: 'BadPieces': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(104,47): note: see declaration of 'BadPieces'
+    TArray<FPlayableSketchGeometryDescriptor> BadPieces = Pieces;
+                                              ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(114,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadPieces.RemoveAll([](const FPlayableSketchGeometryDescriptor& Piece)
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(114,14): error C3484: syntax error: expected '->' before the return type
+    BadPieces.RemoveAll([](const FPlayableSketchGeometryDescriptor& Piece)
+             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(114,15): error C3613: missing return type after '->' ('int' assumed)
+    BadPieces.RemoveAll([](const FPlayableSketchGeometryDescriptor& Piece)
+              ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(114,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadPieces.RemoveAll([](const FPlayableSketchGeometryDescriptor& Piece)
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(114,5): error C2371: 'BadPieces': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(104,47): note: see declaration of 'BadPieces'
+    TArray<FPlayableSketchGeometryDescriptor> BadPieces = Pieces;
+                                              ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(114,15): error C2146: syntax error: missing ';' before identifier 'RemoveAll'
+    BadPieces.RemoveAll([](const FPlayableSketchGeometryDescriptor& Piece)
+              ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(115,5): error C2143: syntax error: missing ';' before '{'
+    {
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(115,5): error C2143: syntax error: missing ')' before ';'
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(115,5): error C2447: '{': missing function header (old-style formal list?)
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(117,6): error C2059: syntax error: ')'
+    });
+     ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(118,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, Plan, BadPieces, Settings), TEXT("PS-V005"), Graph.Connections[0].ConnectionId), TEXT("Missing lintel rejected"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(118,5): error C2374: 'Check': redefinition; multiple initialization
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(118,5): error C2086: 'int Check': redefinition
+    Check(HasIssue(FPlayableSketchValidation::ValidatePlan(Graph, Plan, BadPieces, Settings), TEXT("PS-V005"), Graph.Connections[0].ConnectionId), TEXT("Missing lintel rejected"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(83,5): note: see declaration of 'Check'
+    Check(bGenerated, TEXT("Valid fixture wall generation"));
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(120,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadGraph = Graph;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(120,5): error C2371: 'BadGraph': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(94,26): note: see declaration of 'BadGraph'
+    FPlayableSketchGraph BadGraph = Graph;
+                         ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(121,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadGraph.Rooms[1].PositionMode = EPlayableSketchPositionMode::Locked;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(121,13): error C3484: syntax error: expected '->' before the return type
+    BadGraph.Rooms[1].PositionMode = EPlayableSketchPositionMode::Locked;
+            ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(121,14): error C3613: missing return type after '->' ('int' assumed)
+    BadGraph.Rooms[1].PositionMode = EPlayableSketchPositionMode::Locked;
+             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(121,5): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+    BadGraph.Rooms[1].PositionMode = EPlayableSketchPositionMode::Locked;
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(121,5): error C2371: 'BadGraph': redefinition; different basic types
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(94,26): note: see declaration of 'BadGraph'
+    FPlayableSketchGraph BadGraph = Graph;
+                         ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(121,14): error C2146: syntax error: missing ';' before identifier 'Rooms'
+    BadGraph.Rooms[1].PositionMode = EPlayableSketchPositionMode::Locked;
+             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(122,5): error C3927: '->': trailing return type is not allowed after a non-function declarator
+    BadGraph.Rooms[1].PositionCm = FVector2D(1400.0, 1000.0);
+    ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(122,13): error C3484: syntax error: expected '->' before the return type
+    BadGraph.Rooms[1].PositionCm = FVector2D(1400.0, 1000.0);
+            ^
+ Compile [x64] PlayableSketchDay4Tests.cpp: Exited with error code 2 . The build will fail.
+ Compile [x64] PlayableSketchDay4Tests.cpp: WorkingDirectory C:\Program Files\Epic Games\UE_5.7\Engine\Source
+ Compile [x64] PlayableSketchDay4Tests.cpp: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe @"C:/Users/pisu/Documents/Unreal Projects/PlayableSketch/work/day4/validation-project/Intermediate/Build/Win64/x64/UnrealEditor/Development/PlayableSketch/PlayableSketchDay4Tests.cpp.obj.rsp" 
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(122,14): error C3613: missing return type after '->' ('int' assumed)
+    BadGraph.Rooms[1].PositionCm = FVector2D(1400.0, 1000.0);
+             ^
+C:\Users\pisu\Documents\Unreal Projects\PlayableSketch\work\day4\validation-project\Source\PlayableSketch\Private\Validation\Tests\PlayableSketchDay4Tests.cpp(122,14): fatal error C1003: error count exceeds 100; stopping compilation
+[9/29] Compile [x64] PlayableSketchCorridorRouting.cpp
+[10/29] Compile [x64] PlayableSketchCorridorRoutingTests.cpp
+[11/29] Compile [x64] PlayableSketchDoorTests.cpp
+[12/29] Compile [x64] PlayableSketchDoorGenerator.cpp
+[13/29] Compile [x64] PlayableSketchFloorBuilder.cpp
+[14/29] Compile [x64] PlayableSketchFloorPlanTests.cpp
+[15/29] Compile [x64] PlayableSketchGraphAsset.cpp
+[16/29] Compile [x64] PlayableSketchGridNavigationTests.cpp
+[17/29] Compile [x64] PlayableSketchGridNavigation.cpp
+[18/29] Compile [x64] PlayableSketchLayoutGenerator.cpp
+[19/29] Compile [x64] PlayableSketchPlacementSearch.cpp
+[20/29] Compile [x64] PlayableSketchLevelActor.cpp
+[21/29] Compile [x64] PlayableSketchPlacementSearchTests.cpp
+[22/29] Compile [x64] PlayableSketchRectTests.cpp
+[23/29] Compile [x64] PlayableSketchRoomPlacementTests.cpp
+[24/29] Compile [x64] PlayableSketchWallBuilder.cpp
+[25/29] Compile [x64] PlayableSketchValidation.cpp
+[26/29] Compile [x64] PlayableSketchWallGeometry.cpp
+
+Total time in Parallel executor: 53.11 seconds
+CompilationResultException: OtherCompilationError
+   at UnrealBuildTool.ActionGraph.ExecuteActionsAsync(BuildConfiguration BuildConfiguration, List`1 ActionsToExecute, List`1 TargetDescriptors, ILogger Logger, IActionArtifactCache actionArtifactCache)
+   at UnrealBuildTool.BuildMode.BuildAsync(TargetMakefile[] Makefiles, List`1 TargetDescriptors, BuildConfiguration BuildConfiguration, BuildOptions Options, FileReference WriteOutdatedActionsFile, ILogger Logger, String ActionTypeFilter)
+   at UnrealBuildTool.BuildMode.BuildAsync(List`1 TargetDescriptors, BuildConfiguration BuildConfiguration, ISourceFileWorkingSet WorkingSet, BuildOptions Options, FileReference WriteOutdatedActionsFile, ILogger Logger, Boolean bSkipPreBuildTargets, String ActionTypeFilter)
+   at UnrealBuildTool.BuildMode.ExecuteAsync(CommandLineArguments Arguments, ILogger Logger)
+   at UnrealBuildTool.UnrealBuildTool.Main(String[] ArgumentsArray)
+WriteFileIfChanged() wrote 68 changed files of 69 requested writes.
+
+Result: Failed (OtherCompilationError)
+Total execution time: 61.89 seconds

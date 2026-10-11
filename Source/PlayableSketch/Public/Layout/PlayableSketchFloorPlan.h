@@ -1,8 +1,11 @@
+
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Layout/PlayableSketchRect.h"
+#include "PlayableSketchFloorPlan.generated.h"
 
+UENUM(BlueprintType)
 enum class EPlayableSketchWallSide : uint8
 {
     North,
