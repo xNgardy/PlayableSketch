@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en"
+  ><head
+    ><meta charset="utf-8" /><meta
+      name="viewport"
+      content="width=device-width,initial-scale=1" /><title>PlayableSketch · Metric review</title
+    ><link rel="stylesheet" href="/style.css" /><link rel="stylesheet" href="/metric.css"
+  /></head>
+  <body>
+    <header
+      ><div class="brand"
+        ><span class="mark">PS</span
+        ><div
+          ><strong>Metric review</strong
+          ><small>Step 10 · Review measurements, then accept</small></div
+        ></div
+      ><label
+        >Drawing
+        <select id="metricCase" aria-label="Drawing"></select></label
+      ><a id="backTopology" href="/">← Edit pixel topology</a
+      ><span id="metricStatus" class="pill">Loading…</span></header
+    >
+    <div id="metricMessage" role="status" class="upload-status" hidden></div>
+    <main class="metric-main">
+      <div class="metric-workspace">
+        <div class="views">
+          <section class="view"
+            ><div class="view-heading"
+              ><h2>Observed drawing <small>px · original evidence</small></h2
+              ><label><input type="checkbox" id="showText" checked /> Text boxes</label></div
+            ><svg id="observed" role="img" aria-label="Drawing evidence and associated spans"></svg
+          ></section>
+          <section class="view"
+            ><div class="view-heading"
+              ><h2>Reconstructed plan <small>cm · dimension driven</small></h2
+              ><span id="solveStatus"></span></div
+            ><svg id="metricPlan" role="img" aria-label="Metric plan preview"></svg
+            ><p id="metricMissing" class="small muted"></p
+          ></section>
+        </div>
+        <div class="measurement-area">
+          <div class="section-title"
+            ><h2>Measurements</h2
+            ><button id="addMeasurement">+ Add unwritten measurement</button></div
+          >
+          <p class="small muted"
+            >Select a label, inspect its crop, choose the measured span and confirm the value. Pixel
+            proportions never supply missing centimetres.</p
+          >
+          <div class="measurement-grid"
+            ><div
+              ><label for="dimensionList">Measurement / evidence</label
+              ><select id="dimensionList" size="8"></select
+              ><div id="ignoredList" class="small"></div
+            ></div>
+            <div id="dimensionEditor"
+              ><div id="rawEvidence" class="small"></div
+              ><svg id="evidenceCrop" aria-label="Selected original text crop"></svg>
+              <label
+                >Value (cm)
+                <input
+                  id="dimensionValue"
+                  type="number"
+                  min="0.001"
+                  step="any"
+                  placeholder="Unreadable / missing"
+              /></label>
+              <label
+                >Measured span
+                <select id="dimensionTarget"></select
+              ></label>
+              <div id="suggestions" class="button-row"></div
+              ><p id="spanExplanation" class="small muted"></p>
+              <label class="check"
+                ><input id="confirmDimension" type="checkbox" /> I confirm this exact value and
+                target</label
+              >
+              <label
+                >Correction note
+                <input
+                  id="dimensionNote"
+                  type="text"
+                  maxlength="1000"
+                  placeholder="Why this value or target changed"
+              /></label>
+              <div class="button-row"
+                ><button id="ignoreText">Not a measurement</button
+                ><button id="removeMeasurement">Remove unwritten measurement</button></div
+              ></div
+            ></div
+          >
+        </div>
+      </div>
+      <aside class="metric-aside">
+        <section
+          ><h2>Review checks</h2><div id="metricIssues" aria-live="polite"></div
+          ><p id="revisionInfo" class="small mono"></p
+          ><div class="button-row"
+            ><button id="metricUndo">Undo saved edit</button
+            ><button id="metricRedo">Redo saved edit</button></div
+          ><button id="recompute" class="primary wide">Recompute & save draft</button
+          ><button id="reloadMetric" class="wide">Reload saved revision</button></section
+        >
+        <section
+          ><h2>Regions</h2><div id="regionEditors"></div
+          ><label class="check"
+            ><input id="confirmKinds" type="checkbox" /> I checked all room / corridor types</label
+          ></section
+        >
+        <section
+          ><h2>Global settings (cm)</h2><div class="coordinates" id="settingsEditor"></div
+          ><label
+            >Validation mode
+            <select id="validationMode"
+              ><option value="geometry_only">Geometry only</option
+              ><option value="gameplay">Gameplay</option></select
+            ></label
+          ><label
+            >Start room
+            <select id="startRoom"></select></label
+          ><label
+            >Goal room
+            <select id="goalRoom"></select></label
+        ></section>
+        <section
+          ><h2>Explicit opening relations</h2
+          ><p class="small muted"
+            >Enable only when intended. Door position is normally determined by a
+            corner-to-near-edge measurement.</p
+          ><div id="relationEditors"></div
+        ></section>
+        <section
+          ><h2>Local vertex locks</h2
+          ><p class="small muted"
+            >These lock metric cm coordinates. To move pixel evidence or add a missing wall /
+            opening, return to topology review and approve a new topology.</p
+          ><div id="lockEditors"></div><button id="addLock">+ Add coordinate lock</button></section
+        >
+        <section class="save-panel"
+          ><h2>Accept this metric revision</h2
+          ><label
+            >Reviewer name
+            <input id="reviewerName" type="text" autocomplete="name" maxlength="200" /></label
+          ><p id="acceptReadiness" class="small muted">Resolve checks and save all changes.</p
+          ><button id="acceptMetric" class="primary wide" disabled>Accept metric layout</button
+          ><button id="downloadMetric" class="wide" disabled>Download validated JSON</button
+          ><p class="small muted"
+            >Acceptance applies to this exact saved snapshot. Engine collision and navigation checks
+            run later.</p
+          ></section
+        >
+        <details
+          ><summary>Solver equations & provenance</summary><pre id="solverDetails"></pre>
+        </details>
+      </aside> </main
+    ><script src="/metric.js" defer></script></body
+></html>

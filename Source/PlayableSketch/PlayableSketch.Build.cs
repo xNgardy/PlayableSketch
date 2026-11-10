@@ -6,8 +6,10 @@ public class PlayableSketch : ModuleRules
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
         PrivateIncludePaths.Add(ModuleDirectory);
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-        PrivateDependencyModuleNames.Add("Json");
+        PublicDependencyModuleNames.AddRange(
+            new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+        PrivateDependencyModuleNames.AddRange(
+            new string[] { "Json", "HTTP", "Slate", "SlateCore" });
 
         if (Target.bBuildEditor)
         {

@@ -10,7 +10,7 @@ struct PLAYABLESKETCH_API FPlayableSketchGraph
 {
     GENERATED_BODY()
 
-public:
+  public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Graph")
     TArray<FPlayableSketchRoom> Rooms;
 

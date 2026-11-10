@@ -4,6 +4,6 @@
 
 class PLAYABLESKETCH_API FPlayableSketchPlacementSearchTests
 {
-public:
+  public:
     static void Run();
 };

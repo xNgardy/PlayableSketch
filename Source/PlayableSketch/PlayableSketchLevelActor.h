@@ -10,6 +10,9 @@
 #include "Validation/PlayableSketchValidation.h"
 #include "Geometry/PlayableSketchComponentRegistry.h"
 #include "Navigation/PlayableSketchNavigation.h"
+#include "ExplicitLayout/PlayableSketchImportedLayoutAsset.h"
+#include "ExplicitLayout/PlayableSketchExplicitLayout.h"
+#include "ExplicitLayout/PlayableSketchExplicitNavigation.h"
 #include "PlayableSketchLevelActor.generated.h"
 
 class UMaterialInterface;
@@ -19,7 +22,7 @@ class PLAYABLESKETCH_API APlayableSketchLevelActor : public AActor
 {
     GENERATED_BODY()
 
-public:
+  public:
     APlayableSketchLevelActor();
 
     UPROPERTY()
@@ -34,6 +37,71 @@ public:
     UPROPERTY(EditAnywhere, Category = "PlayableSketch|Graph")
     TObjectPtr<UPlayableSketchGraphAsset> GraphAsset = nullptr;
 
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Import")
+    EPlayableSketchLayoutSource LayoutSource = EPlayableSketchLayoutSource::ProceduralGraph;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Import")
+    TObjectPtr<UPlayableSketchImportedLayoutAsset> ImportedLayoutAsset = nullptr;
+
+    UPROPERTY(Transient)
+    bool bUseSketchViewCoordinates = false;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Import")
+    FString ImportLayoutJsonPath;
+
+    UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Import")
+    FString LastImportReport;
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Import")
+    void ImportLayoutJson();
+
+    bool ImportLayoutJsonText(const FString &Json, FString &OutError);
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Import",
+              meta = (DisplayName = "Import Canonical Layout Json"))
+    void ImportCanonicalLayoutJson();
+
+    bool ImportCanonicalLayoutJsonText(const FString &Json, FString &OutError);
+
+    bool ImportRuntimeCanonicalJsonText(const FString &Json, FString &OutError);
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Pipeline")
+    FString PipelineServiceUrl = TEXT("http://127.0.0.1:8768");
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Pipeline",
+              meta = (FilePathFilter = "png,jpg,jpeg"))
+    FString PipelineImagePath;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Pipeline")
+    FString PipelineJobId;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Pipeline")
+    FString PipelineAcceptedRevisionId;
+
+    UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Pipeline")
+    FString LastPipelineStatus;
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Pipeline")
+    void UploadPipelineImage();
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Pipeline")
+    void RefreshPipelineJob();
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Pipeline")
+    void OpenPipelineReview();
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Pipeline")
+    void ImportPipelineAcceptedLayout();
+
+    static bool IsLocalPipelineUrl(const FString &Url);
+    static bool IsPipelineJobId(const FString &Id);
+    bool IsPipelineRequestCurrent(uint64 Sequence, const FString &Service, const FString &Job,
+                                  const FString &SelectedRevision) const;
+
+  private:
+    uint64 PipelineRequestSequence = 0;
+
+  public:
     UFUNCTION(CallInEditor, Category = "PlayableSketch|Validation")
     void ValidateGraph();
 
@@ -111,12 +179,11 @@ public:
     UFUNCTION(CallInEditor, Category = "PlayableSketch|Tests")
     void TestWallSegments();
 
-
-
     UFUNCTION(CallInEditor, Category = "PlayableSketch|Authoring")
     void GenerateLayout();
 
-    UFUNCTION(CallInEditor, Category = "PlayableSketch|Authoring", meta = (DisplayName = "Rebuild Geometry (Full)"))
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Authoring",
+              meta = (DisplayName = "Rebuild Geometry (Full)"))
     void RebuildGeometry();
 
     UFUNCTION(CallInEditor, Category = "PlayableSketch|Authoring")
@@ -149,7 +216,8 @@ public:
     UPROPERTY(EditAnywhere, Category = "PlayableSketch|Validation", meta = (ClampMin = "0.0"))
     float ClearanceCm = 10.0f;
 
-    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Navigation", meta = (ClampMin = "1", ClampMax = "1000000"))
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Navigation",
+              meta = (ClampMin = "1", ClampMax = "1000000"))
     int32 NavigationMaxCells = 250000;
 
     UPROPERTY(EditAnywhere, Category = "PlayableSketch|Navigation")
@@ -171,6 +239,18 @@ public:
     void ExportNavigationReport();
 
     UFUNCTION(CallInEditor, Category = "PlayableSketch|Navigation")
+    void VerifyExplicitPawnTraversal();
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Navigation")
+    FVector2D NavigationGridOffsetCm = FVector2D::ZeroVector;
+
+    UPROPERTY(EditAnywhere, Category = "PlayableSketch|Navigation",
+              meta = (ClampMin = "1", ClampMax = "1000000"))
+    float ExplicitNavigationCellSizeCm = 25.0f;
+
+    FPlayableSketchExplicitNavigationReport ExplicitNavigationResult;
+
+    UFUNCTION(CallInEditor, Category = "PlayableSketch|Navigation")
     void RunNavigationExamples();
 
     UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Preview")
@@ -182,16 +262,16 @@ public:
     UPROPERTY(VisibleAnywhere, Transient, Category = "PlayableSketch|Validation")
     TArray<FPlayableSketchValidationIssue> LastIssues;
 
-    virtual void OnConstruction(const FTransform& Transform) override;
+    virtual void OnConstruction(const FTransform &Transform) override;
 
 #if WITH_EDITOR
     virtual void PostEditUndo() override;
 #endif
 
-protected:
+  protected:
     virtual void BeginPlay() override;
 
-public:
+  public:
     virtual void Tick(float DeltaTime) override;
 
     TArray<FVector2D> PreviewPathPoints;
@@ -203,11 +283,26 @@ public:
     virtual bool ShouldTickIfViewportsOnly() const override;
 #endif
 
-private:
+  private:
+    UPROPERTY(Transient)
+    TObjectPtr<UPlayableSketchImportedLayoutAsset> ExplicitSettingsAsset = nullptr;
+    FString ExplicitSettingsSourceJson;
+
+    void UpdateExplicitGeometry(bool bForceFull);
+    void ValidateExplicitDesign();
+    void ReportExplicitNavigation();
+    void ApplyRuntimeCoordinates(FPlayableSketchExplicitLayout &Layout) const;
+    bool BuildExplicitGeometry(FPlayableSketchExplicitLayout &Layout,
+                               FPlayableSketchExplicitGeometry &Geometry, FString &Error) const;
+    bool PublishExplicitLayout(const FPlayableSketchExplicitLayout &Layout,
+                               const FPlayableSketchExplicitGeometry &Geometry, const FString &Json,
+                               bool bFull, FString &Error);
 
     FPlayableSketchFloorPlan GeneratedFloorPlan;
     FString LastAttemptSignature;
     friend class FPlayableSketchLocalRebuildTests;
+    friend class FPlayableSketchExplicitImportTests;
+    friend class FPlayableSketchExplicitPersistenceTests;
     friend class FPlayableSketchNavigationIntegrationTests;
     friend class FPlayableSketchExperimentRunner;
     FString PublishedSignature;
@@ -220,7 +315,7 @@ private:
     FPlayableSketchNavigationResult NavigationResult;
     bool bNavigationCurrent = false;
     FPlayableSketchNavigationSettings GetNavigationSettings() const;
-    void RefreshNavigation(const TArray<FPlayableSketchGeometryDescriptor>& Pieces);
+    void RefreshNavigation(const TArray<FPlayableSketchGeometryDescriptor> &Pieces);
     void ResetNavigation();
     void DrawNavigationGrid();
 
@@ -229,11 +324,15 @@ private:
 
     FString GetSourceSignature() const;
     FPlayableSketchValidationSettings GetValidationSettings() const;
-    bool ReadSavedRooms(FPlayableSketchFloorPlan& OutPlan, FString& OutError) const;
-    bool BuildCandidate(FPlayableSketchFloorPlan& Plan, TArray<FPlayableSketchGeometryDescriptor>& Pieces);
-    void PublishCandidate(const FPlayableSketchFloorPlan& Plan, const TArray<FPlayableSketchGeometryDescriptor>& Pieces, bool bFull = true, const FString& Reason = TEXT("Explicit full rebuild"));
-    void InvalidatePreview(const TArray<FPlayableSketchValidationIssue>& Issues, const FString& Status);
-    void FailStage(const TCHAR* Code, const FString& Message);
+    bool ReadSavedRooms(FPlayableSketchFloorPlan &OutPlan, FString &OutError) const;
+    bool BuildCandidate(FPlayableSketchFloorPlan &Plan,
+                        TArray<FPlayableSketchGeometryDescriptor> &Pieces);
+    bool PublishCandidate(const FPlayableSketchFloorPlan &Plan,
+                          const TArray<FPlayableSketchGeometryDescriptor> &Pieces,
+                          bool bFull = true, const FString &Reason = TEXT("Explicit full rebuild"));
+    void InvalidatePreview(const TArray<FPlayableSketchValidationIssue> &Issues,
+                           const FString &Status);
+    void FailStage(const TCHAR *Code, const FString &Message);
     void AnnotateIssues();
     void LogIssues() const;
     void DrawValidationIssues();

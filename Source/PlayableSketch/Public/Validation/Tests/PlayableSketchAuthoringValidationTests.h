@@ -4,6 +4,6 @@
 
 class PLAYABLESKETCH_API FPlayableSketchAuthoringValidationTests
 {
-public:
+  public:
     static bool Run();
 };

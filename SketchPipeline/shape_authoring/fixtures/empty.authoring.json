@@ -1,0 +1,84 @@
+{
+  "schema_version": "playablesketch-shape-authoring/2.0",
+  "document_id": "shape_empty",
+  "revision_id": "revision_1",
+  "parent_revision_id": null,
+  "policy_version": "shape-sizing/1.0",
+  "image_evidence": {
+    "source": {
+      "image_path": "synthetic-contract-only.png",
+      "image_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "width_px": 400,
+      "height_px": 400
+    },
+    "working_size_px": [
+      400,
+      400
+    ],
+    "original_to_working": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "working_to_original": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "normalization_bounds_px": [
+      0,
+      0,
+      400,
+      400
+    ],
+    "items": []
+  },
+  "topology": {
+    "regions": [],
+    "junctions": [],
+    "walls": [],
+    "openings": [],
+    "connections": []
+  },
+  "physical_design": {
+    "units": "cm",
+    "anchor": {
+      "junction_id": null,
+      "position_cm": [
+        0,
+        0
+      ]
+    },
+    "orientation_degrees": 0,
+    "values": [],
+    "acceptance": {
+      "status": "pending",
+      "revision_id": null,
+      "reviewer": null
+    }
+  }
+}

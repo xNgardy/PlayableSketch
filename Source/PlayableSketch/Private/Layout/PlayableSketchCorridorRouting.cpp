@@ -1,8 +1,10 @@
 #include "Layout/PlayableSketchCorridorRouting.h"
 #include "SpatialGraph/PlayableSketchGraphValidator.h"
 
-bool FPlayableSketchCorridorRouting::ValidateCandidate(const FPlayableSketchCorridorCandidate& Candidate,
-        const TArray<FPlayableSketchPlacedRoom>& Rooms, const TArray<FPlayableSketchCorridor>& AcceptedCorridors, FString& OutError)
+bool FPlayableSketchCorridorRouting::ValidateCandidate(
+    const FPlayableSketchCorridorCandidate &Candidate,
+    const TArray<FPlayableSketchPlacedRoom> &Rooms,
+    const TArray<FPlayableSketchCorridor> &AcceptedCorridors, FString &OutError)
 {
     OutError.Reset();
 
@@ -12,7 +14,7 @@ bool FPlayableSketchCorridorRouting::ValidateCandidate(const FPlayableSketchCorr
         return false;
     }
 
-    for (const FPlayableSketchPlacedRoom& Room : Rooms)
+    for (const FPlayableSketchPlacedRoom &Room : Rooms)
     {
         if (!Room.Bounds.IsValid())
         {
@@ -21,7 +23,7 @@ bool FPlayableSketchCorridorRouting::ValidateCandidate(const FPlayableSketchCorr
         }
     }
 
-    for (const FPlayableSketchRect& Footprint : Candidate.Footprints)
+    for (const FPlayableSketchRect &Footprint : Candidate.Footprints)
     {
         if (!Footprint.IsValid())
         {
@@ -29,28 +31,33 @@ bool FPlayableSketchCorridorRouting::ValidateCandidate(const FPlayableSketchCorr
             return false;
         }
 
-        for (const FPlayableSketchPlacedRoom& Room : Rooms)
+        for (const FPlayableSketchPlacedRoom &Room : Rooms)
         {
             if (Footprint.OverlapsInterior(Room.Bounds))
             {
-                OutError = FString::Printf(TEXT("Candidate overlaps Room %s."), *Room.RoomId.ToString());
+                OutError =
+                    FString::Printf(TEXT("Candidate overlaps Room %s."), *Room.RoomId.ToString());
                 return false;
             }
         }
 
-        for (const FPlayableSketchCorridor& Accepted : AcceptedCorridors)
+        for (const FPlayableSketchCorridor &Accepted : AcceptedCorridors)
         {
-            for (const FPlayableSketchRect& ExistingFootprint : Accepted.Footprints)
+            for (const FPlayableSketchRect &ExistingFootprint : Accepted.Footprints)
             {
                 if (!ExistingFootprint.IsValid())
                 {
-                    OutError = FString::Printf(TEXT("Invalid accepted corridor footprint: Connection %s."), *Accepted.ConnectionId.ToString());
+                    OutError =
+                        FString::Printf(TEXT("Invalid accepted corridor footprint: Connection %s."),
+                                        *Accepted.ConnectionId.ToString());
                     return false;
                 }
 
                 if (Footprint.OverlapsInterior(ExistingFootprint))
                 {
-                    OutError = FString::Printf(TEXT("Candidate overlaps corridor of Connection %s."), *Accepted.ConnectionId.ToString());
+                    OutError =
+                        FString::Printf(TEXT("Candidate overlaps corridor of Connection %s."),
+                                        *Accepted.ConnectionId.ToString());
                     return false;
                 }
             }
@@ -60,11 +67,13 @@ bool FPlayableSketchCorridorRouting::ValidateCandidate(const FPlayableSketchCorr
     return true;
 }
 
-bool FPlayableSketchCorridorRouting::Generate(const FPlayableSketchGraph& Graph, FPlayableSketchFloorPlan& FloorPlan, int32 GridStepCm, FString& OutError)
+bool FPlayableSketchCorridorRouting::Generate(const FPlayableSketchGraph &Graph,
+                                              FPlayableSketchFloorPlan &FloorPlan, int32 GridStepCm,
+                                              FString &OutError)
 {
     OutError.Reset();
 
-    for (FPlayableSketchCorridor& Corridor : FloorPlan.Corridors)
+    for (FPlayableSketchCorridor &Corridor : FloorPlan.Corridors)
     {
         Corridor.Footprints.Reset();
     }
@@ -91,45 +100,50 @@ bool FPlayableSketchCorridorRouting::Generate(const FPlayableSketchGraph& Graph,
 
     TArray<FPlayableSketchCorridor> Pending = FloorPlan.Corridors;
 
-    Pending.Sort([](const FPlayableSketchCorridor& A, const FPlayableSketchCorridor& B)
-        {
-            return A.ConnectionId.ToString() < B.ConnectionId.ToString();
-        });
+    Pending.Sort([](const FPlayableSketchCorridor &A, const FPlayableSketchCorridor &B) {
+        return A.ConnectionId.ToString() < B.ConnectionId.ToString();
+    });
 
     TArray<FPlayableSketchCorridor> Accepted;
     TSet<FGuid> RoutedConnectionIds;
 
-    for (FPlayableSketchCorridor& Corridor : Pending)
+    for (FPlayableSketchCorridor &Corridor : Pending)
     {
         if (RoutedConnectionIds.Contains(Corridor.ConnectionId))
         {
-            OutError = FString::Printf(TEXT("Routing failed: duplicate Connection %s."), *Corridor.ConnectionId.ToString());
+            OutError = FString::Printf(TEXT("Routing failed: duplicate Connection %s."),
+                                       *Corridor.ConnectionId.ToString());
             return false;
         }
 
-        const FPlayableSketchConnection* Connection = Graph.Connections.FindByPredicate([&Corridor](const FPlayableSketchConnection& Item)
-            {
+        const FPlayableSketchConnection *Connection =
+            Graph.Connections.FindByPredicate([&Corridor](const FPlayableSketchConnection &Item) {
                 return Item.ConnectionId == Corridor.ConnectionId;
             });
 
-        if (!Connection || Corridor.DoorA.RoomId != Connection->RoomAId || Corridor.DoorB.RoomId != Connection->RoomBId)
+        if (!Connection || Corridor.DoorA.RoomId != Connection->RoomAId ||
+            Corridor.DoorB.RoomId != Connection->RoomBId)
         {
-            OutError = FString::Printf(TEXT("Routing failed: invalid endpoint ownership for Connection %s."), *Corridor.ConnectionId.ToString());
+            OutError = FString::Printf(
+                TEXT("Routing failed: invalid endpoint ownership for Connection %s."),
+                *Corridor.ConnectionId.ToString());
             return false;
         }
 
         TArray<FPlayableSketchCorridorCandidate> Candidates;
         FString CandidateError;
 
-        if (!FPlayableSketchCorridorRouter::BuildCandidates(Corridor, Connection->CorridorWidthCm, GridStepCm, Candidates, CandidateError))
+        if (!FPlayableSketchCorridorRouter::BuildCandidates(Corridor, Connection->CorridorWidthCm,
+                                                            GridStepCm, Candidates, CandidateError))
         {
-            OutError = FString::Printf(TEXT("Routing failed: Connection %s. %s"), *Corridor.ConnectionId.ToString(), *CandidateError);
+            OutError = FString::Printf(TEXT("Routing failed: Connection %s. %s"),
+                                       *Corridor.ConnectionId.ToString(), *CandidateError);
             return false;
         }
 
         bool bFoundRoute = false;
 
-        for (const FPlayableSketchCorridorCandidate& Candidate : Candidates)
+        for (const FPlayableSketchCorridorCandidate &Candidate : Candidates)
         {
             if (ValidateCandidate(Candidate, FloorPlan.Rooms, Accepted, CandidateError))
             {
@@ -141,7 +155,9 @@ bool FPlayableSketchCorridorRouting::Generate(const FPlayableSketchGraph& Graph,
 
         if (!bFoundRoute)
         {
-            OutError = FString::Printf(TEXT("Routing failed: Connection %s, all %d candidates rejected. Last reason: %s"), *Corridor.ConnectionId.ToString(), Candidates.Num(), *CandidateError);
+            OutError = FString::Printf(
+                TEXT("Routing failed: Connection %s, all %d candidates rejected. Last reason: %s"),
+                *Corridor.ConnectionId.ToString(), Candidates.Num(), *CandidateError);
             return false;
         }
 

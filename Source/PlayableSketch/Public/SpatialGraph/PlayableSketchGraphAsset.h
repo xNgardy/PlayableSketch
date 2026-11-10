@@ -31,12 +31,21 @@ class PLAYABLESKETCH_API UPlayableSketchGraphAsset : public UDataAsset
 {
     GENERATED_BODY()
 
-public:
+  public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Graph")
     FPlayableSketchGraph Graph;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Layout")
     FPlayableSketchSavedLayout SavedLayout;
+
+    UPROPERTY(VisibleAnywhere, Category = "Import")
+    FString ImportDocumentId;
+
+    UPROPERTY(VisibleAnywhere, Category = "Import")
+    FString ImportRevisionId;
+
+    UPROPERTY(VisibleAnywhere, Category = "Import")
+    FString ImportSourceHash;
 
     UPROPERTY(EditAnywhere, Transient, Category = "Authoring")
     FGuid NewConnectionRoomAId;
@@ -59,12 +68,13 @@ public:
     FString GetSourceText() const;
 
 #if WITH_EDITOR
-    virtual void PreEditChange(FProperty* PropertyAboutToChange) override;
-    virtual void PreEditChange(FEditPropertyChain& PropertyAboutToChange) override;
-    virtual void PostEditChangeChainProperty(FPropertyChangedChainEvent& PropertyChangedEvent) override;
+    virtual void PreEditChange(FProperty *PropertyAboutToChange) override;
+    virtual void PreEditChange(FEditPropertyChain &PropertyAboutToChange) override;
+    virtual void PostEditChangeChainProperty(
+        FPropertyChangedChainEvent &PropertyChangedEvent) override;
 #endif
 
-private:
+  private:
     TSet<FGuid> RoomsBeforeEdit;
     void CaptureRoomIds();
     void RemoveDeletedRoomConnections();

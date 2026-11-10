@@ -1,0 +1,289 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:playablesketch:pixel-annotations:1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "playablesketch-pixel-annotations/1.0"
+    },
+    "observations_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reference_draft_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "coordinate_frame": {
+      "const": "original"
+    },
+    "method": {
+      "enum": [
+        "manual_visual_trace",
+        "synthetic_render",
+        "augmentation_transfer"
+      ]
+    },
+    "precision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "strokes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "wall",
+              "tick"
+            ]
+          },
+          "line_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "line_ids"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "junctions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "point_px": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "kind": {
+            "enum": [
+              "corner",
+              "tee",
+              "cross"
+            ]
+          },
+          "status": {
+            "const": "approximate_intended_junction"
+          }
+        },
+        "required": [
+          "id",
+          "point_px",
+          "kind",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "door",
+              "open_passage",
+              "incidental"
+            ]
+          },
+          "start_px": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "end_px": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "opening_candidate_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "semantic_provenance": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "start_px",
+          "end_px",
+          "opening_candidate_id",
+          "semantic_provenance"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "associations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dimension_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "span_start_px": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "span_end_px": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "endpoint_basis": {
+            "enum": [
+              "manual_interpretation_of_measured_span",
+              "synthetic_render_measured_endpoints",
+              "augmentation_transferred_endpoints"
+            ]
+          },
+          "provenance": {
+            "enum": [
+              "author_confirmed_corner_to_opening_center",
+              "manual_image_and_reference_review",
+              "author_confirmed_corner_to_opening_edge",
+              "generated_span_to_label_association",
+              "augmentation_transferred_association"
+            ]
+          }
+        },
+        "required": [
+          "text_id",
+          "dimension_id",
+          "span_start_px",
+          "span_end_px",
+          "endpoint_basis",
+          "provenance"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "region_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "kind": {
+            "enum": [
+              "room",
+              "corridor"
+            ]
+          },
+          "polygon_px": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "minItems": 3
+          },
+          "status": {
+            "enum": [
+              "manual_intended_boundary",
+              "generated_intended_boundary",
+              "augmentation_transferred_boundary"
+            ]
+          }
+        },
+        "required": [
+          "region_id",
+          "kind",
+          "polygon_px",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "observations_path",
+    "reference_draft_path",
+    "coordinate_frame",
+    "method",
+    "precision",
+    "strokes",
+    "junctions",
+    "gaps",
+    "associations",
+    "issues"
+  ],
+  "additionalProperties": false
+}

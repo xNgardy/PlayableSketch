@@ -1,0 +1,49 @@
+{
+  "policy_version": "shape-sizing/1.0",
+  "units": "cm",
+  "description": "Product starting points; neither measurements nor architectural standards.",
+  "presets": {
+    "room": {
+      "width_cm": 500,
+      "depth_cm": 400
+    },
+    "corridor_segment": {
+      "length_cm": 400,
+      "width_cm": 200
+    },
+    "door": {
+      "clear_width_cm": 120,
+      "height_cm": 220
+    },
+    "walls": {
+      "wall_thickness_cm": 20,
+      "wall_height_cm": 300
+    }
+  },
+  "soft_preferences": [
+    "presets",
+    "normalized_aspect",
+    "relative_area",
+    "relative_spacing",
+    "design_scale"
+  ],
+  "hard_constraints": [
+    "user_locks",
+    "positive_sizes",
+    "rectangularity",
+    "non_overlap",
+    "shared_wall_ownership",
+    "opening_containment",
+    "opening_non_overlap",
+    "interface_continuity"
+  ],
+  "physical_basis": {
+    "regions": "wall_centerline",
+    "corridor_width": "wall_centerline",
+    "door_width": "clear_opening",
+    "door_offset": "reference_junction_to_near_edge"
+  },
+  "numeric_text": "ignored",
+  "acceptance": "exact_authoring_revision",
+  "infeasible": "retain_last_valid_preview_and_draft_locks"
+}

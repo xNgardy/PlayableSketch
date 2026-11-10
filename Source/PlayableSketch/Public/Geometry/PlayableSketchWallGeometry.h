@@ -42,19 +42,14 @@ struct PLAYABLESKETCH_API FPlayableSketchGeometryDescriptor
 
 class PLAYABLESKETCH_API FPlayableSketchWallGeometry
 {
-public:
-    static bool SplitWall(
-        const FPlayableSketchWallSegment& Wall,
-        const TArray<FPlayableSketchWallOpening>& Openings,
-        const FPlayableSketchWallSettings& Settings,
-        const FGuid& SourceId,
-        bool bRoom,
-        TArray<FPlayableSketchGeometryDescriptor>& OutPieces,
-        FString& OutError);
+  public:
+    static bool SplitWall(const FPlayableSketchWallSegment &Wall,
+                          const TArray<FPlayableSketchWallOpening> &Openings,
+                          const FPlayableSketchWallSettings &Settings, const FGuid &SourceId,
+                          bool bRoom, TArray<FPlayableSketchGeometryDescriptor> &OutPieces,
+                          FString &OutError);
 
-    static bool Generate(
-        const FPlayableSketchFloorPlan& FloorPlan,
-        const FPlayableSketchWallSettings& Settings,
-        TArray<FPlayableSketchGeometryDescriptor>& OutPieces,
-        FString& OutError);
+    static bool Generate(const FPlayableSketchFloorPlan &FloorPlan,
+                         const FPlayableSketchWallSettings &Settings,
+                         TArray<FPlayableSketchGeometryDescriptor> &OutPieces, FString &OutError);
 };

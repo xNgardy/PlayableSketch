@@ -1,249 +1,153 @@
 # PlayableSketch
 
-An Unreal Engine C++ prototype that turns a spatial graph into room floors, doors,
-orthogonal corridors and wall geometry. It supports saved room placements, validated
-edits, component-preserving local rebuilds and grid-based navigation analysis.
+PlayableSketch turns a hand-drawn floor plan into an editable layout. It detects rooms and doors, lets you adjust shapes, connections and dimensions in the browser, and exports the approved plan for Unreal Engine.
 
-The repository includes a fixed experiment manifest, a headless runner and raw results
-including generation failures. Geometry validation passed for **10 of 30** cases;
-none was reachable in the navigation analysis. The Local/Full benchmark
-passed equivalence checks for **10 distinct edits**.
+## How it works
 
-## Environment and build
+- **U-Net** extracts a pixel-level wall mask.
+- **YOLO11n** detects door markers.
+- Image processing temporarily closes the detected doors and identifies connected interior areas as rooms.
+- The geometry step converts those areas into editable room boundaries.
 
-Verified on Windows with Unreal Engine **5.7.4**, Visual Studio 2022 / MSVC
-**14.44.35229**, Windows SDK **10.0.22621.0** and an AMD Ryzen 5 5600X.
-Python **3.10+** is needed for experiment validation and CSV/statistics export;
-the scripts use only its standard library. Git is optional for running experiments;
-when available, its revision and working-tree status are recorded.
+Areas without a separating wall or door count as one room, including U-shaped and L-shaped spaces. There is no separate corridor class.
 
-1. Clone your fork with its `Source`, `Config`, `Content`, `Scripts`, `Experiments`
-   and `PlayableSketch.uproject` files. Keep World Partition external actors/objects
-   with the sample map.
-2. Install UE 5.7 and the Visual Studio C++/Unreal build tools. The project enables
-   the engine's Modeling Tools Editor Mode plugin.
-3. Generate Visual Studio project files from `PlayableSketch.uproject`, then build
-   `PlayableSketchEditor`, `Development Editor`, `Win64`.
-4. Open `PlayableSketch.uproject`. The sample map is `/Game/PlayableSketch` and the
-   sample graph asset is `/Game/PlayableSketch/Data/DA_ThreeRooms`.
+## Requirements
 
-A command-line build from the repository root is also possible:
+The browser workspace requires Python 3.13, the packages listed below and a current browser. The current setup has been run on macOS. It uses MPS on supported Apple Silicon hardware and CPU otherwise.
 
-```powershell
-$Project = Join-Path (Get-Location) 'PlayableSketch.uproject'
-New-Item -ItemType Directory -Force Saved\BuildLogs | Out-Null
-& 'C:\Program Files\Epic Games\UE_5.7\Engine\Build\BatchFiles\Build.bat' `
-    PlayableSketchEditor Win64 Development "-Project=$Project" `
-    -WaitMutex -NoHotReloadFromIDE -NoUBA "-Log=$PWD\Saved\BuildLogs\build.log"
+Opening or building the Unreal project also requires **Unreal Engine 5.7** and your platform's C++ build tools. Unreal Editor does not need to be running to upload drawings or edit plans.
+
+## Setup
+
+Clone the repository and open the project folder:
+
+```bash
+git clone https://github.com/xNgardy/PlayableSketch.git
+cd PlayableSketch
 ```
 
-The recorded verification used this working checkout. A fresh clone, packaged build
-and interactive playthrough have not been verified by this experiment run.
+On macOS, create the local Python environment:
 
-## Authoring and editor controls
+```bash
+python3.13 -m venv Saved/Runtime/hybrid-v1/python
+source Saved/Runtime/hybrid-v1/python/bin/activate
+python -m pip install --upgrade pip
+python -m pip install torch==2.9.1 torchvision==0.24.1 ultralytics==8.4.208 numpy==2.4.2 opencv-python==4.13.0.92 shapely==2.2.0 scipy==1.18.1 jsonschema==4.26.0 Pillow==12.1.1
+```
 
-Place/select a `PlayableSketchLevelActor` and assign a `PlayableSketchGraphAsset` in
-its Details panel. Edit the graph asset's room/connection arrays; stable GUIDs identify
-elements. Rooms define dimensions, type, role and Auto/Locked positioning. Connections
-define endpoints, corridor/door widths and optional manual door positions. Set Start
-and Goal room IDs to existing, different rooms.
+Model files are stored in `SketchPipeline/shape_authoring/models/hybrid-unet-yolo11-v1/`:
 
-Use the actor's Details buttons:
-
-| Control | Behavior |
+| File | Purpose |
 | --- | --- |
-| Validate Graph / Validate Current Design | Report structured input/geometry issues. |
-| Generate Layout | Place Auto rooms, generate geometry and save room placements in the graph asset. |
-| Rebuild Geometry (Full) | Rebuild from saved/Locked positions and replace generated components. |
-| Rebuild Local Geometry | Recompute the candidate and retain/update unchanged/key-matched components. |
-| Auto Rebuild Geometry | Refresh geometry after graph/settings edits. |
-| Clear Floors | Remove generated preview geometry and its navigation result. |
-| Analyze Navigation | Analyze the current floor/wall geometry from Start to Goal. |
-| Export Navigation Report | Export the current navigation sample under `Saved/Navigation`. |
-| Run Navigation Examples | Export the five fixed navigation fixtures. |
-| Show Navigation Grid / Show Blocked Navigation Cells | Draw the analyzed cells and route in the viewport. |
+| `wall.pt` | U-Net wall weights |
+| `door.pt` | YOLO11n door weights |
+| `model-lock.json` | Model file hashes and inference settings |
 
-Validation failures invalidate the preview and remove outdated generated collision.
-Local rebuild can fall back to Full when the initial snapshot is missing, global
-settings/seed/asset change or the component registry is unhealthy; inspect
-`LastRebuildReport` for the actual mode and reason. Save the asset/map through the
-editor after authoring changes.
+The active model and Python environment path are selected in `SketchPipeline/shape_authoring/workspace-model.lock.json`. Weight hashes are checked when the model loads.
 
-## Repeat the experiments
+## Starting the workspace
 
-Close the editor before rebuilding. From the repository root:
+Run this from the project root:
 
-```powershell
-.\Scripts\run_experiments.ps1 `
-    -EngineRoot 'C:\Program Files\Epic Games\UE_5.7' `
-    -PythonExe python
+```bash
+Saved/Runtime/hybrid-v1/python/bin/python Scripts/start_runtime.py --workspace-only
 ```
 
-The script validates the manifest SHA-256 lock, records source hashes, builds the
-editor target, runs all `PlayableSketch.` automation tests in a transient world with
-`-NullRHI`, validates the output and writes a new timestamped directory under
-`Experiments/runs/`. Logs, DDC and the automation report stay under
-`Saved/Experiments/runs/`. It restores the process DDC environment variables on exit.
+The service starts and opens [http://127.0.0.1:8772/](http://127.0.0.1:8772/) in your browser.
 
-Use `-OutputDirectory <unused-path>` to choose the result directory. The script refuses
-to overwrite an existing directory. `-SkipBuild` is only appropriate when the binary
-already matches the current source. Run one experiment process at a time because the
-engine initially exports to `Saved/Experiments/raw_results.json`.
+On the prepared local installation, you can also double-click `Start Sketch Workspace.command`. This shortcut additionally expects the environment at `Saved/Training/v1/python/bin/python`; use the command above for a fresh installation.
 
-The engine automation entry point is `PlayableSketch.Experiments.Run`. The PowerShell
-wrapper adds the manifest/source checks and CSV/statistical exports. Expected generation
-failures are data; the automation test fails for a broken harness or a Local/Full
-equivalence failure. Fresh raw results are retained when automation reports a failure.
+To keep the service in the terminal, or run it on another operating system, use a Python environment with the required packages installed:
 
-`Scripts/create_manifest.py` documents how the committed inputs were constructed.
-**Do not regenerate or tune the manifest after looking at outcomes.** A changed protocol
-needs a separately identified manifest/run and must retain its failures.
-
-## Fixed protocol
-
-[`Experiments/manifest.json`](Experiments/manifest.json) was written before the first
-run. Its SHA-256 is:
-
-```text
-06f45534f232d33e21d6e47cd22c36d87c69f40bacb314a6cc77f4dc5ddf0ca8
+```bash
+python -m SketchPipeline.shape_authoring.server \
+  --port 8772 \
+  --output Saved/ShapeFirst/workspace/jobs \
+  --profile hybrid \
+  --checkpoint SketchPipeline/shape_authoring/models/hybrid-unet-yolo11-v1/model-lock.json
 ```
 
-It fixes full graphs, GUIDs, seeds, schema/algorithm versions and all generation,
-geometry and navigation settings. The generation group contains 10 chain, 10 binary
-branching and 10 ring graphs. Each family uses room counts
-`5, 10, 20, 5, 10, 20, 5, 10, 20, 5`; seeds and IDs are fixed per case. Every room in
-this group uses Auto placement, 200 cm corridors and 150 cm doors. For zero-based case
-index `i` within a family, room index `r`, and family index `f`, dimensions are fixed as
-`width = 600 + 50*i + 50*(r%3)` and `depth = 600 + 50*((r+i+2*f)%4)` cm.
-The recorded output contains **30 different room-bound arrangements even after
-removing GUIDs**.
-There is one generation attempt per case with a 128-attempt placement bound; no retry,
-replacement or success-only filtering is performed.
+Open the same address in your browser. Stop a service started this way with `Ctrl+C` in its terminal.
 
-This is input set version 2 (`varied-dimensions`). The first, uniform-dimension input
-set only varied seeds/IDs within repeated room counts. Inspection showed that the
-current placement implementation does not consume Seed, so that set was inadequate
-for geometric diversity. Its full manifest and results remain in
-[`Experiments/archive/uniform-inputs`](Experiments/archive/uniform-inputs). The second
-set varied dimensions by the formula above, was locked before its own run, and retained
-all of its outcomes. The generation algorithm was unchanged. The headline results
-below use only version 2; the earlier run is not pooled into them.
+## From sketch to plan
 
-The benchmark group is separate from the generation group. It uses a known valid
-four-room Locked ring and ten predefined before/after graph pairs: hub material,
-display name, room width, room depth, room position, door width, corridor width,
-connection deletion, room deletion and array reordering. Display-name and array-order
-edits intentionally test changes that should leave geometry unchanged. These fixtures
-do not demonstrate successful automatic generation of branching/ring layouts.
+1. Choose **Upload sketch** to upload a PNG or JPG, up to 20 MB. You can also drag the file onto the upload area.
+2. Once detection finishes, check the result in the **Sketch**, **Plan** and **Compare** views.
+3. Move and resize rooms, add missing rooms or doors, and delete incorrect suggestions.
+4. Adjust room names and suggested dimensions, then choose **Save changes**.
+5. Open **Review plan**, check the layout and confirm it.
 
-For each pair, the runner performs one warmup and five measured repetitions. Before
-**every** repetition, both actors receive the same baseline graph and a Full rebuild.
-Their starting plans and actual scene values must match. Both then receive the exact
-same edited graph; one uses Local and the other Full. Execution order alternates.
-Baseline setup, comparison and JSON/CSV export are outside the measured rebuild call.
-Warmups remain in the raw records and are excluded from timing summaries.
+Choose **Use a sample** to try the workspace without uploading a drawing. Previous drawings appear on the home screen and under **Saved drawings**. Switch between light and dark themes from the top bar.
 
-Equivalence checks cover canonical room bounds, door endpoints and corridor footprints;
-actual component keys, transforms, mesh/material assignments and collision settings;
-registry health/current source signatures; navigation metrics, ordered paths and
-walkable cell sets. Raw records include plans, canonical scene values, baseline
-fingerprints, update counts and the actual mode/reason. A Local fallback is not accepted
-as a successful Local comparison. Artifact hashes are identifiers; equality checks also
-compare the underlying values directly.
+### Preparing a drawing
 
-## Recorded results
+Draw one floor from above. Keep wall lines clear. Mark a door by leaving a gap in the wall and adding a small tick at each end. Take the photo as straight-on as possible, with even lighting.
 
-[`Experiments/results`](Experiments/results) contains the run from **2026-10-11 UTC**:
+Written dimensions are optional. Suggested sizes are not measurements read from the drawing and can be changed later. Faint or broken lines can cause detection errors, so review the plan before exporting it.
 
-| Generation family | Cases / valid inputs | Room placement succeeded | Valid geometry | Navigation reachable | Failed pipeline |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Chain | 10 / 10 | 10 | 10 | 0 | 0 |
-| Branching | 10 / 10 | 10 | 0 | 0 | 10 |
-| Ring | 10 / 10 | 10 | 0 | 0 | 10 |
-| **Total** | **30 / 30** | **30** | **10** | **0** | **20** |
+### Keyboard shortcuts
 
-The 20 failures occurred during door generation: the automatically selected openings
-overlapped. They have `failure_stage="doors"`, `error_code="EXPERIMENT_DOORS"` and the
-original error text identifying the conflicting connection IDs. Their later geometry
-validation/navigation fields are **null/not computed**, rather than successful or
-measured zero. Thus room placement is 30/30 and geometry acceptance is **10/30 (33.3%)**.
-Navigation analysis completed on all ten valid geometries, but every result was
-unreachable: navigation success is **0/30**, or **0/10 conditional on valid geometry**.
-These ten records have `status="completed"` because analysis completed; that field
-does not mean the navigation was successful. Agent radius is 40 cm, clearance 10 cm,
-agent height 180 cm and grid cell size 50 cm. The conservative grid/discretization is
-a relevant limitation; this experiment does not establish a single cause for every
-unreachable case.
-
-All ten benchmark pairs passed, including the warmups: 20 warmup records and 100 measured
-records (50 Local, 50 Full). There were no Local fallbacks. Benchmark validity means
-accepted geometry, completed navigation analysis and equal Local/Full outcomes;
-it does not require the edited layout to be reachable. The pooled observed times are:
-
-| Rebuild measurement | Local median / P95 (ms) | Full median / P95 (ms) | Samples per mode |
-| --- | ---: | ---: | ---: |
-| Entire rebuild call | 1.667 / 3.126 | 6.089 / 7.533 | 50 |
-| Component apply | 0.163 / 0.925 | 4.650 / 5.772 | 50 |
-| Navigation | 1.318 / 1.865 | 1.372 / 1.815 | 50 |
-
-Per-edit Full/Local median-time ratios range from **2.53 to 3.92** on these small
-fixtures. This is a single-machine CPU/editor observation, including two geometry
-no-op edits, rather than a general performance guarantee. There are only five measured
-repeats per edit; their nearest-rank P95 is the maximum of those five samples. Pooled
-statistics combine different edits. No GPU/frame-time, packaged-runtime or large-layout
-benchmark was performed.
-
-`total_ms` measures the existing rebuild method including validation, planning,
-component updates, navigation and reporting. `plan_ms`, `validation_ms`, `dirty_ms`,
-`apply_ms` and `navigation_ms` are the existing internal measurements and do not form
-an exhaustive additive partition of total time. Local still recomputes candidate
-geometry and navigation globally; the measured saving primarily comes from component
-reuse. Generation `geometry_pipeline_ms` covers pure door/routing/wall/validation work
-up to completion or failure and does not include scene component creation. Its pooled
-summary includes the 20 early failures and must not be interpreted as successful-build
-latency. Every timing summary includes its own non-null sample count.
-
-| Artifact | Contents |
+| Key | Action |
 | --- | --- |
-| [raw_results.json](Experiments/results/raw_results.json) | Full consumed manifest, all 30 generation outcomes, all 120 benchmark records, snapshots, errors and navigation output. |
-| [generation.csv](Experiments/results/generation.csv) | All generation cases, input graphs/settings, stage outcomes and timings. |
-| [benchmark.csv](Experiments/results/benchmark.csv) | Warmups and measured repeats, before/after graphs, mode/reason, equality flags and timings. |
-| [summary.json](Experiments/results/summary.json) | Denominators, family outcomes, per-edit and pooled median/P95 values. |
-| [timing_summary.csv](Experiments/results/timing_summary.csv) | Per-edit/per-mode/per-metric sample counts, median and P95. |
-| [provenance.json](Experiments/results/provenance.json) | Engine/compiler context, OS/CPU context, Git revision/dirty status, source SHA-256 values and automation outcomes. |
+| `V` | Select / move |
+| `R` | Add a room |
+| `D` | Add a door |
+| `G` | Add a connection |
+| Arrow keys | Move the selected room, or resize it with the Resize tool |
+| `Shift` + arrow keys | Use larger steps |
+| `F` | Fit the plan to the view |
+| `+` / `-` | Zoom in / out |
+| `Ctrl/Cmd + S` | Save changes |
+| `Ctrl/Cmd + Z` | Undo |
+| `Delete` / `Backspace` | Delete the selected item |
 
-CSV empty cells represent JSON null. Nested arrays/objects are JSON-encoded CSV fields.
-P95 is nearest rank `ceil(0.95*n)`; median uses the conventional sample median. The
-recorded checkout had uncommitted source changes; its exact source hashes are provided
-instead of implying the Git HEAD alone reproduces the run.
+## Exporting to Unreal Engine
 
-## Automated verification
+**Review plan** offers two output modes:
 
-The recorded build succeeded and all five automation tests returned `Success`:
+- **Geometry only:** Exports room and door geometry.
+- **Playable level:** Also requires a start and a goal in different rooms. Passages are checked for player clearance.
 
-- `PlayableSketch.Authoring.Validation`
-- `PlayableSketch.Geometry.LocalRebuild`
-- `PlayableSketch.Navigation.GridAndMetrics`
-- `PlayableSketch.Navigation.ActorLifecycle`
-- `PlayableSketch.Experiments.Run`
+After confirming the plan, choose **Export for Unreal** to download a ZIP file. It contains `validated-layout.json`, plan provenance and a manifest with file hashes. If you change the geometry or dimensions, confirm the plan again.
 
-Harness/test success does not imply that all 30 generated designs succeeded. The raw
-generation failures above remain part of the result and denominator.
+If the Mac application has been built locally, open it with `Start PlayableSketch.command`. **Open latest plan** loads the latest playable export. Use WASD or the arrow keys to move, or choose **Follow route** to follow the route.
 
-## Current limitations
+The packaged application is not included in the Git repository. To build the Unreal project, open `PlayableSketch.uproject` in Unreal Engine 5.7 and compile it. Mac packaging details are in the [packaging guide](Docs/step14_packaged_runtime.md).
 
-- Automatic placement/door selection does not jointly solve the complete graph;
-  branching/ring failures in this manifest expose that limitation. Corridor routing
-  uses bounded orthogonal candidates rather than unrestricted global backtracking.
-- Navigation is a conservative, four-neighbor horizontal occupancy grid with finite
-  cell/work budgets. It reports reachability, route length, physical dead ends,
-  alternative route existence and unreachable rooms. It is not a Recast NavMesh or
-  an actual pawn movement test; discretization/agent clearance can reject narrow paths.
-- Generated layout coordinates are local centimeters. Navigation assumes horizontal
-  floors and unit actor scale; stairs and general 3D traversal are outside this prototype.
-- Local rebuild preserves components but still plans/validates the complete candidate
-  and rebuilds the navigation analysis.
-- The fixed benchmark covers ten edits on small, valid fixtures. It does not establish
-  scalability or compensate for failed automatic-generation cases.
+## Project structure
 
+| Folder / file | Contents |
+| --- | --- |
+| `SketchPipeline/shape_authoring/` | Model inference, geometry, local service and browser interface |
+| `SketchPipeline/tests/` | Python tests |
+| `Scripts/` | Training, evaluation, launch and packaging tools |
+| `Source/` | Unreal Engine C++ code |
+| `Content/`, `Config/` | Unreal assets and project settings |
+| `Docs/` | Technical notes and evaluation reports |
+| `Experiments/` | Protocols and results from earlier Unreal experiments |
+| `Data/` | Local training data; excluded from Git |
+| `Saved/` | Local environments, jobs, training and application outputs; excluded from Git |
 
+Uploaded drawings, edits and exports are stored under `Saved/ShapeFirst/workspace/jobs/`. Deleting this folder also deletes the saved plans.
+
+Training and experiment tools use separately prepared data, annotations and earlier experiment artifacts. These are not part of a fresh clone. Retraining is not required to run the application with the included weights.
+
+## Checks and results
+
+To check the hybrid integration, run this in the configured Python environment:
+
+```bash
+python -m unittest SketchPipeline.tests.test_hybrid_integration SketchPipeline.tests.test_project_model_selection
+```
+
+To run the full test suite:
+
+```bash
+python -m unittest discover -s SketchPipeline/tests
+```
+
+Some tests require local datasets, earlier model files and OCR dependencies. The application setup above does not provide everything needed for the full suite.
+
+In the latest integration check, the L-shaped example produced **4 rooms / 3 doors**, and the U-shaped example produced **2 rooms / 1 door**. Both passed plan editing, sizing and geometry export checks. These are results for two examples, not an accuracy estimate across all drawings.
+
+See the [training results](Docs/hybrid_unet_yolo11_training_2026_11_09.md) and [integration checks](Docs/hybrid_integration_2026_11_10.md) for details.

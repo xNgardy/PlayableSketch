@@ -21,11 +21,12 @@ FVector2D FPlayableSketchCorridorRouter::GetOutwardDirection(EPlayableSketchWall
     }
 }
 
-bool FPlayableSketchCorridorRouter::BuildCandidate(const TArray<FVector2D>& Points, double WidthCm, FPlayableSketchCorridorCandidate& OutCandidate)
+bool FPlayableSketchCorridorRouter::BuildCandidate(const TArray<FVector2D> &Points, double WidthCm,
+                                                   FPlayableSketchCorridorCandidate &OutCandidate)
 {
     OutCandidate = FPlayableSketchCorridorCandidate();
 
-    for (const FVector2D& Point : Points)
+    for (const FVector2D &Point : Points)
     {
         if (!FMath::IsFinite(Point.X) || !FMath::IsFinite(Point.Y))
         {
@@ -40,8 +41,10 @@ bool FPlayableSketchCorridorRouter::BuildCandidate(const TArray<FVector2D>& Poin
 
     for (int32 Index = 1; Index + 1 < OutCandidate.Waypoints.Num();)
     {
-        const FVector2D PreviousDelta = OutCandidate.Waypoints[Index] - OutCandidate.Waypoints[Index - 1];
-        const FVector2D NextDelta = OutCandidate.Waypoints[Index + 1] - OutCandidate.Waypoints[Index];
+        const FVector2D PreviousDelta =
+            OutCandidate.Waypoints[Index] - OutCandidate.Waypoints[Index - 1];
+        const FVector2D NextDelta =
+            OutCandidate.Waypoints[Index + 1] - OutCandidate.Waypoints[Index];
 
         const bool bBothHorizontal = PreviousDelta.Y == 0.0 && NextDelta.Y == 0.0;
         const bool bBothVertical = PreviousDelta.X == 0.0 && NextDelta.X == 0.0;
@@ -77,11 +80,13 @@ bool FPlayableSketchCorridorRouter::BuildCandidate(const TArray<FVector2D>& Poin
 
         if (A.Y == B.Y && A.X != B.X)
         {
-            Footprint = FPlayableSketchRect(FVector2D(FMath::Min(A.X, B.X), A.Y - HalfWidthCm), FVector2D(FMath::Max(A.X, B.X), A.Y + HalfWidthCm));
+            Footprint = FPlayableSketchRect(FVector2D(FMath::Min(A.X, B.X), A.Y - HalfWidthCm),
+                                            FVector2D(FMath::Max(A.X, B.X), A.Y + HalfWidthCm));
         }
         else if (A.X == B.X && A.Y != B.Y)
         {
-            Footprint = FPlayableSketchRect(FVector2D(A.X - HalfWidthCm, FMath::Min(A.Y, B.Y)), FVector2D(A.X + HalfWidthCm, FMath::Max(A.Y, B.Y)));
+            Footprint = FPlayableSketchRect(FVector2D(A.X - HalfWidthCm, FMath::Min(A.Y, B.Y)),
+                                            FVector2D(A.X + HalfWidthCm, FMath::Max(A.Y, B.Y)));
         }
         else
         {
@@ -107,12 +112,15 @@ bool FPlayableSketchCorridorRouter::BuildCandidate(const TArray<FVector2D>& Poin
     return true;
 }
 
-bool FPlayableSketchCorridorRouter::BuildCandidates(const FPlayableSketchCorridor& Corridor, int32 CorridorWidthCm, int32 GridStepCm, TArray<FPlayableSketchCorridorCandidate>& OutCandidates, FString& OutError)
+bool FPlayableSketchCorridorRouter::BuildCandidates(
+    const FPlayableSketchCorridor &Corridor, int32 CorridorWidthCm, int32 GridStepCm,
+    TArray<FPlayableSketchCorridorCandidate> &OutCandidates, FString &OutError)
 {
     OutCandidates.Reset();
     OutError.Reset();
 
-    if (!Corridor.ConnectionId.IsValid() || !Corridor.DoorA.RoomId.IsValid() || !Corridor.DoorB.RoomId.IsValid() || CorridorWidthCm <= 0 || GridStepCm <= 0)
+    if (!Corridor.ConnectionId.IsValid() || !Corridor.DoorA.RoomId.IsValid() ||
+        !Corridor.DoorB.RoomId.IsValid() || CorridorWidthCm <= 0 || GridStepCm <= 0)
     {
         OutError = TEXT("Invalid corridor routing input.");
         return false;
@@ -132,32 +140,31 @@ bool FPlayableSketchCorridorRouter::BuildCandidates(const FPlayableSketchCorrido
     const FVector2D OutsideA = Corridor.DoorA.PositionCm + DirectionA * ExitDistanceCm;
     const FVector2D OutsideB = Corridor.DoorB.PositionCm + DirectionB * ExitDistanceCm;
 
-    auto AddCandidate = [&](const FVector2D& Elbow)
+    auto AddCandidate = [&](const FVector2D &Elbow) {
+        TArray<FVector2D> Points;
+        Points.Add(Corridor.DoorA.PositionCm);
+        Points.Add(OutsideA);
+        Points.Add(Elbow);
+        Points.Add(OutsideB);
+        Points.Add(Corridor.DoorB.PositionCm);
+
+        FPlayableSketchCorridorCandidate Candidate;
+
+        if (!BuildCandidate(Points, CorridorWidthCm, Candidate))
         {
-            TArray<FVector2D> Points;
-            Points.Add(Corridor.DoorA.PositionCm);
-            Points.Add(OutsideA);
-            Points.Add(Elbow);
-            Points.Add(OutsideB);
-            Points.Add(Corridor.DoorB.PositionCm);
+            return;
+        }
 
-            FPlayableSketchCorridorCandidate Candidate;
-
-            if (!BuildCandidate(Points, CorridorWidthCm, Candidate))
+        for (const FPlayableSketchCorridorCandidate &Existing : OutCandidates)
+        {
+            if (Existing.Waypoints == Candidate.Waypoints)
             {
                 return;
             }
+        }
 
-            for (const FPlayableSketchCorridorCandidate& Existing : OutCandidates)
-            {
-                if (Existing.Waypoints == Candidate.Waypoints)
-                {
-                    return;
-                }
-            }
-
-            OutCandidates.Add(MoveTemp(Candidate));
-        };
+        OutCandidates.Add(MoveTemp(Candidate));
+    };
 
     AddCandidate(FVector2D(OutsideB.X, OutsideA.Y));
 
@@ -165,7 +172,8 @@ bool FPlayableSketchCorridorRouter::BuildCandidates(const FPlayableSketchCorrido
 
     if (OutCandidates.IsEmpty())
     {
-        OutError = FString::Printf(TEXT("Routing failed: no valid L candidate for Connection %s."), *Corridor.ConnectionId.ToString());
+        OutError = FString::Printf(TEXT("Routing failed: no valid L candidate for Connection %s."),
+                                   *Corridor.ConnectionId.ToString());
         return false;
     }
 

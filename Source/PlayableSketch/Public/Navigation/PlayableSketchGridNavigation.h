@@ -12,9 +12,11 @@ struct PLAYABLESKETCH_API FPlayableSketchGridPath
 
 class PLAYABLESKETCH_API FPlayableSketchGridNavigation
 {
-public:
-    static bool FindPath(const FPlayableSketchFloorPlan& FloorPlan, const FGuid& StartRoomId, const FGuid& GoalRoomId, int32 GridStepCm, FPlayableSketchGridPath& OutPath, FString& OutError);
+  public:
+    static bool FindPath(const FPlayableSketchFloorPlan &FloorPlan, const FGuid &StartRoomId,
+                         const FGuid &GoalRoomId, int32 GridStepCm,
+                         FPlayableSketchGridPath &OutPath, FString &OutError);
 
-private:
-    static bool ContainsPoint(const FPlayableSketchRect& Rect, const FVector2D& Point);
+  private:
+    static bool ContainsPoint(const FPlayableSketchRect &Rect, const FVector2D &Point);
 };

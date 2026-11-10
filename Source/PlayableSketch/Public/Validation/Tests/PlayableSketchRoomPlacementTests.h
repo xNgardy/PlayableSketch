@@ -5,6 +5,6 @@
 
 class PLAYABLESKETCH_API FPlayableSketchRoomPlacementTests
 {
-public:
-    static void Run(const FPlayableSketchGraph& Graph);
+  public:
+    static void Run(const FPlayableSketchGraph &Graph);
 };

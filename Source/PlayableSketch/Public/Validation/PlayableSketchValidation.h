@@ -57,16 +57,14 @@ struct PLAYABLESKETCH_API FPlayableSketchValidationSettings
 
 class PLAYABLESKETCH_API FPlayableSketchValidation
 {
-public:
-    static bool HasErrors(const TArray<FPlayableSketchValidationIssue>& Issues);
+  public:
+    static bool HasErrors(const TArray<FPlayableSketchValidationIssue> &Issues);
 
     static TArray<FPlayableSketchValidationIssue> ValidateInput(
-        const FPlayableSketchGraph& Graph,
-        const FPlayableSketchValidationSettings& Settings);
+        const FPlayableSketchGraph &Graph, const FPlayableSketchValidationSettings &Settings);
 
     static TArray<FPlayableSketchValidationIssue> ValidatePlan(
-        const FPlayableSketchGraph& Graph,
-        const FPlayableSketchFloorPlan& Plan,
-        const TArray<FPlayableSketchGeometryDescriptor>& Pieces,
-        const FPlayableSketchValidationSettings& Settings);
+        const FPlayableSketchGraph &Graph, const FPlayableSketchFloorPlan &Plan,
+        const TArray<FPlayableSketchGeometryDescriptor> &Pieces,
+        const FPlayableSketchValidationSettings &Settings);
 };

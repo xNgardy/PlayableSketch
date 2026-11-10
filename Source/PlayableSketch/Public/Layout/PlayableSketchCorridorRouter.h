@@ -11,10 +11,14 @@ struct PLAYABLESKETCH_API FPlayableSketchCorridorCandidate
 
 class PLAYABLESKETCH_API FPlayableSketchCorridorRouter
 {
-public:
-    static bool BuildCandidates(const FPlayableSketchCorridor& Corridor, int32 CorridorWidthCm, int32 GridStepCm, TArray<FPlayableSketchCorridorCandidate>& OutCandidates, FString& OutError);
+  public:
+    static bool BuildCandidates(const FPlayableSketchCorridor &Corridor, int32 CorridorWidthCm,
+                                int32 GridStepCm,
+                                TArray<FPlayableSketchCorridorCandidate> &OutCandidates,
+                                FString &OutError);
 
-private:
+  private:
     static FVector2D GetOutwardDirection(EPlayableSketchWallSide WallSide);
-    static bool BuildCandidate(const TArray<FVector2D>& Points, double WidthCm, FPlayableSketchCorridorCandidate& OutCandidate);
+    static bool BuildCandidate(const TArray<FVector2D> &Points, double WidthCm,
+                               FPlayableSketchCorridorCandidate &OutCandidate);
 };

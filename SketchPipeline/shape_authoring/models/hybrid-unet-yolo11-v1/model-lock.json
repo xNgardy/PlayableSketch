@@ -1,0 +1,23 @@
+{
+  "version": "hybrid-unet-yolo11/1.0",
+  "wall": {
+    "path": "wall.pt",
+    "sha256": "98a7a18164c5579c6df2faf8b6ccd2fef73d7b99e04f191a91d22977fc5be23e"
+  },
+  "door": {
+    "path": "door.pt",
+    "sha256": "f4a3045583a635b1d011b37f0c7e7044b3664caa7eb239c44b8c67a553705bd8"
+  },
+  "parameters": {
+    "wall_threshold": 0.35,
+    "door_threshold": 0.5,
+    "closing_kernel": 5
+  },
+  "input_side": 1024,
+  "door_full_and_tiled": true,
+  "room_definition": "Connected floor interior, separated only by walls and doors; no corridor class.",
+  "review_required": true,
+  "production_promoted": true,
+  "validation_objective": 1.4357142857142857,
+  "geometry_version": "hybrid-authoring/1.0"
+}

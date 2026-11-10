@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:playablesketch:validated-layout:1",
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "playablesketch-layout/1.0"
+        },
+        "document_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "revision_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "parent_revision_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "algorithm_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observation_document_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "source": {
+          "$ref": "urn:playablesketch:common:1#/$defs/source"
+        },
+        "units": {
+          "const": "cm"
+        },
+        "coordinate_system": {
+          "const": "local_x_right_y_up_z_up"
+        },
+        "dimension_basis": {
+          "const": "wall_centerline"
+        },
+        "validation_mode": {
+          "enum": [
+            "geometry_only",
+            "gameplay"
+          ]
+        },
+        "start_room_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "goal_room_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "settings": {
+          "$ref": "urn:playablesketch:common:1#/$defs/settings"
+        },
+        "review": {
+          "$ref": "urn:playablesketch:common:1#/$defs/review"
+        },
+        "layout": {
+          "$ref": "urn:playablesketch:common:1#/$defs/layout"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:playablesketch:common:1#/$defs/issue"
+          },
+          "minItems": 0
+        },
+        "validation": {
+          "$ref": "urn:playablesketch:common:1#/$defs/validation"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 0
+        },
+        "kind": {
+          "const": "validated_layout"
+        },
+        "status": {
+          "const": "validated"
+        }
+      },
+      "required": [
+        "schema_version",
+        "document_id",
+        "revision_id",
+        "parent_revision_id",
+        "algorithm_version",
+        "observation_document_id",
+        "source",
+        "units",
+        "coordinate_system",
+        "dimension_basis",
+        "validation_mode",
+        "start_room_id",
+        "goal_room_id",
+        "settings",
+        "review",
+        "layout",
+        "issues",
+        "validation",
+        "notes",
+        "kind",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "properties": {
+        "review": {
+          "properties": {
+            "status": {
+              "const": "accepted"
+            },
+            "reviewer": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "issues": {
+          "maxItems": 0
+        },
+        "validation": {
+          "properties": {
+            "metric": {
+              "const": "passed"
+            },
+            "validator_version": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "layout": {
+          "properties": {
+            "vertices": {
+              "items": {
+                "properties": {
+                  "position_cm": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": -1000000000.0,
+                      "maximum": 1000000000.0
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "state": {
+                    "enum": [
+                      "confirmed",
+                      "derived"
+                    ]
+                  }
+                }
+              }
+            },
+            "openings": {
+              "items": {
+                "properties": {
+                  "center_offset_cm": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000000.0
+                  },
+                  "clear_width_cm": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1000000000.0
+                  },
+                  "state": {
+                    "enum": [
+                      "confirmed",
+                      "derived"
+                    ]
+                  }
+                }
+              }
+            },
+            "dimensions": {
+              "items": {
+                "properties": {
+                  "value_cm": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1000000000.0
+                  },
+                  "state": {
+                    "enum": [
+                      "confirmed",
+                      "derived"
+                    ]
+                  },
+                  "target": {
+                    "not": {
+                      "properties": {
+                        "type": {
+                          "const": "unassigned"
+                        }
+                      },
+                      "required": [
+                        "type"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

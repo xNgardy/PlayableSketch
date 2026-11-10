@@ -1,0 +1,944 @@
+{
+  "version": "drawing-pack/1.0",
+  "purpose": "Reference diagrams only; future photo labels must be traced from actual photographs.",
+  "split_policy": "Split by original drawing before augmentation. Never derive training samples from validation or test originals.",
+  "plans": [
+    {
+      "id": "P01",
+      "title": "Düz dikey bağlantı",
+      "rooms": [
+        [
+          30,
+          20,
+          130,
+          100
+        ],
+        [
+          20,
+          200,
+          140,
+          290
+        ]
+      ],
+      "corridors": [
+        [
+          65,
+          100,
+          95,
+          200
+        ]
+      ],
+      "doors": [
+        0,
+        1
+      ],
+      "barriers": [],
+      "notes": [
+        "İki oda arasında tek dikey koridor çiz.",
+        "Koridorun iki oda girişinde kapı olsun. Kapı boşluğu koridor genişliğinin yaklaşık yarısı kadar kalsın."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 1,
+      "expected_doors": 2,
+      "filename": "P01.png"
+    },
+    {
+      "id": "P02",
+      "title": "Yatay ve farklı boyda odalar",
+      "rooms": [
+        [
+          20,
+          40,
+          100,
+          140
+        ],
+        [
+          210,
+          20,
+          340,
+          170
+        ]
+      ],
+      "corridors": [
+        [
+          100,
+          75,
+          210,
+          105
+        ]
+      ],
+      "doors": [
+        0
+      ],
+      "barriers": [],
+      "notes": [
+        "Solda küçük, sağda büyük oda; arada yatay koridor.",
+        "Yalnız sol girişte kapı çiz. Sağ oda bağlantısı tamamen açık olsun."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 1,
+      "expected_doors": 1,
+      "filename": "P02.png"
+    },
+    {
+      "id": "P03",
+      "title": "Uzun ve dar koridor",
+      "rooms": [
+        [
+          30,
+          20,
+          140,
+          100
+        ],
+        [
+          20,
+          260,
+          150,
+          350
+        ]
+      ],
+      "corridors": [
+        [
+          75,
+          100,
+          95,
+          260
+        ]
+      ],
+      "doors": [
+        0,
+        1
+      ],
+      "barriers": [],
+      "notes": [
+        "İki oda arasında uzun, dar bir koridor çiz.",
+        "İki kapı da dar koridordan daha dar olsun; boşluğu fotoğrafta kaybolacak kadar küçültme."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 1,
+      "expected_doors": 2,
+      "filename": "P03.png"
+    },
+    {
+      "id": "P04",
+      "title": "Geniş ve kısa koridor",
+      "rooms": [
+        [
+          20,
+          20,
+          130,
+          110
+        ],
+        [
+          190,
+          10,
+          320,
+          140
+        ]
+      ],
+      "corridors": [
+        [
+          130,
+          45,
+          190,
+          95
+        ]
+      ],
+      "doors": [
+        0,
+        1
+      ],
+      "barriers": [],
+      "notes": [
+        "Kısa bağlantıyı önceki örnekten belirgin biçimde geniş çiz.",
+        "İki uçta da kapı olsun; büyük açıklığı duvarla kapatma."
+      ],
+      "split": "validation",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 1,
+      "expected_doors": 2,
+      "filename": "P04.png"
+    },
+    {
+      "id": "P05",
+      "title": "Aşağı ve sağa L - açık",
+      "rooms": [
+        [
+          20,
+          20,
+          120,
+          100
+        ],
+        [
+          200,
+          170,
+          300,
+          260
+        ]
+      ],
+      "corridors": [
+        [
+          55,
+          100,
+          85,
+          210
+        ],
+        [
+          85,
+          180,
+          200,
+          210
+        ]
+      ],
+      "doors": [],
+      "barriers": [],
+      "notes": [
+        "Üst odadan aşağı in, sonra sağa dönerek ikinci odaya bağlan.",
+        "İki oda girişi ve L dirseği açık. Dönüşte enine çizgi çizme."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 2,
+      "expected_doors": 0,
+      "filename": "P05.png"
+    },
+    {
+      "id": "P06",
+      "title": "Aşağı ve sola L - iki kapı",
+      "rooms": [
+        [
+          190,
+          20,
+          290,
+          100
+        ],
+        [
+          10,
+          170,
+          110,
+          260
+        ]
+      ],
+      "corridors": [
+        [
+          225,
+          100,
+          255,
+          210
+        ],
+        [
+          110,
+          180,
+          225,
+          210
+        ]
+      ],
+      "doors": [
+        0,
+        1
+      ],
+      "barriers": [],
+      "notes": [
+        "Üst sağ odadan aşağı, sonra sola dönen bir L çiz.",
+        "Kapılar yalnız odalara girişte olsun. L dönüşünün içinde kapı veya duvar olmasın."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 2,
+      "expected_doors": 2,
+      "filename": "P06.png"
+    },
+    {
+      "id": "P07",
+      "title": "Sağa ve aşağı L - tek kapı",
+      "rooms": [
+        [
+          10,
+          20,
+          100,
+          120
+        ],
+        [
+          190,
+          230,
+          300,
+          320
+        ]
+      ],
+      "corridors": [
+        [
+          100,
+          55,
+          260,
+          85
+        ],
+        [
+          230,
+          85,
+          260,
+          230
+        ]
+      ],
+      "doors": [
+        1
+      ],
+      "barriers": [],
+      "notes": [
+        "Sol odadan sağa çık, aşağı dön ve alt sağ odaya gir.",
+        "Yalnız alt odanın girişine kapı koy; ilk giriş tamamen açık."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 2,
+      "expected_doors": 1,
+      "filename": "P07.png"
+    },
+    {
+      "id": "P08",
+      "title": "Sağa ve yukarı dar L",
+      "rooms": [
+        [
+          10,
+          210,
+          100,
+          310
+        ],
+        [
+          220,
+          10,
+          320,
+          90
+        ]
+      ],
+      "corridors": [
+        [
+          100,
+          245,
+          270,
+          265
+        ],
+        [
+          250,
+          90,
+          270,
+          245
+        ]
+      ],
+      "doors": [
+        0,
+        1
+      ],
+      "barriers": [],
+      "notes": [
+        "Alt soldan sağa, ardından yukarı giden dar L çiz.",
+        "İki oda girişinde kapı olsun. Dar koridorun iki duvarını paralel tut."
+      ],
+      "split": "validation",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 2,
+      "expected_doors": 2,
+      "filename": "P08.png"
+    },
+    {
+      "id": "P09",
+      "title": "Genişliği değişen L",
+      "rooms": [
+        [
+          20,
+          20,
+          130,
+          100
+        ],
+        [
+          210,
+          180,
+          320,
+          280
+        ]
+      ],
+      "corridors": [
+        [
+          60,
+          100,
+          85,
+          230
+        ],
+        [
+          85,
+          180,
+          210,
+          230
+        ]
+      ],
+      "doors": [
+        0,
+        1
+      ],
+      "barriers": [],
+      "notes": [
+        "Dikey kol dar, yatay kol yaklaşık iki kat geniş olsun.",
+        "Dirseğin içini açık bırak. Geniş kolun oda girişine de kapı çiz."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 2,
+      "expected_doors": 2,
+      "filename": "P09.png"
+    },
+    {
+      "id": "P10",
+      "title": "Kısa dirsekli L",
+      "rooms": [
+        [
+          20,
+          20,
+          140,
+          120
+        ],
+        [
+          190,
+          130,
+          300,
+          240
+        ]
+      ],
+      "corridors": [
+        [
+          75,
+          120,
+          105,
+          175
+        ],
+        [
+          105,
+          145,
+          190,
+          175
+        ]
+      ],
+      "doors": [],
+      "barriers": [],
+      "notes": [
+        "Dikey kolu kısa, yatay kolu biraz daha uzun çiz.",
+        "Kapı işareti yok; oda girişleri ve dönüş tamamen açık."
+      ],
+      "split": "test",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 2,
+      "expected_doors": 0,
+      "filename": "P10.png"
+    },
+    {
+      "id": "P11",
+      "title": "İki dönüşlü zikzak",
+      "rooms": [
+        [
+          10,
+          20,
+          110,
+          100
+        ],
+        [
+          210,
+          260,
+          320,
+          350
+        ]
+      ],
+      "corridors": [
+        [
+          45,
+          100,
+          75,
+          190
+        ],
+        [
+          75,
+          160,
+          265,
+          190
+        ],
+        [
+          235,
+          190,
+          265,
+          260
+        ]
+      ],
+      "doors": [
+        0
+      ],
+      "barriers": [],
+      "notes": [
+        "Önce aşağı, sonra sağa, sonra yeniden aşağı: üç koridor parçası.",
+        "Yalnız ilk oda çıkışında kapı olsun; iki dönüşü açık bırak."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 3,
+      "expected_doors": 1,
+      "filename": "P11.png"
+    },
+    {
+      "id": "P12",
+      "title": "U biçiminde bağlantı",
+      "rooms": [
+        [
+          10,
+          20,
+          110,
+          110
+        ],
+        [
+          220,
+          20,
+          320,
+          110
+        ]
+      ],
+      "corridors": [
+        [
+          45,
+          110,
+          75,
+          260
+        ],
+        [
+          75,
+          230,
+          255,
+          260
+        ],
+        [
+          255,
+          110,
+          285,
+          260
+        ]
+      ],
+      "doors": [],
+      "barriers": [],
+      "notes": [
+        "İki üst oda, aşağı dolanan U koridoruyla bağlansın.",
+        "Üç koridor kolu ve iki açık dönüş çiz. Odalar arasına üstten kestirme bağlantı ekleme."
+      ],
+      "split": "test",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 3,
+      "expected_doors": 0,
+      "filename": "P12.png"
+    },
+    {
+      "id": "P13",
+      "title": "T kavşağı - üç oda",
+      "rooms": [
+        [
+          10,
+          110,
+          90,
+          210
+        ],
+        [
+          260,
+          110,
+          350,
+          210
+        ],
+        [
+          130,
+          10,
+          220,
+          90
+        ]
+      ],
+      "corridors": [
+        [
+          90,
+          145,
+          260,
+          175
+        ],
+        [
+          160,
+          90,
+          190,
+          145
+        ]
+      ],
+      "doors": [
+        0,
+        1,
+        2
+      ],
+      "barriers": [],
+      "notes": [
+        "Solda, sağda ve üstte birer oda; ortada T biçiminde koridor.",
+        "Üç oda girişine kapı çiz. T merkezinde ayırıcı duvar olmasın."
+      ],
+      "split": "train",
+      "expected_rooms": 3,
+      "expected_corridor_segments": 2,
+      "expected_doors": 3,
+      "filename": "P13.png"
+    },
+    {
+      "id": "P14",
+      "title": "Dört kollu kavşak",
+      "rooms": [
+        [
+          10,
+          130,
+          90,
+          230
+        ],
+        [
+          270,
+          130,
+          350,
+          230
+        ],
+        [
+          130,
+          10,
+          230,
+          90
+        ],
+        [
+          130,
+          270,
+          230,
+          350
+        ]
+      ],
+      "corridors": [
+        [
+          90,
+          165,
+          270,
+          195
+        ],
+        [
+          165,
+          90,
+          195,
+          165
+        ],
+        [
+          165,
+          195,
+          195,
+          270
+        ]
+      ],
+      "doors": [
+        0,
+        2
+      ],
+      "barriers": [],
+      "notes": [
+        "Dört yönde birer oda ve ortada artı biçimli bağlantı çiz.",
+        "Soldaki ve üstteki oda girişleri kapılı, sağ ve alt girişler tamamen açık."
+      ],
+      "split": "validation",
+      "expected_rooms": 4,
+      "expected_corridor_segments": 3,
+      "expected_doors": 2,
+      "filename": "P14.png"
+    },
+    {
+      "id": "P15",
+      "title": "Üç oda, iki düz koridor",
+      "rooms": [
+        [
+          30,
+          10,
+          150,
+          90
+        ],
+        [
+          20,
+          170,
+          160,
+          270
+        ],
+        [
+          40,
+          350,
+          140,
+          430
+        ]
+      ],
+      "corridors": [
+        [
+          75,
+          90,
+          105,
+          170
+        ],
+        [
+          75,
+          270,
+          105,
+          350
+        ]
+      ],
+      "doors": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "barriers": [],
+      "notes": [
+        "Üç odayı dikey sırala; aralarında iki ayrı koridor olsun.",
+        "Her koridorun iki ucuna kapı çiz: toplam dört kapı. Ortadaki oda koridor sayılmaz."
+      ],
+      "split": "train",
+      "expected_rooms": 3,
+      "expected_corridor_segments": 2,
+      "expected_doors": 4,
+      "filename": "P15.png"
+    },
+    {
+      "id": "P16",
+      "title": "L bağlantısı ve yan oda",
+      "rooms": [
+        [
+          10,
+          10,
+          110,
+          90
+        ],
+        [
+          210,
+          170,
+          310,
+          270
+        ],
+        [
+          10,
+          270,
+          110,
+          350
+        ]
+      ],
+      "corridors": [
+        [
+          45,
+          90,
+          75,
+          210
+        ],
+        [
+          75,
+          180,
+          210,
+          210
+        ],
+        [
+          45,
+          210,
+          75,
+          270
+        ]
+      ],
+      "doors": [
+        0,
+        1
+      ],
+      "barriers": [],
+      "notes": [
+        "Üst soldan aşağı, sonra sağ odaya dönen L çiz; dikey kol alttaki üçüncü odaya da uzansın.",
+        "Üst ve sağ oda girişleri kapılı, alt oda girişi açık olsun."
+      ],
+      "split": "test",
+      "expected_rooms": 3,
+      "expected_corridor_segments": 3,
+      "expected_doors": 2,
+      "filename": "P16.png"
+    },
+    {
+      "id": "P17",
+      "title": "Kapalı uç - karşı örnek",
+      "rooms": [
+        [
+          20,
+          10,
+          130,
+          90
+        ],
+        [
+          20,
+          200,
+          130,
+          290
+        ]
+      ],
+      "corridors": [
+        [
+          60,
+          90,
+          90,
+          200
+        ]
+      ],
+      "doors": [
+        0
+      ],
+      "barriers": [
+        [
+          60,
+          200,
+          90,
+          200
+        ]
+      ],
+      "notes": [
+        "Üst oda koridora kapıyla açılsın. Alt oda sınırında koridoru kesen tam bir duvar çiz.",
+        "Alt odanın üst kenarı kesintisiz kalsın. Burada kapı veya geçiş YOK."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 1,
+      "expected_doors": 1,
+      "filename": "P17.png"
+    },
+    {
+      "id": "P18",
+      "title": "Bağlantısız iki oda",
+      "rooms": [
+        [
+          20,
+          20,
+          130,
+          150
+        ],
+        [
+          180,
+          90,
+          300,
+          240
+        ]
+      ],
+      "corridors": [],
+      "doors": [],
+      "barriers": [],
+      "notes": [
+        "Birbirine yakın ama temas etmeyen iki kapalı oda çiz.",
+        "Aradaki beyaz alan koridor değildir. İki oda arasında duvar veya kapı ekleme."
+      ],
+      "split": "train",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 0,
+      "expected_doors": 0,
+      "filename": "P18.png"
+    },
+    {
+      "id": "P19",
+      "title": "L dirseğinde kapalı duvar",
+      "rooms": [
+        [
+          20,
+          20,
+          120,
+          100
+        ],
+        [
+          200,
+          170,
+          300,
+          260
+        ]
+      ],
+      "corridors": [
+        [
+          55,
+          100,
+          85,
+          210
+        ],
+        [
+          85,
+          180,
+          200,
+          210
+        ]
+      ],
+      "doors": [
+        0,
+        1
+      ],
+      "barriers": [
+        [
+          85,
+          180,
+          85,
+          210
+        ]
+      ],
+      "notes": [
+        "İki oda ve L çiz; oda girişlerine kapı koy.",
+        "L dönüşünde iki kolu tamamen ayıran kısa bir duvar çiz. Bu örnekte odalar birbirine GEÇİLEMEZ."
+      ],
+      "split": "validation",
+      "expected_rooms": 2,
+      "expected_corridor_segments": 2,
+      "expected_doors": 2,
+      "filename": "P19.png"
+    },
+    {
+      "id": "P20",
+      "title": "L yanında bağlantısız oda",
+      "rooms": [
+        [
+          10,
+          10,
+          110,
+          90
+        ],
+        [
+          210,
+          170,
+          310,
+          270
+        ],
+        [
+          180,
+          10,
+          290,
+          100
+        ]
+      ],
+      "corridors": [
+        [
+          45,
+          90,
+          75,
+          210
+        ],
+        [
+          75,
+          180,
+          210,
+          210
+        ]
+      ],
+      "doors": [
+        0
+      ],
+      "barriers": [],
+      "notes": [
+        "Üst soldaki oda ile alt sağdaki odayı açık dirsekli L ile bağla. İlk giriş kapılı, son giriş açık olsun.",
+        "Üst sağa üçüncü, tamamen kapalı bir oda çiz. Yakın dursa da hiçbir koridora değmesin."
+      ],
+      "split": "test",
+      "expected_rooms": 3,
+      "expected_corridor_segments": 2,
+      "expected_doors": 1,
+      "filename": "P20.png"
+    }
+  ]
+}

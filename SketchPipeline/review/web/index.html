@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head
+    ><meta charset="utf-8" /><meta
+      name="viewport"
+      content="width=device-width,initial-scale=1" /><title>PlayableSketch · Topology review</title
+    ><link rel="stylesheet" href="/style.css"
+  /></head>
+  <body>
+    <header
+      ><div class="brand"
+        ><span class="mark">PS</span
+        ><div
+          ><strong>Topology review</strong><small>Sketch to level · PlayableSketch</small></div
+        ></div
+      ><label class="case-label"
+        >Drawing
+        <select id="caseSelect" aria-label="Drawing"></select></label
+      ><button id="uploadButton">Upload drawing</button
+      ><input id="uploadFile" type="file" accept="image/jpeg,image/png" hidden /><span
+        id="saveStatus"
+        class="pill"
+        >Loading</span
+      ><span class="pixel-note">Step 08 · Pixel topology</span></header
+    >
+    <div id="uploadStatus" class="upload-status" role="status" hidden></div>
+    <main>
+      <section class="workspace">
+        <nav class="toolbar" aria-label="Drawing tools">
+          <div class="tool-group"
+            ><button data-tool="select" class="active">Select <kbd>V</kbd></button
+            ><button data-tool="wall">Wall <kbd>W</kbd></button
+            ><button data-tool="opening">Opening <kbd>O</kbd></button
+            ><button data-tool="join">Join endpoints <kbd>J</kbd></button
+            ><button data-tool="pan">Pan</button></div
+          >
+          <div class="tool-group"
+            ><button id="undo" title="Undo (Ctrl/Cmd+Z)">Undo</button
+            ><button id="redo" title="Redo (Ctrl/Cmd+Shift+Z)">Redo</button
+            ><button id="fit">Fit</button><span id="zoom">100%</span></div
+          >
+        </nav>
+        <div class="canvas-wrap"
+          ><canvas
+            id="plan"
+            tabindex="0"
+            aria-label="Drawing image and editable topology canvas"
+          ></canvas
+          ><div id="emptyMessage">Loading drawing…</div
+          ><div class="canvas-options"
+            ><label><input type="checkbox" id="showRegions" checked /> Regions</label
+            ><label
+              >Photo
+              <input
+                id="photoOpacity"
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value="0.8" /></label></div
+        ></div>
+        <footer
+          ><span id="hint">Select a wall or opening; drag its endpoints.</span
+          ><span id="position">—</span></footer
+        >
+      </section>
+      <aside>
+        <details id="jobsPanel"
+          ><summary>Pipeline jobs</summary
+          ><label
+            >Recent job
+            <select id="jobSelect" aria-label="Recent pipeline job"></select></label
+          ><label
+            >Upload mode
+            <select id="jobMode" aria-label="Upload mode"
+              ><option value="inference">Automatic inference</option
+              ><option value="manual">Manual review preparation</option></select
+            ></label
+          ><label
+            ><input id="reuseJob" type="checkbox" /> Reuse matching completed job (explicit
+            cache)</label
+          ><p id="jobDetail" class="small muted">Upload a drawing to create a persistent job.</p
+          ><div class="button-row"
+            ><button id="refreshJob">Open / refresh</button
+            ><button id="cancelJob" disabled>Cancel</button
+            ><button id="retryJob" disabled>Retry</button></div
+          ></details
+        >
+        <p id="reviewNotice" class="review-notice"
+          >Every drawing needs your review before it can continue. Automatic detection is a
+          suggestion.</p
+        >
+        <section class="summary"
+          ><div><strong id="regionCount">—</strong><span>regions</span></div
+          ><div><strong id="linkCount">—</strong><span>links</span></div
+          ><div><strong id="issueCount">—</strong><span>blocking</span></div></section
+        >
+        <section
+          ><div class="section-title"
+            ><h2>Selected element</h2><span id="selectionType">—</span></div
+          ><p id="selectionEmpty" class="muted">Click a wall or opening in the drawing.</p>
+          <div id="selectionEditor" hidden
+            ><div id="selectionId" class="mono"></div
+            ><label
+              >Axis
+              <select id="axisInput"
+                ><option value="horizontal">Horizontal</option
+                ><option value="vertical">Vertical</option></select
+              ></label
+            ><div class="coordinates"
+              ><label>Start X <input id="x1" type="number" step="0.01" /></label
+              ><label>Start Y <input id="y1" type="number" step="0.01" /></label
+              ><label>End X <input id="x2" type="number" step="0.01" /></label
+              ><label>End Y <input id="y2" type="number" step="0.01" /></label></div
+            ><div class="button-row"
+              ><button id="applyCoordinates">Apply coordinates</button
+              ><button id="deleteElement" class="danger">Delete</button></div
+            >
+            <div id="openingEditor" hidden
+              ><label
+                >Opening type
+                <select id="openingKind"
+                  ><option value="door">door</option
+                  ><option value="open_passage">open_passage</option
+                  ><option value="unknown">unknown</option></select
+                ></label
+              ><p id="openingDecision" class="muted"></p
+              ><div class="button-row"
+                ><button id="approveOpening" class="positive">Approve opening</button
+                ><button id="rejectOpening">Reject</button></div
+              ><button id="closeOpening" class="wide">Fill opening with wall</button
+              ><p class="small muted"
+                >Reject removes the opening hypothesis. Fill with wall closes the physical gap.</p
+              ></div
+            ></div
+          >
+        </section>
+        <section
+          ><div class="section-title"><h2>Checks</h2><span id="analysisStatus">—</span></div
+          ><div id="issues" aria-live="polite"></div
+        ></section>
+        <section><h2>Openings</h2><div id="openingList"></div></section>
+        <section class="save-panel"
+          ><p id="readiness">Recalculating the graph…</p
+          ><button id="saveDraft" class="wide">Save draft</button
+          ><button id="acceptReview" class="primary wide" disabled>Approve topology</button
+          ><button id="metricContinue" class="primary wide" disabled
+            >Continue to metric review →</button
+          ><button id="download" class="wide" disabled>Download reviewed JSON</button
+          ><div id="revision" class="small mono muted"></div
+          ><p class="small muted"
+            >Approval covers pixel topology. Dimensions and Unreal export are validated in later
+            stages.</p
+          ></section
+        >
+        <details
+          ><summary>Help and colors</summary
+          ><p
+            >Wall / Opening: select two points. Drawing an opening on a wall cuts that wall across
+            the selected span.</p
+          ><p
+            >Join: select two wall endpoints. Scroll to zoom. Hold Space or use Pan to move
+            around.</p
+          ><p
+            >Teal: walls. Orange: pending opening. Green: approved opening. Amber: uncertain region.
+            Red: unsupported region or dangling wall.</p
+          ><p
+            >Delete removes the selected element. Escape cancels an operation. Ctrl/Cmd+Z undoes a
+            change.</p
+          ></details
+        >
+      </aside>
+    </main>
+    <div id="toast" role="status" hidden></div>
+    <script src="/editor.js" defer></script> </body
+></html>

@@ -34,7 +34,7 @@ struct PLAYABLESKETCH_API FPlayableSketchNavigationResult
     double TotalMs = 0.0;
     FString Status;
 
-    FVector2D CellCenter(const FIntPoint& Cell) const;
+    FVector2D CellCenter(const FIntPoint &Cell) const;
     FString Summary() const;
 };
 
@@ -51,15 +51,13 @@ struct PLAYABLESKETCH_API FPlayableSketchNavigationSample
 
 class PLAYABLESKETCH_API FPlayableSketchNavigation
 {
-public:
-    // true = analysis completed, including a valid result with no route.
-    // false = invalid input or bounded computation could not finish.
-    static bool Analyze(const FPlayableSketchFloorPlan& Plan,
-        const TArray<FPlayableSketchGeometryDescriptor>& SolidPieces,
-        const FGuid& StartRoomId, const FGuid& GoalRoomId,
-        const FPlayableSketchNavigationSettings& Settings,
-        FPlayableSketchNavigationResult& Result, FString& Error);
+  public:
+    static bool Analyze(const FPlayableSketchFloorPlan &Plan,
+                        const TArray<FPlayableSketchGeometryDescriptor> &SolidPieces,
+                        const FGuid &StartRoomId, const FGuid &GoalRoomId,
+                        const FPlayableSketchNavigationSettings &Settings,
+                        FPlayableSketchNavigationResult &Result, FString &Error);
 
-    static bool ExportJson(const TArray<FPlayableSketchNavigationSample>& Samples,
-        const FString& Filename, FString& Error);
+    static bool ExportJson(const TArray<FPlayableSketchNavigationSample> &Samples,
+                           const FString &Filename, FString &Error);
 };

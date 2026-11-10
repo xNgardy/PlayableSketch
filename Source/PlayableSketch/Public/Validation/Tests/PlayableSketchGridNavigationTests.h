@@ -5,6 +5,7 @@
 
 class PLAYABLESKETCH_API FPlayableSketchGridNavigationTests
 {
-public:
-    static bool Run(const FPlayableSketchFloorPlan& FloorPlan, const FGuid& StartRoomId, const FGuid& GoalRoomId, int32 GridStepCm, FPlayableSketchGridPath& OutPath);
+  public:
+    static bool Run(const FPlayableSketchFloorPlan &FloorPlan, const FGuid &StartRoomId,
+                    const FGuid &GoalRoomId, int32 GridStepCm, FPlayableSketchGridPath &OutPath);
 };

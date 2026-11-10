@@ -1,0 +1,152 @@
+{
+  "version": "shape-human-geometry-curation/1.0",
+  "date": "2026-11-04",
+  "source_images_modified": false,
+  "original_annotations_modified": false,
+  "reviewer": "coding-agent visual structural review",
+  "samples": {
+    "Data_3": {
+      "source_sha256": "d63f863009536baa4e0465bfddd6421b7944de89463118094fd1075cb37352b3",
+      "regions": [
+        {
+          "region_id": "rA",
+          "kind": "room",
+          "polygon_px": [
+            [
+              280.0,
+              160.0
+            ],
+            [
+              900.0,
+              150.0
+            ],
+            [
+              907.0,
+              798.0
+            ],
+            [
+              281.0,
+              769.0
+            ]
+          ],
+          "status": "agent_visual_review_approximate_intended_boundary"
+        },
+        {
+          "region_id": "rB",
+          "kind": "room",
+          "polygon_px": [
+            [
+              900.0,
+              150.0
+            ],
+            [
+              1668.0,
+              166.0
+            ],
+            [
+              1661.0,
+              755.0
+            ],
+            [
+              907.0,
+              798.0
+            ]
+          ],
+          "status": "agent_visual_review_approximate_intended_boundary"
+        }
+      ],
+      "review": "Visually checked against source on 2026-11-04; reuse existing observed junctions. No physical dimension or OCR text used. Not author-approved or pixel-perfect ground truth."
+    },
+    "Data_8": {
+      "source_sha256": "4da1d426566e85fa3fa7b86be872f71b2dfbe379c2b1392174d70e7af922ca6c",
+      "regions": [
+        {
+          "region_id": "rA",
+          "kind": "room",
+          "polygon_px": [
+            [
+              235.0,
+              129.0
+            ],
+            [
+              723.0,
+              127.0
+            ],
+            [
+              742.0,
+              307.0
+            ],
+            [
+              760.0,
+              415.0
+            ],
+            [
+              751.0,
+              553.0
+            ],
+            [
+              270.0,
+              571.0
+            ]
+          ],
+          "status": "agent_visual_review_approximate_intended_boundary"
+        },
+        {
+          "region_id": "c0",
+          "kind": "corridor",
+          "polygon_px": [
+            [
+              742.0,
+              307.0
+            ],
+            [
+              1103.0,
+              306.0
+            ],
+            [
+              1111.0,
+              418.0
+            ],
+            [
+              760.0,
+              415.0
+            ]
+          ],
+          "status": "agent_visual_review_approximate_intended_boundary"
+        },
+        {
+          "region_id": "rB",
+          "kind": "room",
+          "polygon_px": [
+            [
+              1087.0,
+              122.0
+            ],
+            [
+              1419.0,
+              135.0
+            ],
+            [
+              1447.0,
+              489.0
+            ],
+            [
+              1114.0,
+              486.0
+            ],
+            [
+              1111.0,
+              418.0
+            ],
+            [
+              1103.0,
+              306.0
+            ]
+          ],
+          "status": "agent_visual_review_approximate_intended_boundary"
+        }
+      ],
+      "review": "Visually checked against source on 2026-11-04; reuse existing observed junctions. No physical dimension or OCR text used. Not author-approved or pixel-perfect ground truth."
+    }
+  }
+}

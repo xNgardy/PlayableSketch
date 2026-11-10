@@ -1,0 +1,203 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "playablesketch-metric-input/1.0"
+    },
+    "topology_revision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "region_kinds": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "urn:playablesketch:common:1#/$defs/id"
+      },
+      "additionalProperties": {
+        "enum": [
+          "room",
+          "corridor"
+        ]
+      }
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "wall_thickness_cm": {
+          "$ref": "urn:playablesketch:common:1#/$defs/positive"
+        },
+        "wall_height_cm": {
+          "$ref": "urn:playablesketch:common:1#/$defs/positive"
+        },
+        "door_height_cm": {
+          "$ref": "urn:playablesketch:common:1#/$defs/positive"
+        },
+        "floor_thickness_cm": {
+          "$ref": "urn:playablesketch:common:1#/$defs/positive"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "dimensions": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:playablesketch:common:1#/$defs/dimension"
+          },
+          {
+            "properties": {
+              "state": {
+                "enum": [
+                  "confirmed",
+                  "inferred",
+                  "missing",
+                  "conflicting"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "urn:playablesketch:common:1#/$defs/id"
+              },
+              "state": {
+                "const": "confirmed"
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:playablesketch:common:1#/$defs/id"
+                },
+                "uniqueItems": true
+              },
+              "type": {
+                "enum": [
+                  "centered_opening",
+                  "full_span_opening"
+                ]
+              },
+              "opening_id": {
+                "$ref": "urn:playablesketch:common:1#/$defs/id"
+              }
+            },
+            "required": [
+              "id",
+              "state",
+              "type",
+              "opening_id",
+              "note"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "urn:playablesketch:common:1#/$defs/id"
+              },
+              "state": {
+                "const": "confirmed"
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "urn:playablesketch:common:1#/$defs/id"
+                },
+                "uniqueItems": true
+              },
+              "type": {
+                "const": "point_lock"
+              },
+              "vertex_id": {
+                "$ref": "urn:playablesketch:common:1#/$defs/id"
+              },
+              "axis": {
+                "enum": [
+                  "x",
+                  "y"
+                ]
+              },
+              "value_cm": {
+                "type": "number",
+                "minimum": -1000000000.0,
+                "maximum": 1000000000.0
+              }
+            },
+            "required": [
+              "id",
+              "state",
+              "type",
+              "vertex_id",
+              "axis",
+              "value_cm",
+              "note"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "origin_vertex_id": {
+      "$ref": "urn:playablesketch:common:1#/$defs/id"
+    },
+    "top_k": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8
+    },
+    "hypothesis_budget": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 64
+    },
+    "ignored_texts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "evidence_id": {
+            "$ref": "urn:playablesketch:common:1#/$defs/id"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "evidence_id",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "topology_revision_id",
+    "region_kinds",
+    "dimensions"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:playablesketch:metric-input:1"
+}

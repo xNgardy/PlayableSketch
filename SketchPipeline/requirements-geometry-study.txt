@@ -1,0 +1,6 @@
+# Separate MLX environment only; do not install over the production OCR runtime.
+# Snapshot, exact transitive freeze, and Step07 geometry path are recorded in
+# Saved/GeometryStudy/v1/{protocol.json,pip-freeze.txt,vlm_runtime.json}.
+mlx-vlm==0.7.8
+mlx==0.32.4
+transformers==5.20.1

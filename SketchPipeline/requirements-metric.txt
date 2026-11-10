@@ -1,0 +1,6 @@
+-r requirements.txt
+numpy==2.4.2
+# Step 08 exact review re-analysis dependencies:
+shapely==2.2.0
+Pillow==12.1.1
+opencv-python-headless==4.13.0.92

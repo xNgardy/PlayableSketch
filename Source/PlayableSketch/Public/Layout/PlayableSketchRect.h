@@ -9,16 +9,17 @@ struct PLAYABLESKETCH_API FPlayableSketchRect
 
     FPlayableSketchRect() = default;
 
-    FPlayableSketchRect(const FVector2D& InMin, const FVector2D& InMax) : Min(InMin), Max(InMax)
+    FPlayableSketchRect(const FVector2D &InMin, const FVector2D &InMax) : Min(InMin), Max(InMax)
     {
     }
 
     bool IsValid() const
     {
-        return FMath::IsFinite(Min.X) && FMath::IsFinite(Min.Y) && FMath::IsFinite(Max.X) && FMath::IsFinite(Max.Y) && Max.X > Min.X && Max.Y > Min.Y;
+        return FMath::IsFinite(Min.X) && FMath::IsFinite(Min.Y) && FMath::IsFinite(Max.X) &&
+               FMath::IsFinite(Max.Y) && Max.X > Min.X && Max.Y > Min.Y;
     }
 
-    bool OverlapsInterior(const FPlayableSketchRect& Other) const
+    bool OverlapsInterior(const FPlayableSketchRect &Other) const
     {
         if (!IsValid() || !Other.IsValid())
         {
@@ -31,9 +32,10 @@ struct PLAYABLESKETCH_API FPlayableSketchRect
         return bOverlapsX && bOverlapsY;
     }
 
-    bool HasRequiredGap(const FPlayableSketchRect& Other, double RequiredGapCm) const
+    bool HasRequiredGap(const FPlayableSketchRect &Other, double RequiredGapCm) const
     {
-        if (!IsValid() || !Other.IsValid() || !FMath::IsFinite(RequiredGapCm) || RequiredGapCm < 0.0)
+        if (!IsValid() || !Other.IsValid() || !FMath::IsFinite(RequiredGapCm) ||
+            RequiredGapCm < 0.0)
         {
             return false;
         }

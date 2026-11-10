@@ -6,15 +6,15 @@
 
 namespace
 {
-    const FName GeneratedWallTag(TEXT("PlayableSketch.GeneratedWall"));
+const FName GeneratedWallTag(TEXT("PlayableSketch.GeneratedWall"));
 }
 
-void FPlayableSketchWallBuilder::Clear(AActor& Owner)
+void FPlayableSketchWallBuilder::Clear(AActor &Owner)
 {
-    TArray<UStaticMeshComponent*> Components;
+    TArray<UStaticMeshComponent *> Components;
     Owner.GetComponents<UStaticMeshComponent>(Components);
 
-    for (UStaticMeshComponent* Component : Components)
+    for (UStaticMeshComponent *Component : Components)
     {
         if (IsValid(Component) && Component->ComponentHasTag(GeneratedWallTag))
         {
@@ -24,11 +24,9 @@ void FPlayableSketchWallBuilder::Clear(AActor& Owner)
     }
 }
 
-bool FPlayableSketchWallBuilder::Build(
-    AActor& Owner,
-    const TArray<FPlayableSketchGeometryDescriptor>& Pieces,
-    UMaterialInterface* Material,
-    FString& OutError)
+bool FPlayableSketchWallBuilder::Build(AActor &Owner,
+                                       const TArray<FPlayableSketchGeometryDescriptor> &Pieces,
+                                       UMaterialInterface *Material, FString &OutError)
 {
     OutError.Reset();
 
@@ -38,23 +36,18 @@ bool FPlayableSketchWallBuilder::Build(
         return false;
     }
 
-    for (const FPlayableSketchGeometryDescriptor& Piece : Pieces)
+    for (const FPlayableSketchGeometryDescriptor &Piece : Pieces)
     {
-        if (!Piece.SourceId.IsValid()
-            || Piece.CenterCm.ContainsNaN()
-            || Piece.SizeCm.ContainsNaN()
-            || Piece.SizeCm.X <= 0.0
-            || Piece.SizeCm.Y <= 0.0
-            || Piece.SizeCm.Z <= 0.0)
+        if (!Piece.SourceId.IsValid() || Piece.CenterCm.ContainsNaN() ||
+            Piece.SizeCm.ContainsNaN() || Piece.SizeCm.X <= 0.0 || Piece.SizeCm.Y <= 0.0 ||
+            Piece.SizeCm.Z <= 0.0)
         {
             OutError = TEXT("Invalid wall descriptor.");
             return false;
         }
     }
 
-    UStaticMesh* CubeMesh = LoadObject<UStaticMesh>(
-        nullptr,
-        TEXT("/Engine/BasicShapes/Cube.Cube"));
+    UStaticMesh *CubeMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Cube.Cube"));
 
     if (!CubeMesh)
     {
@@ -77,19 +70,15 @@ bool FPlayableSketchWallBuilder::Build(
     int32 WallCount = 0;
     int32 LintelCount = 0;
 
-    for (const FPlayableSketchGeometryDescriptor& Piece : Pieces)
+    for (const FPlayableSketchGeometryDescriptor &Piece : Pieces)
     {
-        const FVector Scale(
-            Piece.SizeCm.X / MeshSize.X,
-            Piece.SizeCm.Y / MeshSize.Y,
-            Piece.SizeCm.Z / MeshSize.Z);
+        const FVector Scale(Piece.SizeCm.X / MeshSize.X, Piece.SizeCm.Y / MeshSize.Y,
+                            Piece.SizeCm.Z / MeshSize.Z);
 
         const FVector Location = Piece.CenterCm - MeshCenter * Scale;
 
-        UStaticMeshComponent* Component = NewObject<UStaticMeshComponent>(
-            &Owner,
-            NAME_None,
-            RF_Transient);
+        UStaticMeshComponent *Component =
+            NewObject<UStaticMeshComponent>(&Owner, NAME_None, RF_Transient);
 
         if (!Component)
         {
@@ -118,13 +107,12 @@ bool FPlayableSketchWallBuilder::Build(
         }
 
         Component->ComponentTags.Add(GeneratedWallTag);
-        Component->ComponentTags.Add(FName(
-            bLintel ? TEXT("PlayableSketch.Lintel") : TEXT("PlayableSketch.Wall")));
+        Component->ComponentTags.Add(
+            FName(bLintel ? TEXT("PlayableSketch.Lintel") : TEXT("PlayableSketch.Wall")));
 
-        Component->ComponentTags.Add(FName(*FString::Printf(
-            TEXT("%s=%s"),
-            Piece.bRoom ? TEXT("RoomId") : TEXT("ConnectionId"),
-            *Piece.SourceId.ToString())));
+        Component->ComponentTags.Add(FName(
+            *FString::Printf(TEXT("%s=%s"), Piece.bRoom ? TEXT("RoomId") : TEXT("ConnectionId"),
+                             *Piece.SourceId.ToString())));
 
         Owner.AddInstanceComponent(Component);
         Component->RegisterComponent();
@@ -139,13 +127,8 @@ bool FPlayableSketchWallBuilder::Build(
         }
     }
 
-    UE_LOG(
-        LogTemp,
-        Display,
-        TEXT("Walls generated: Walls=%d Lintels=%d MeshComponents=%d"),
-        WallCount,
-        LintelCount,
-        Pieces.Num());
+    UE_LOG(LogTemp, Display, TEXT("Walls generated: Walls=%d Lintels=%d MeshComponents=%d"),
+           WallCount, LintelCount, Pieces.Num());
 
     return true;
 }

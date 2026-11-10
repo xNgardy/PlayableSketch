@@ -1,0 +1,266 @@
+.metric-main {
+  grid-template-columns: minmax(600px, 1fr) 360px;
+}
+.metric-workspace {
+  overflow: auto;
+  padding: 20px;
+  min-width: 0;
+}
+.views {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.view {
+  background: #fff;
+  border: 1px solid #dce4df;
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 0;
+}
+.view-heading {
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.view-heading h2 {
+  margin: 0;
+}
+.view-heading small {
+  display: block;
+  margin-top: 5px;
+  color: #76877e;
+  font-weight: 400;
+}
+.view > svg {
+  width: 100%;
+  height: 330px;
+  display: block;
+  background: #f8faf8;
+}
+.view > p {
+  padding: 0 12px;
+}
+.measurement-area {
+  background: #fff;
+  border: 1px solid #dce4df;
+  border-radius: 10px;
+  margin-top: 18px;
+  padding: 18px;
+}
+.measurement-grid {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.7fr) minmax(260px, 1.3fr);
+  gap: 18px;
+}
+.measurement-grid label {
+  display: block;
+  margin: 9px 0;
+}
+.measurement-grid input:not([type="checkbox"]),
+.measurement-grid select {
+  width: 100%;
+  margin-top: 6px;
+}
+#dimensionList {
+  min-height: 275px;
+}
+#evidenceCrop {
+  width: 100%;
+  height: 90px;
+  background: #f7f8f7;
+  border: 1px solid #e3e8e4;
+  border-radius: 6px;
+  margin: 10px 0;
+}
+#dimensionEditor .check,
+.check {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  margin: 13px 0;
+  line-height: 1.5;
+}
+#suggestions {
+  flex-wrap: wrap;
+}
+#suggestions button {
+  font-size: 10px;
+}
+.metric-aside label {
+  display: block;
+  margin: 10px 0;
+}
+.metric-aside input:not([type="checkbox"]),
+.metric-aside select {
+  width: 100%;
+  margin-top: 5px;
+  font: inherit;
+  padding: 7px;
+  border: 1px solid #d8e1da;
+  border-radius: 6px;
+}
+.metric-aside .check {
+  display: flex;
+}
+.region-editor,
+.relation-editor,
+.lock-editor {
+  border: 1px solid #e2e9e4;
+  border-radius: 6px;
+  padding: 9px;
+  margin: 9px 0;
+}
+.region-editor strong {
+  font-size: 11px;
+}
+.region-editor input {
+  margin-bottom: 6px;
+}
+.region-editor select {
+  margin-top: 4px;
+}
+.metric-aside pre {
+  white-space: pre-wrap;
+  font-size: 10px;
+  max-height: 400px;
+  overflow: auto;
+}
+.metric-aside a,
+header a {
+  color: #216952;
+  font-size: 12px;
+}
+#metricIssues button {
+  display: block;
+  text-align: left;
+  width: 100%;
+  margin: 5px 0;
+  white-space: normal;
+}
+#rawEvidence {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+#ignoredList button {
+  padding: 4px;
+  font-size: 10px;
+  margin: 4px;
+}
+#metricMessage {
+  position: relative;
+}
+.metric-aside input[type="checkbox"] {
+  width: auto;
+}
+.metric-main svg [data-id] {
+  cursor: pointer;
+}
+.metric-main svg text {
+  font-family: system-ui, sans-serif;
+}
+.metric-aside .coordinates label {
+  margin: 0;
+}
+.metric-main .issue {
+  word-break: break-word;
+}
+.metric-main button:focus-visible,
+.metric-main select:focus-visible,
+.metric-main input:focus-visible {
+  outline: 2px solid #4f947c;
+  outline-offset: 2px;
+}
+header {
+  gap: 18px;
+}
+#metricStatus {
+  margin-left: auto;
+}
+@media (max-width: 1100px) {
+  .metric-main {
+    grid-template-columns: minmax(450px, 1fr) 310px;
+  }
+  .views {
+    grid-template-columns: 1fr;
+  }
+  .view > svg {
+    height: 280px;
+  }
+}
+@media (max-width: 800px) {
+  header {
+    height: auto;
+    min-height: 78px;
+    flex-wrap: wrap;
+    padding: 15px;
+  }
+  .metric-main {
+    display: flex;
+    height: auto;
+    flex-direction: column;
+  }
+  .metric-aside {
+    border-left: 0;
+  }
+  .views {
+    grid-template-columns: 1fr;
+  }
+  .measurement-grid {
+    grid-template-columns: 1fr;
+  }
+  .metric-workspace {
+    overflow: visible;
+  }
+  .brand {
+    min-width: 0;
+  }
+}
+body {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+header {
+  flex-shrink: 0;
+}
+#metricMessage {
+  position: static;
+  top: auto;
+  left: auto;
+  max-width: none;
+  z-index: auto;
+  margin: 0;
+  padding: 10px 24px;
+  border-radius: 0;
+  box-shadow: none;
+  color: #365c4a;
+  flex-shrink: 0;
+}
+.metric-main {
+  height: auto;
+  flex: 1;
+  min-height: 0;
+}
+.metric-main .view-heading {
+  align-items: flex-start;
+}
+#solveStatus {
+  font-size: 10px;
+  color: #657f71;
+  max-width: 130px;
+  text-align: right;
+}
+@media (max-width: 800px) {
+  body {
+    height: auto;
+    overflow: auto;
+  }
+  .metric-main {
+    flex: none;
+    min-height: auto;
+  }
+}

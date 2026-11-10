@@ -1,0 +1,20 @@
+{
+  "policy_version": "shape-sizing/2.0",
+  "units": "cm",
+  "description": "Design suggestions, never recovered image measurements.",
+  "room_reference_area_cm2": 200000,
+  "corridor_width_cm": 200,
+  "door_clear_width_cm": 120,
+  "runtime_settings": {"wall_thickness_cm": 20, "wall_height_cm": 300, "door_height_cm": 220, "floor_thickness_cm": 20},
+  "runtime_settings_note": "Explicit application configuration, including the existing runtime floor default; no image measurement.",
+  "minimum_interior_cm": 10,
+  "minimum_coordinate_gap_cm": 0.1,
+  "maximum_value_cm": 1000000,
+  "position_preference_weight": 0.03,
+  "span_preference_weight": 1.0,
+  "corridor_preference_weight": 2.0,
+  "solver_iterations": 12000,
+  "solver_tolerance_cm": 0.00001,
+  "numeric_text": "ignored",
+  "export_permission": "Step 5 exact-snapshot confirmation remains separate"
+}

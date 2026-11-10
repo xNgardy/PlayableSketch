@@ -1,0 +1,773 @@
+{
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "playablesketch-shape-authoring/2.0"
+    },
+    "document_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "revision_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "parent_revision_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "policy_version": {
+      "enum": ["shape-sizing/1.0", "shape-sizing/2.0"]
+    },
+    "image_evidence": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "object",
+          "properties": {
+            "image_path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "image_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "width_px": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height_px": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "image_path",
+            "image_sha256",
+            "width_px",
+            "height_px"
+          ],
+          "additionalProperties": false
+        },
+        "working_size_px": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "original_to_working": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000000.0,
+              "maximum": 1000000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "working_to_original": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000000.0,
+              "maximum": 1000000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "normalization_bounds_px": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": -1000000000.0,
+            "maximum": 1000000000.0
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "kind": {
+                "enum": [
+                  "stroke",
+                  "region",
+                  "junction",
+                  "opening_marker",
+                  "distractor"
+                ]
+              },
+              "points_px": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": -1000000000.0,
+                    "maximum": 1000000000.0
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              }
+            },
+            "required": [
+              "id",
+              "kind",
+              "points_px"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "source",
+        "working_size_px",
+        "original_to_working",
+        "working_to_original",
+        "normalization_bounds_px",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "topology": {
+      "type": "object",
+      "properties": {
+        "regions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/region"
+          }
+        },
+        "junctions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/junction"
+          }
+        },
+        "walls": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/wall"
+          }
+        },
+        "openings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/opening"
+          }
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/connection"
+          }
+        }
+      },
+      "required": [
+        "regions",
+        "junctions",
+        "walls",
+        "openings",
+        "connections"
+      ],
+      "additionalProperties": false
+    },
+    "physical_design": {
+      "type": "object",
+      "properties": {
+        "units": {
+          "const": "cm"
+        },
+        "anchor": {
+          "type": "object",
+          "properties": {
+            "junction_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "position_cm": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": -1000000000.0,
+                "maximum": 1000000000.0
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "required": [
+            "junction_id",
+            "position_cm"
+          ],
+          "additionalProperties": false
+        },
+        "orientation_degrees": {
+          "enum": [
+            0,
+            90,
+            180,
+            270
+          ]
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/adjustable"
+          }
+        },
+        "acceptance": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "pending",
+                "accepted"
+              ]
+            },
+            "revision_id": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "reviewer": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "revision_id",
+            "reviewer"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "units",
+        "anchor",
+        "orientation_degrees",
+        "values",
+        "acceptance"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "document_id",
+    "revision_id",
+    "parent_revision_id",
+    "policy_version",
+    "image_evidence",
+    "topology",
+    "physical_design"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:playablesketch:shape-authoring:2",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "point": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": -1000000000.0,
+        "maximum": 1000000000.0
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "matrix": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "number",
+          "minimum": -1000000000.0,
+          "maximum": 1000000000.0
+        },
+        "minItems": 3,
+        "maxItems": 3
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "geometry": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "enum": [
+            "model",
+            "regularized",
+            "user"
+          ]
+        },
+        "state": {
+          "enum": [
+            "proposed",
+            "confirmed",
+            "unknown",
+            "ambiguous",
+            "stale"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "uniqueItems": true
+        },
+        "points_px": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000000.0,
+              "maximum": 1000000000.0
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "points_normalized": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      },
+      "required": [
+        "origin",
+        "state",
+        "evidence_ids",
+        "points_px",
+        "points_normalized"
+      ],
+      "additionalProperties": false
+    },
+    "region": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "room",
+            "corridor_segment"
+          ]
+        },
+        "wall_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 4,
+          "uniqueItems": true
+        },
+        "geometry": {
+          "$ref": "#/$defs/geometry"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "type",
+        "wall_ids",
+        "geometry"
+      ],
+      "additionalProperties": false
+    },
+    "junction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "type": {
+          "enum": [
+            "corner",
+            "t",
+            "cross",
+            "endpoint",
+            "unknown"
+          ]
+        },
+        "geometry": {
+          "$ref": "#/$defs/geometry"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "geometry"
+      ],
+      "additionalProperties": false
+    },
+    "wall": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "type": {
+          "enum": [
+            "wall",
+            "interface"
+          ]
+        },
+        "start_junction_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "end_junction_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "entity_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "geometry": {
+          "$ref": "#/$defs/geometry"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "start_junction_id",
+        "end_junction_id",
+        "entity_ids",
+        "geometry"
+      ],
+      "additionalProperties": false
+    },
+    "placement": {
+      "type": "object",
+      "properties": {
+        "reference_junction_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "direction": {
+          "enum": [
+            "toward_end",
+            "toward_start"
+          ]
+        },
+        "near_edge_normalized": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "interval_normalized": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "required": [
+        "reference_junction_id",
+        "direction",
+        "near_edge_normalized",
+        "interval_normalized"
+      ],
+      "additionalProperties": false
+    },
+    "opening": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "type": {
+          "enum": [
+            "door",
+            "open_passage"
+          ]
+        },
+        "support_wall_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "entity_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "placement": {
+          "$ref": "#/$defs/placement"
+        },
+        "geometry": {
+          "$ref": "#/$defs/geometry"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "support_wall_id",
+        "entity_ids",
+        "placement",
+        "geometry"
+      ],
+      "additionalProperties": false
+    },
+    "connection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "entity_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "opening_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "shared_span_normalized": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "geometry": {
+          "$ref": "#/$defs/geometry"
+        }
+      },
+      "required": [
+        "id",
+        "entity_ids",
+        "opening_ids",
+        "shared_span_normalized",
+        "geometry"
+      ],
+      "additionalProperties": false
+    },
+    "suggestion": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": -1000000000.0,
+          "maximum": 1000000000.0
+        },
+        "origin": {
+          "enum": [
+            "preset",
+            "proportion_suggestion"
+          ]
+        },
+        "revision_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        }
+      },
+      "required": [
+        "value",
+        "origin",
+        "revision_id"
+      ],
+      "additionalProperties": false
+    },
+    "adjustable": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "entity_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "parameter": {
+          "enum": [
+            "width_cm",
+            "depth_cm",
+            "length_cm",
+            "clear_width_cm",
+            "height_cm",
+            "near_edge_offset_cm",
+            "wall_thickness_cm",
+            "wall_height_cm",
+            "floor_thickness_cm",
+            "door_height_cm"
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": -1000000000.0,
+              "maximum": 1000000000.0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "origin": {
+          "enum": [
+            "preset",
+            "proportion_suggestion",
+            "user_override"
+          ]
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "previous_suggestion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/suggestion"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "authoring_revision_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "binding_revision_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "state": {
+          "enum": [
+            "current",
+            "unknown",
+            "conflicting",
+            "stale"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "entity_id",
+        "parameter",
+        "value",
+        "origin",
+        "locked",
+        "previous_suggestion",
+        "authoring_revision_id",
+        "binding_revision_id",
+        "state"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

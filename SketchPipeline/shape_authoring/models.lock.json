@@ -1,0 +1,14 @@
+{
+  "version": "shape-model/1.0",
+  "architecture": "shape-unet/1.0",
+  "checkpoint_path": "SketchPipeline/shape_authoring/models/shape-unet-v1.pt",
+  "checkpoint_sha256": "e8f6637b5be5f2b399f43f1417944e41105a4afbe58008331330d088b8affbde",
+  "candidate_width": 12,
+  "config_sha256": "96b9caba3fe03f41acecd0d3bdcc3cb04de9f9288014c9699d749ba214173dfe",
+  "protocol_sha256": "f8c7a981166efcb6faba91ab11396a5bdcc8eb0d8a001c4ee9a1aaeaaaedc6ff",
+  "report_path": "Saved/ShapeFirst/v1/report.json",
+  "automation_targets_met": true,
+  "scope": "Local development model; every proposal requires user correction/review. Not an unseen-writer result.",
+  "training_checkpoint_path": "Saved/ShapeFirst/v1/candidate_12/model.pt",
+  "weights_license": "Project-authored weights; repository currently declares no redistribution license. No external pretrained weights."
+}

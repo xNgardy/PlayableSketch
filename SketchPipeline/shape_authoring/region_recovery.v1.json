@@ -1,0 +1,18 @@
+{
+  "version": "shape-region-recovery/1.1",
+  "minimum_supported_area_fraction": 0.0015,
+  "minimum_supported_area_px": 48,
+  "minimum_component_extent_px": 3,
+  "minimum_supported_fill": 0.45,
+  "minimum_supported_model_mean": 0.65,
+  "support_edge_threshold": 0.45,
+  "support_opposite_wall_threshold": 0.5,
+  "support_room_min_edges": 3,
+  "support_room_min_edge": 0.2,
+  "maximum_joint_snap_fraction": 0.045,
+  "maximum_joint_snap_region_fraction": 0.2,
+  "minimum_shared_span_px": 8,
+  "minimum_wall_snap_support": 0.35,
+  "minimum_box_extent_px": 8,
+  "review_required": true
+}

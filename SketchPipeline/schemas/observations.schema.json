@@ -1,0 +1,319 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:playablesketch:observations:1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": "playablesketch-observations/1.0"
+    },
+    "kind": {
+      "const": "observations"
+    },
+    "document_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "revision_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "source": {
+      "$ref": "urn:playablesketch:common:1#/$defs/source"
+    },
+    "coordinate_system": {
+      "const": "u_right_v_down"
+    },
+    "units": {
+      "const": "px"
+    },
+    "frame": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "width_px": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "height_px": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "original_to_frame": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": -1000000000.0,
+                "maximum": 1000000000.0
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": -1000000000.0,
+                "maximum": 1000000000.0
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": -1000000000.0,
+                "maximum": 1000000000.0
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "id",
+        "width_px",
+        "height_px",
+        "original_to_frame"
+      ],
+      "additionalProperties": false
+    },
+    "region_annotation_status": {
+      "enum": [
+        "not_started",
+        "partial",
+        "complete"
+      ]
+    },
+    "texts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "raw_text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "polygon_px": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000000.0
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "minItems": 3
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "parsed_value_cm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 1000000000.0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "method": {
+            "enum": [
+              "manual_transcription",
+              "synthetic_render",
+              "ocr",
+              "augmentation_transfer"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "raw_text",
+          "polygon_px",
+          "parsed_value_cm",
+          "score",
+          "method"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "start_px": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000.0
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "end_px": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000.0
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "start_px",
+          "end_px",
+          "score"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "opening_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "polygon_px": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000000.0
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "minItems": 3
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "polygon_px",
+          "score"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:playablesketch:common:1#/$defs/issue"
+      },
+      "minItems": 0
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "document_id",
+    "revision_id",
+    "source",
+    "coordinate_system",
+    "units",
+    "frame",
+    "region_annotation_status",
+    "texts",
+    "lines",
+    "opening_candidates",
+    "issues",
+    "notes"
+  ],
+  "additionalProperties": false
+}

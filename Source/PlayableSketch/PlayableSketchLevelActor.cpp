@@ -1,4 +1,7 @@
 #include "PlayableSketchLevelActor.h"
+#include "Import/PlayableSketchLayoutImporter.h"
+#include "Misc/FileHelper.h"
+#include "HAL/FileManager.h"
 #include "HAL/PlatformTime.h"
 #include "Navigation/PlayableSketchNavigationExamples.h"
 #include "Misc/Paths.h"
@@ -31,7 +34,7 @@ APlayableSketchLevelActor::APlayableSketchLevelActor()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    USceneComponent* SketchRoot = CreateDefaultSubobject<USceneComponent>(TEXT("SketchRoot"));
+    USceneComponent *SketchRoot = CreateDefaultSubobject<USceneComponent>(TEXT("SketchRoot"));
     SketchRoot->SetMobility(EComponentMobility::Movable);
 
     SetRootComponent(SketchRoot);
@@ -78,6 +81,11 @@ void APlayableSketchLevelActor::Tick(float DeltaTime)
 
 void APlayableSketchLevelActor::ValidateGraph()
 {
+    if (LayoutSource == EPlayableSketchLayoutSource::ImportedExplicitLayout)
+    {
+        ValidateExplicitDesign();
+        return;
+    }
     if (!GraphAsset)
     {
         UE_LOG(LogTemp, Error, TEXT("GraphAsset is not assigned."));
@@ -94,7 +102,7 @@ void APlayableSketchLevelActor::ValidateGraph()
 
     UE_LOG(LogTemp, Error, TEXT("Graph validation failed: %d error(s)."), Errors.Num());
 
-    for (const FString& Error : Errors)
+    for (const FString &Error : Errors)
     {
         UE_LOG(LogTemp, Error, TEXT("%s"), *Error);
     }
@@ -193,14 +201,15 @@ void APlayableSketchLevelActor::ClearFloors()
 
 void APlayableSketchLevelActor::TestFloorPath()
 {
-    // Preserve the existing button, but use the solid/agent-aware analysis now.
+
     AnalyzeNavigation();
 }
 void APlayableSketchLevelActor::DrawFloorPathPreview()
 {
-    if (!GetWorld() || !bNavigationCurrent || PreviewPathPoints.Num() < 2 || bPreviewStale
-        || PublishedSignature != GetSourceSignature() || !GetActorScale3D().Equals(FVector::OneVector, 0.0001)
-        || !GetActorQuat().GetUpVector().Equals(FVector::UpVector, 0.0001))
+    if (!GetWorld() || !bNavigationCurrent || PreviewPathPoints.Num() < 2 || bPreviewStale ||
+        PublishedSignature != GetSourceSignature() ||
+        !GetActorScale3D().Equals(FVector::OneVector, 0.0001) ||
+        !GetActorQuat().GetUpVector().Equals(FVector::UpVector, 0.0001))
     {
         return;
     }
@@ -209,14 +218,12 @@ void APlayableSketchLevelActor::DrawFloorPathPreview()
 
     for (int32 Index = 0; Index + 1 < PreviewPathPoints.Num(); ++Index)
     {
-        const FVector2D& PointA = PreviewPathPoints[Index];
-        const FVector2D& PointB = PreviewPathPoints[Index + 1];
+        const FVector2D &PointA = PreviewPathPoints[Index];
+        const FVector2D &PointB = PreviewPathPoints[Index + 1];
 
-        const FVector A = ActorTransform.TransformPosition(
-            FVector(PointA.X, PointA.Y, 10.0));
+        const FVector A = ActorTransform.TransformPosition(FVector(PointA.X, PointA.Y, 10.0));
 
-        const FVector B = ActorTransform.TransformPosition(
-            FVector(PointB.X, PointB.Y, 10.0));
+        const FVector B = ActorTransform.TransformPosition(FVector(PointB.X, PointB.Y, 10.0));
 
         DrawDebugLine(GetWorld(), A, B, FColor::Green, false, -1.0f, 0, 5.0f);
     }
@@ -247,34 +254,25 @@ void APlayableSketchLevelActor::TestWallSegments()
     FString Error;
     int32 Failures = 0;
 
-    auto Check = [&](bool bPassed, const TCHAR* Name)
+    auto Check = [&](bool bPassed, const TCHAR *Name) {
+        if (bPassed)
         {
-            if (bPassed)
-            {
-                UE_LOG(LogTemp, Display, TEXT("PASS: %s"), Name);
-            }
-            else
-            {
-                ++Failures;
-                UE_LOG(LogTemp, Error, TEXT("FAIL: %s"), Name);
-            }
-        };
+            UE_LOG(LogTemp, Display, TEXT("PASS: %s"), Name);
+        }
+        else
+        {
+            ++Failures;
+            UE_LOG(LogTemp, Error, TEXT("FAIL: %s"), Name);
+        }
+    };
 
     const bool bSolidSuccess = FPlayableSketchWallGeometry::SplitWall(
-        Wall,
-        TArray<FPlayableSketchWallOpening>(),
-        Settings,
-        SourceId,
-        true,
-        Pieces,
-        Error);
+        Wall, TArray<FPlayableSketchWallOpening>(), Settings, SourceId, true, Pieces, Error);
 
-    Check(
-        bSolidSuccess
-        && Pieces.Num() == 1
-        && Pieces[0].CenterCm.Equals(FVector(300.0, 10.0, 150.0), 0.01)
-        && Pieces[0].SizeCm.Equals(FVector(600.0, 20.0, 300.0), 0.01),
-        TEXT("Solid wall dimensions"));
+    Check(bSolidSuccess && Pieces.Num() == 1 &&
+              Pieces[0].CenterCm.Equals(FVector(300.0, 10.0, 150.0), 0.01) &&
+              Pieces[0].SizeCm.Equals(FVector(600.0, 20.0, 300.0), 0.01),
+          TEXT("Solid wall dimensions"));
 
     FPlayableSketchWallOpening Opening;
     Opening.StartCm = 200.0;
@@ -283,25 +281,17 @@ void APlayableSketchLevelActor::TestWallSegments()
     TArray<FPlayableSketchWallOpening> Openings;
     Openings.Add(Opening);
 
-    const bool bDoorSuccess = FPlayableSketchWallGeometry::SplitWall(
-        Wall,
-        Openings,
-        Settings,
-        SourceId,
-        true,
-        Pieces,
-        Error);
+    const bool bDoorSuccess = FPlayableSketchWallGeometry::SplitWall(Wall, Openings, Settings,
+                                                                     SourceId, true, Pieces, Error);
 
-    Check(
-        bDoorSuccess
-        && Pieces.Num() == 3
-        && Pieces[0].CenterCm.Equals(FVector(100.0, 10.0, 150.0), 0.01)
-        && Pieces[0].SizeCm.Equals(FVector(200.0, 20.0, 300.0), 0.01)
-        && Pieces[1].Role == EPlayableSketchGeometryRole::Lintel
-        && Pieces[1].CenterCm.Equals(FVector(300.0, 10.0, 260.0), 0.01)
-        && Pieces[1].SizeCm.Equals(FVector(200.0, 20.0, 80.0), 0.01)
-        && Pieces[2].CenterCm.Equals(FVector(500.0, 10.0, 150.0), 0.01),
-        TEXT("Door segments and lintel dimensions"));
+    Check(bDoorSuccess && Pieces.Num() == 3 &&
+              Pieces[0].CenterCm.Equals(FVector(100.0, 10.0, 150.0), 0.01) &&
+              Pieces[0].SizeCm.Equals(FVector(200.0, 20.0, 300.0), 0.01) &&
+              Pieces[1].Role == EPlayableSketchGeometryRole::Lintel &&
+              Pieces[1].CenterCm.Equals(FVector(300.0, 10.0, 260.0), 0.01) &&
+              Pieces[1].SizeCm.Equals(FVector(200.0, 20.0, 80.0), 0.01) &&
+              Pieces[2].CenterCm.Equals(FVector(500.0, 10.0, 150.0), 0.01),
+          TEXT("Door segments and lintel dimensions"));
 
     FPlayableSketchWallOpening SecondOpening;
     SecondOpening.StartCm = 100.0;
@@ -310,72 +300,60 @@ void APlayableSketchLevelActor::TestWallSegments()
     Openings.Add(SecondOpening);
 
     const bool bMultipleSuccess = FPlayableSketchWallGeometry::SplitWall(
-        Wall,
-        Openings,
-        Settings,
-        SourceId,
-        true,
-        Pieces,
-        Error);
+        Wall, Openings, Settings, SourceId, true, Pieces, Error);
 
-    Check(
-        bMultipleSuccess && Pieces.Num() == 5,
-        TEXT("Multiple unsorted openings"));
+    Check(bMultipleSuccess && Pieces.Num() == 5, TEXT("Multiple unsorted openings"));
 
     Openings[1].StartCm = 300.0;
     Openings[1].EndCm = 450.0;
 
-    Check(
-        !FPlayableSketchWallGeometry::SplitWall(
-            Wall,
-            Openings,
-            Settings,
-            SourceId,
-            true,
-            Pieces,
-            Error)
-        && Pieces.IsEmpty(),
-        TEXT("Overlapping openings rejected"));
+    Check(!FPlayableSketchWallGeometry::SplitWall(Wall, Openings, Settings, SourceId, true, Pieces,
+                                                  Error) &&
+              Pieces.IsEmpty(),
+          TEXT("Overlapping openings rejected"));
 
     Openings.SetNum(1);
     Openings[0].StartCm = -20.0;
     Openings[0].EndCm = 100.0;
 
-    Check(
-        !FPlayableSketchWallGeometry::SplitWall(
-            Wall,
-            Openings,
-            Settings,
-            SourceId,
-            true,
-            Pieces,
-            Error)
-        && Pieces.IsEmpty(),
-        TEXT("Outside opening rejected"));
+    Check(!FPlayableSketchWallGeometry::SplitWall(Wall, Openings, Settings, SourceId, true, Pieces,
+                                                  Error) &&
+              Pieces.IsEmpty(),
+          TEXT("Outside opening rejected"));
 
-    UE_LOG(
-        LogTemp,
-        Display,
-        TEXT("Wall segment tests finished: Failures=%d"),
-        Failures);
+    UE_LOG(LogTemp, Display, TEXT("Wall segment tests finished: Failures=%d"), Failures);
 }
 
 FString APlayableSketchLevelActor::GetSourceSignature() const
 {
+    if (LayoutSource == EPlayableSketchLayoutSource::ImportedExplicitLayout)
+    {
+        return TEXT("Explicit|") + GetPathNameSafe(ImportedLayoutAsset.Get()) +
+               (ImportedLayoutAsset
+                    ? FPlayableSketchExplicitLayoutBuilder::StableId(
+                          TEXT("canonical"), TEXT("snapshot"), ImportedLayoutAsset->CanonicalJson)
+                          .ToString(EGuidFormats::Digits)
+                    : TEXT("NoImportedLayout")) +
+               FString::Printf(TEXT("|%.9g|%.9g|%.9g|%.9g|%d|%.9g|%.9g|%.9g|%d"), WallThicknessCm,
+                               WallHeightCm, DoorHeightCm, FloorThicknessCm, GridStepCm,
+                               PawnRadiusCm, PawnHeightCm, ClearanceCm, NavigationMaxCells) +
+               GetPathNameSafe(WallMaterial.Get()) + GetPathNameSafe(DefaultFloorMaterial.Get()) +
+               GetPathNameSafe(StartFloorMaterial.Get()) + GetPathNameSafe(GoalFloorMaterial.Get());
+    }
     if (!GraphAsset)
     {
         return TEXT("NoGraphAsset");
     }
 
-    return GraphAsset->GetPathName() + GraphAsset->GetSourceText()
-        + FString::Printf(TEXT("|%d|%d|%d|%d|%.9g|%.9g|%.9g|%.9g|%.9g|%.9g|%.9g|%.9g"),
-            GridStepCm, RoomGapCm, DoorCornerMarginCm, MaxPlacementAttempts,
-            FloorThicknessCm, WallHeightCm, WallThicknessCm, DoorHeightCm,
-            MinCorridorWidthCm, PawnRadiusCm, PawnHeightCm, ClearanceCm)
-        + GetPathNameSafe(WallMaterial.Get()) + GetPathNameSafe(DefaultFloorMaterial.Get())
-        + GetPathNameSafe(HubFloorMaterial.Get()) + GetPathNameSafe(StartFloorMaterial.Get())
-        + GetPathNameSafe(GoalFloorMaterial.Get())
-        + FString::Printf(TEXT("|NavigationMaxCells=%d"), NavigationMaxCells);
+    return GraphAsset->GetPathName() + GraphAsset->GetSourceText() +
+           FString::Printf(TEXT("|%d|%d|%d|%d|%.9g|%.9g|%.9g|%.9g|%.9g|%.9g|%.9g|%.9g"), GridStepCm,
+                           RoomGapCm, DoorCornerMarginCm, MaxPlacementAttempts, FloorThicknessCm,
+                           WallHeightCm, WallThicknessCm, DoorHeightCm, MinCorridorWidthCm,
+                           PawnRadiusCm, PawnHeightCm, ClearanceCm) +
+           GetPathNameSafe(WallMaterial.Get()) + GetPathNameSafe(DefaultFloorMaterial.Get()) +
+           GetPathNameSafe(HubFloorMaterial.Get()) + GetPathNameSafe(StartFloorMaterial.Get()) +
+           GetPathNameSafe(GoalFloorMaterial.Get()) +
+           FString::Printf(TEXT("|NavigationMaxCells=%d"), NavigationMaxCells);
 }
 
 FPlayableSketchValidationSettings APlayableSketchLevelActor::GetValidationSettings() const
@@ -393,7 +371,8 @@ FPlayableSketchValidationSettings APlayableSketchLevelActor::GetValidationSettin
     return Settings;
 }
 
-bool APlayableSketchLevelActor::ReadSavedRooms(FPlayableSketchFloorPlan& OutPlan, FString& OutError) const
+bool APlayableSketchLevelActor::ReadSavedRooms(FPlayableSketchFloorPlan &OutPlan,
+                                               FString &OutError) const
 {
     OutPlan = FPlayableSketchFloorPlan();
     OutError.Reset();
@@ -410,21 +389,23 @@ bool APlayableSketchLevelActor::ReadSavedRooms(FPlayableSketchFloorPlan& OutPlan
         return false;
     }
 
-    for (const FPlayableSketchRoom& Room : GraphAsset->Graph.Rooms)
+    for (const FPlayableSketchRoom &Room : GraphAsset->Graph.Rooms)
     {
         FVector2D MinCm = Room.PositionCm;
 
         if (Room.PositionMode == EPlayableSketchPositionMode::Auto)
         {
-            const FPlayableSketchSavedPlacement* Saved = GraphAsset->SavedLayout.Rooms.FindByPredicate(
-                [&](const FPlayableSketchSavedPlacement& Placement)
-                {
-                    return Placement.RoomId == Room.RoomId;
-                });
+            const FPlayableSketchSavedPlacement *Saved =
+                GraphAsset->SavedLayout.Rooms.FindByPredicate(
+                    [&](const FPlayableSketchSavedPlacement &Placement) {
+                        return Placement.RoomId == Room.RoomId;
+                    });
 
             if (!Saved)
             {
-                OutError = FString::Printf(TEXT("Room %s has no saved placement. Run Generate Layout."), *Room.RoomId.ToString());
+                OutError =
+                    FString::Printf(TEXT("Room %s has no saved placement. Run Generate Layout."),
+                                    *Room.RoomId.ToString());
                 return false;
             }
 
@@ -443,7 +424,8 @@ bool APlayableSketchLevelActor::ReadSavedRooms(FPlayableSketchFloorPlan& OutPlan
 
         if (!Placed.Bounds.IsValid())
         {
-            OutError = FString::Printf(TEXT("Invalid position or dimensions for Room %s."), *Room.RoomId.ToString());
+            OutError = FString::Printf(TEXT("Invalid position or dimensions for Room %s."),
+                                       *Room.RoomId.ToString());
             return false;
         }
 
@@ -453,9 +435,8 @@ bool APlayableSketchLevelActor::ReadSavedRooms(FPlayableSketchFloorPlan& OutPlan
     return true;
 }
 
-bool APlayableSketchLevelActor::BuildCandidate(
-    FPlayableSketchFloorPlan& Plan,
-    TArray<FPlayableSketchGeometryDescriptor>& Pieces)
+bool APlayableSketchLevelActor::BuildCandidate(FPlayableSketchFloorPlan &Plan,
+                                               TArray<FPlayableSketchGeometryDescriptor> &Pieces)
 {
     for (int32 A = 0; A < Plan.Rooms.Num(); ++A)
     {
@@ -465,9 +446,10 @@ bool APlayableSketchLevelActor::BuildCandidate(
             {
                 FPlayableSketchValidationIssue Issue;
                 Issue.Code = TEXT("PS-V001");
-                Issue.ElementIds = { Plan.Rooms[A].RoomId, Plan.Rooms[B].RoomId };
+                Issue.ElementIds = {Plan.Rooms[A].RoomId, Plan.Rooms[B].RoomId};
                 Issue.Message = TEXT("Room interiors overlap. Move or resize a Room.");
-                const FVector2D Center = (Plan.Rooms[A].Bounds.Min + Plan.Rooms[A].Bounds.Max) * 0.5;
+                const FVector2D Center =
+                    (Plan.Rooms[A].Bounds.Min + Plan.Rooms[A].Bounds.Max) * 0.5;
                 const FVector2D Half = (Plan.Rooms[A].Bounds.Max - Plan.Rooms[A].Bounds.Min) * 0.5;
                 Issue.PositionCm = FVector(Center.X, Center.Y, 25.0);
                 Issue.ExtentCm = FVector(Half.X, Half.Y, 25.0);
@@ -504,7 +486,8 @@ bool APlayableSketchLevelActor::BuildCandidate(
     }
 
     const double ValidationStart = FPlatformTime::Seconds();
-    LastIssues = FPlayableSketchValidation::ValidatePlan(GraphAsset->Graph, Plan, Pieces, GetValidationSettings());
+    LastIssues = FPlayableSketchValidation::ValidatePlan(GraphAsset->Graph, Plan, Pieces,
+                                                         GetValidationSettings());
     ValidationMs += (FPlatformTime::Seconds() - ValidationStart) * 1000.0;
 
     if (FPlayableSketchValidation::HasErrors(LastIssues))
@@ -518,6 +501,11 @@ bool APlayableSketchLevelActor::BuildCandidate(
 
 void APlayableSketchLevelActor::GenerateLayout()
 {
+    if (LayoutSource == EPlayableSketchLayoutSource::ImportedExplicitLayout)
+    {
+        UpdateExplicitGeometry(true);
+        return;
+    }
     RebuildStartSeconds = FPlatformTime::Seconds();
     ValidationMs = 0.0;
     PlanMs = 0.0;
@@ -531,12 +519,16 @@ void APlayableSketchLevelActor::GenerateLayout()
 
     if (GetWorld() && GetWorld()->IsGameWorld())
     {
-        UE_LOG(LogTemp, Warning, TEXT("Generate Layout is an Editor authoring action. Use Rebuild Geometry during PIE."));
+        UE_LOG(
+            LogTemp, Warning,
+            TEXT(
+                "Generate Layout is an Editor authoring action. Use Rebuild Geometry during PIE."));
         return;
     }
 
     const double InputStart = FPlatformTime::Seconds();
-    LastIssues = FPlayableSketchValidation::ValidateInput(GraphAsset->Graph, GetValidationSettings());
+    LastIssues =
+        FPlayableSketchValidation::ValidateInput(GraphAsset->Graph, GetValidationSettings());
     ValidationMs += (FPlatformTime::Seconds() - InputStart) * 1000.0;
 
     if (FPlayableSketchValidation::HasErrors(LastIssues))
@@ -548,7 +540,8 @@ void APlayableSketchLevelActor::GenerateLayout()
     FPlayableSketchFloorPlan Candidate;
     FString Error;
 
-    if (!FPlayableSketchLayoutGenerator::Generate(GraphAsset->Graph, GridStepCm, RoomGapCm, Candidate, Error, MaxPlacementAttempts))
+    if (!FPlayableSketchLayoutGenerator::Generate(GraphAsset->Graph, GridStepCm, RoomGapCm,
+                                                  Candidate, Error, MaxPlacementAttempts))
     {
         FailStage(TEXT("PS-G001"), Error);
         return;
@@ -563,11 +556,12 @@ void APlayableSketchLevelActor::GenerateLayout()
 
 #if WITH_EDITOR
     {
-        const FScopedTransaction Transaction(NSLOCTEXT("PlayableSketch", "GenerateLayout", "Generate PlayableSketch Layout"));
+        const FScopedTransaction Transaction(
+            NSLOCTEXT("PlayableSketch", "GenerateLayout", "Generate PlayableSketch Layout"));
         GraphAsset->Modify();
         GraphAsset->SavedLayout.Rooms.Reset();
 
-        for (const FPlayableSketchPlacedRoom& Room : Candidate.Rooms)
+        for (const FPlayableSketchPlacedRoom &Room : Candidate.Rooms)
         {
             FPlayableSketchSavedPlacement Saved;
             Saved.RoomId = Room.RoomId;
@@ -579,7 +573,8 @@ void APlayableSketchLevelActor::GenerateLayout()
     }
 #endif
 
-    PlanMs = FMath::Max(0.0, (FPlatformTime::Seconds() - RebuildStartSeconds) * 1000.0 - ValidationMs);
+    PlanMs =
+        FMath::Max(0.0, (FPlatformTime::Seconds() - RebuildStartSeconds) * 1000.0 - ValidationMs);
     PublishCandidate(Candidate, Pieces, true, TEXT("Generate Layout requested new placements"));
 }
 
@@ -595,17 +590,27 @@ void APlayableSketchLevelActor::RebuildLocalGeometry()
 
 FString APlayableSketchLevelActor::GetGlobalRebuildSignature() const
 {
-    if (!GraphAsset) return TEXT("NoGraphAsset");
-    return GetPathNameSafe(GraphAsset.Get()) + FString::Printf(
-        TEXT("|%d|%d|%d|%d|%d|%d|%.17g|%.17g|%.17g|%.17g|%.17g|%.17g|%.17g|%.17g"),
-        GraphAsset->Graph.Seed, GraphAsset->Graph.SchemaVersion,
-        GridStepCm, RoomGapCm, DoorCornerMarginCm, MaxPlacementAttempts,
-        FloorThicknessCm, WallHeightCm, WallThicknessCm, DoorHeightCm,
-        MinCorridorWidthCm, PawnRadiusCm, PawnHeightCm, ClearanceCm);
+    if (LayoutSource == EPlayableSketchLayoutSource::ImportedExplicitLayout)
+        return TEXT("Explicit|") + GetPathNameSafe(ImportedLayoutAsset.Get());
+    if (!GraphAsset)
+        return TEXT("NoGraphAsset");
+    return GetPathNameSafe(GraphAsset.Get()) +
+           FString::Printf(
+               TEXT("|%d|%d|%d|%d|%d|%d|%.17g|%.17g|%.17g|%.17g|%.17g|%.17g|%.17g|%.17g"),
+               GraphAsset->Graph.Seed, GraphAsset->Graph.SchemaVersion, GridStepCm, RoomGapCm,
+               DoorCornerMarginCm, MaxPlacementAttempts, FloorThicknessCm, WallHeightCm,
+               WallThicknessCm, DoorHeightCm, MinCorridorWidthCm, PawnRadiusCm, PawnHeightCm,
+               ClearanceCm);
 }
 
 void APlayableSketchLevelActor::UpdateGeometry(bool bForceFull)
 {
+    if (LayoutSource == EPlayableSketchLayoutSource::ImportedExplicitLayout)
+    {
+        UpdateExplicitGeometry(bForceFull);
+        return;
+    }
+    ExplicitSettingsAsset = nullptr;
     RebuildStartSeconds = FPlatformTime::Seconds();
     ValidationMs = 0.0;
     PlanMs = 0.0;
@@ -616,7 +621,8 @@ void APlayableSketchLevelActor::UpdateGeometry(bool bForceFull)
         return;
     }
     const double InputStart = FPlatformTime::Seconds();
-    LastIssues = FPlayableSketchValidation::ValidateInput(GraphAsset->Graph, GetValidationSettings());
+    LastIssues =
+        FPlayableSketchValidation::ValidateInput(GraphAsset->Graph, GetValidationSettings());
     ValidationMs += (FPlatformTime::Seconds() - InputStart) * 1000.0;
     if (FPlayableSketchValidation::HasErrors(LastIssues))
     {
@@ -631,11 +637,14 @@ void APlayableSketchLevelActor::UpdateGeometry(bool bForceFull)
         return;
     }
     TArray<FPlayableSketchGeometryDescriptor> Pieces;
-    if (!BuildCandidate(Candidate, Pieces)) return;
-    PlanMs = FMath::Max(0.0, (FPlatformTime::Seconds() - RebuildStartSeconds) * 1000.0 - ValidationMs);
+    if (!BuildCandidate(Candidate, Pieces))
+        return;
+    PlanMs =
+        FMath::Max(0.0, (FPlatformTime::Seconds() - RebuildStartSeconds) * 1000.0 - ValidationMs);
 
     bool bFull = bForceFull;
-    FString Reason = bFull ? TEXT("Explicit full geometry rebuild") : TEXT("Descriptor changes only");
+    FString Reason =
+        bFull ? TEXT("Explicit full geometry rebuild") : TEXT("Descriptor changes only");
     if (!bFull && PublishedSignature.IsEmpty())
     {
         bFull = true;
@@ -644,7 +653,8 @@ void APlayableSketchLevelActor::UpdateGeometry(bool bForceFull)
     else if (!bFull && PublishedGlobalSignature != GetGlobalRebuildSignature())
     {
         bFull = true;
-        Reason = TEXT("Fallback: graph asset, seed, schema or global settings changed; saved placements retained");
+        Reason = TEXT(
+            "Fallback: graph asset, seed, schema or global settings changed; saved placements retained");
     }
     else if (!bFull && !ComponentRegistry.IsHealthy(*this))
     {
@@ -654,16 +664,14 @@ void APlayableSketchLevelActor::UpdateGeometry(bool bForceFull)
     PublishCandidate(Candidate, Pieces, bFull, Reason);
 }
 
-void APlayableSketchLevelActor::PublishCandidate(
-    const FPlayableSketchFloorPlan& Plan,
-    const TArray<FPlayableSketchGeometryDescriptor>& Pieces,
-    bool bFull, const FString& Reason)
+bool APlayableSketchLevelActor::PublishCandidate(
+    const FPlayableSketchFloorPlan &Plan, const TArray<FPlayableSketchGeometryDescriptor> &Pieces,
+    bool bFull, const FString &Reason)
 {
     const double SpecStart = FPlatformTime::Seconds();
     TArray<FPlayableSketchComponentSpec> Specs;
-    auto AddFloor = [&](const FPlayableSketchRect& Bounds, const FGuid& Id, bool bRoom,
-                        UMaterialInterface* Material)
-    {
+    auto AddFloor = [&](const FPlayableSketchRect &Bounds, const FGuid &Id, bool bRoom,
+                        UMaterialInterface *Material) {
         FPlayableSketchComponentSpec S;
         S.SourceId = Id;
         S.bRoom = bRoom;
@@ -675,11 +683,11 @@ void APlayableSketchLevelActor::PublishCandidate(
         S.Material = Material;
         Specs.Add(S);
     };
-    for (const FPlayableSketchPlacedRoom& Placed : Plan.Rooms)
+    for (const FPlayableSketchPlacedRoom &Placed : Plan.Rooms)
     {
-        UMaterialInterface* Material = DefaultFloorMaterial.Get();
-        const FPlayableSketchRoom* Room = GraphAsset->Graph.Rooms.FindByPredicate(
-            [&](const FPlayableSketchRoom& R) { return R.RoomId == Placed.RoomId; });
+        UMaterialInterface *Material = DefaultFloorMaterial.Get();
+        const FPlayableSketchRoom *Room = GraphAsset->Graph.Rooms.FindByPredicate(
+            [&](const FPlayableSketchRoom &R) { return R.RoomId == Placed.RoomId; });
         if (Room)
         {
             if (Room->RoomRole == EPlayableSketchRoomRole::Start && StartFloorMaterial)
@@ -691,16 +699,18 @@ void APlayableSketchLevelActor::PublishCandidate(
         }
         AddFloor(Placed.Bounds, Placed.RoomId, true, Material);
     }
-    for (const FPlayableSketchCorridor& Corridor : Plan.Corridors)
-        for (const FPlayableSketchRect& Rect : FPlayableSketchFloorBuilder::BuildCorridorFloorRects(Corridor.Footprints))
+    for (const FPlayableSketchCorridor &Corridor : Plan.Corridors)
+        for (const FPlayableSketchRect &Rect :
+             FPlayableSketchFloorBuilder::BuildCorridorFloorRects(Corridor.Footprints))
             AddFloor(Rect, Corridor.ConnectionId, false, DefaultFloorMaterial.Get());
-    for (const FPlayableSketchGeometryDescriptor& Piece : Pieces)
+    for (const FPlayableSketchGeometryDescriptor &Piece : Pieces)
     {
         FPlayableSketchComponentSpec S;
         S.SourceId = Piece.SourceId;
         S.bRoom = Piece.bRoom;
         S.Kind = Piece.Role == EPlayableSketchGeometryRole::Lintel
-            ? EPlayableSketchPieceKind::Lintel : EPlayableSketchPieceKind::Wall;
+                     ? EPlayableSketchPieceKind::Lintel
+                     : EPlayableSketchPieceKind::Wall;
         S.CenterCm = Piece.CenterCm;
         S.SizeCm = Piece.SizeCm;
         S.Material = WallMaterial.Get();
@@ -711,17 +721,18 @@ void APlayableSketchLevelActor::PublishCandidate(
     FString Error;
     if (!ComponentRegistry.Apply(*this, Specs, bFull, LastUpdateStats, Error))
     {
-        // Apply rolls back staged components. The accepted preview stays visible but stale.
+
         ResetNavigation();
         bPreviewStale = !GeneratedFloorPlan.Rooms.IsEmpty();
-        PreviewStatus = TEXT("Geometry apply failed. Previous preview retained; it is not current.");
+        PreviewStatus =
+            TEXT("Geometry apply failed. Previous preview retained; it is not current.");
         LastRebuildReport = TEXT("Result=ApplyFailed; previous preview retained as stale.");
         FPlayableSketchValidationIssue Issue;
         Issue.Code = TEXT("PS-G003");
         Issue.Message = Error;
-        LastIssues = { Issue };
+        LastIssues = {Issue};
         LogIssues();
-        return;
+        return false;
     }
     GeneratedFloorPlan = Plan;
     PublishedSignature = GetSourceSignature();
@@ -731,21 +742,124 @@ void APlayableSketchLevelActor::PublishCandidate(
     bPreviewStale = false;
     RefreshNavigation(Pieces);
     PreviewStatus = bFull ? TEXT("Current valid preview. Full geometry rebuild completed.")
-                         : TEXT("Current valid preview. Local geometry update completed.");
+                          : TEXT("Current valid preview. Local geometry update completed.");
     LastRebuildReport = FString::Printf(
-        TEXT("Mode=%s Reason=%s DirtyRooms=%d DirtyConnections=%d Created=%d Updated=%d Removed=%d Kept=%d PlanMs=%.3f DirtyMs=%.3f ApplyMs=%.3f ValidationMs=%.3f TotalMs=%.3f NavigationMs=%.3f NavigationAnalyzed=%d"),
-        bFull ? TEXT("Full") : TEXT("Local"), *Reason,
-        LastUpdateStats.DirtyRooms.Num(), LastUpdateStats.DirtyConnections.Num(),
-        LastUpdateStats.Created, LastUpdateStats.Updated, LastUpdateStats.Removed, LastUpdateStats.Kept,
-        PlanMs, LastUpdateStats.DirtyMs, LastUpdateStats.ApplyMs, ValidationMs,
-        (FPlatformTime::Seconds() - RebuildStartSeconds) * 1000.0, NavigationResult.TotalMs, bNavigationCurrent);
+        TEXT(
+            "Mode=%s Reason=%s DirtyRooms=%d DirtyConnections=%d Created=%d Updated=%d Removed=%d Kept=%d PlanMs=%.3f DirtyMs=%.3f ApplyMs=%.3f ValidationMs=%.3f TotalMs=%.3f NavigationMs=%.3f NavigationAnalyzed=%d"),
+        bFull ? TEXT("Full") : TEXT("Local"), *Reason, LastUpdateStats.DirtyRooms.Num(),
+        LastUpdateStats.DirtyConnections.Num(), LastUpdateStats.Created, LastUpdateStats.Updated,
+        LastUpdateStats.Removed, LastUpdateStats.Kept, PlanMs, LastUpdateStats.DirtyMs,
+        LastUpdateStats.ApplyMs, ValidationMs,
+        (FPlatformTime::Seconds() - RebuildStartSeconds) * 1000.0, NavigationResult.TotalMs,
+        bNavigationCurrent);
     UE_LOG(LogTemp, Display, TEXT("%s"), *LastRebuildReport);
     LogIssues();
+    return true;
+}
+
+void APlayableSketchLevelActor::ImportLayoutJson()
+{
+    FString Json, Error;
+    const FString Path =
+        FPaths::IsRelative(ImportLayoutJsonPath)
+            ? FPaths::ConvertRelativePathToFull(FPaths::ProjectDir(), ImportLayoutJsonPath)
+            : ImportLayoutJsonPath;
+    if (ImportLayoutJsonPath.IsEmpty() || IFileManager::Get().FileSize(*Path) > 2 * 1024 * 1024 ||
+        !FFileHelper::LoadFileToString(Json, *Path))
+    {
+        LastImportReport = TEXT(
+            "Rejected: choose a readable bridge JSON file (maximum 2 MB). Existing design retained.");
+        return;
+    }
+    ImportLayoutJsonText(Json, Error);
+}
+
+bool APlayableSketchLevelActor::ImportLayoutJsonText(const FString &Json, FString &OutError)
+{
+    auto Reject = [&](const FString &Message) {
+        OutError = Message;
+        LastImportReport = TEXT("Rejected: ") + Message + TEXT(" Existing design retained.");
+        return false;
+    };
+    if (!GetWorld() || !GraphAsset || !GetActorScale3D().Equals(FVector::OneVector))
+        return Reject(TEXT("Assign a GraphAsset and use unit actor scale before importing."));
+#if WITH_EDITOR
+    if (GetWorld()->WorldType != EWorldType::Editor &&
+        GetWorld()->WorldType != EWorldType::EditorPreview)
+        return Reject(TEXT("Import Layout JSON is an Editor authoring action."));
+#else
+    return Reject(TEXT("Import Layout JSON is an Editor authoring action."));
+#endif
+    FPlayableSketchLegacyImport Import;
+    FPlayableSketchFloorPlan Plan;
+    TArray<FPlayableSketchGeometryDescriptor> Pieces;
+    if (!FPlayableSketchLayoutImporter::Parse(Json, Import, OutError) ||
+        !FPlayableSketchLayoutImporter::Prepare(Import, GetValidationSettings(), Plan, Pieces,
+                                                OutError))
+        return Reject(OutError);
+
+#if WITH_EDITOR
+    const FScopedTransaction Transaction(
+        NSLOCTEXT("PlayableSketch", "ImportLayout", "Import PlayableSketch Layout JSON"));
+    Modify();
+#endif
+    UPlayableSketchGraphAsset *OriginalAsset = GraphAsset;
+    UPlayableSketchGraphAsset *StagedAsset =
+        NewObject<UPlayableSketchGraphAsset>(this, NAME_None, RF_Transient);
+    StagedAsset->Graph = Import.Graph;
+    const float OldThickness = WallThicknessCm, OldHeight = WallHeightCm;
+    const float OldDoorHeight = DoorHeightCm, OldFloorThickness = FloorThicknessCm;
+    const EPlayableSketchLayoutSource OldSource = LayoutSource;
+    LayoutSource = EPlayableSketchLayoutSource::ProceduralGraph;
+    GraphAsset = StagedAsset;
+    WallThicknessCm = Import.Walls.ThicknessCm;
+    WallHeightCm = Import.Walls.HeightCm;
+    DoorHeightCm = Import.Walls.DoorHeightCm;
+    FloorThicknessCm = Import.FloorThicknessCm;
+    LastIssues.Reset();
+    RebuildStartSeconds = FPlatformTime::Seconds();
+    ValidationMs = PlanMs = 0.0;
+    const bool bPublished =
+        PublishCandidate(Plan, Pieces, true,
+                         TEXT("Legacy JSON import; Locked rooms and verified straight corridor"));
+    GraphAsset = OriginalAsset;
+    if (!bPublished)
+    {
+        LayoutSource = OldSource;
+        WallThicknessCm = OldThickness;
+        WallHeightCm = OldHeight;
+        DoorHeightCm = OldDoorHeight;
+        FloorThicknessCm = OldFloorThickness;
+        LastAttemptSignature = GetSourceSignature();
+        return Reject(TEXT("Component publication failed; previous preview retained as stale."));
+    }
+#if WITH_EDITOR
+    OriginalAsset->Modify();
+#endif
+    OriginalAsset->Graph = Import.Graph;
+    OriginalAsset->SavedLayout.Rooms.Reset();
+    for (const auto &Room : Plan.Rooms)
+        OriginalAsset->SavedLayout.Rooms.Add({Room.RoomId, Room.Bounds.Min});
+    OriginalAsset->ImportDocumentId = Import.DocumentId;
+    OriginalAsset->ImportRevisionId = Import.RevisionId;
+    OriginalAsset->ImportSourceHash = Import.SourceHash;
+    ExplicitSettingsAsset = nullptr;
+#if WITH_EDITOR
+    OriginalAsset->MarkPackageDirty();
+    MarkPackageDirty();
+#endif
+    PublishedSignature = LastAttemptSignature = GetSourceSignature();
+    PublishedGlobalSignature = GetGlobalRebuildSignature();
+    LastImportReport = FString::Printf(
+        TEXT(
+            "Imported %s / %s: 2 Locked rooms, 1 verified straight corridor, 2 manual doors. Legacy int dimensions preserved without grid rounding. Navigation reachability is reported separately."),
+        *Import.DocumentId, *Import.RevisionId);
+    OutError.Reset();
+    return true;
 }
 
 void APlayableSketchLevelActor::InvalidatePreview(
-    const TArray<FPlayableSketchValidationIssue>& Issues,
-    const FString& Status)
+    const TArray<FPlayableSketchValidationIssue> &Issues, const FString &Status)
 {
     LastIssues = Issues;
     AnnotateIssues();
@@ -761,7 +875,7 @@ void APlayableSketchLevelActor::InvalidatePreview(
     LogIssues();
 }
 
-void APlayableSketchLevelActor::FailStage(const TCHAR* Code, const FString& Message)
+void APlayableSketchLevelActor::FailStage(const TCHAR *Code, const FString &Message)
 {
     FPlayableSketchValidationIssue Issue;
     Issue.Code = FName(Code);
@@ -769,48 +883,59 @@ void APlayableSketchLevelActor::FailStage(const TCHAR* Code, const FString& Mess
 
     if (GraphAsset)
     {
-        for (const FPlayableSketchRoom& Room : GraphAsset->Graph.Rooms)
+        for (const FPlayableSketchRoom &Room : GraphAsset->Graph.Rooms)
         {
-            if (Message.Contains(Room.RoomId.ToString())) Issue.ElementIds.AddUnique(Room.RoomId);
+            if (Message.Contains(Room.RoomId.ToString()))
+                Issue.ElementIds.AddUnique(Room.RoomId);
         }
-        for (const FPlayableSketchConnection& Connection : GraphAsset->Graph.Connections)
+        for (const FPlayableSketchConnection &Connection : GraphAsset->Graph.Connections)
         {
-            if (Message.Contains(Connection.ConnectionId.ToString())) Issue.ElementIds.AddUnique(Connection.ConnectionId);
+            if (Message.Contains(Connection.ConnectionId.ToString()))
+                Issue.ElementIds.AddUnique(Connection.ConnectionId);
         }
     }
 
-    InvalidatePreview({ Issue }, TEXT("Generation failed. Preview cleared; see Last Issues."));
+    InvalidatePreview({Issue}, TEXT("Generation failed. Preview cleared; see Last Issues."));
 }
 
 void APlayableSketchLevelActor::AnnotateIssues()
 {
-    if (!GraphAsset) return;
+    if (!GraphAsset)
+        return;
 
-    for (FPlayableSketchValidationIssue& Issue : LastIssues)
+    for (FPlayableSketchValidationIssue &Issue : LastIssues)
     {
-        if (Issue.bHasPosition) continue;
+        if (Issue.bHasPosition)
+            continue;
 
-        for (const FGuid& Id : Issue.ElementIds)
+        for (const FGuid &Id : Issue.ElementIds)
         {
-            const FPlayableSketchConnection* Connection = GraphAsset->Graph.Connections.FindByPredicate(
-                [&](const FPlayableSketchConnection& Item) { return Item.ConnectionId == Id; });
+            const FPlayableSketchConnection *Connection =
+                GraphAsset->Graph.Connections.FindByPredicate(
+                    [&](const FPlayableSketchConnection &Item) { return Item.ConnectionId == Id; });
             const FGuid RoomId = Connection ? Connection->RoomAId : Id;
-            const FPlayableSketchRoom* Source = GraphAsset->Graph.Rooms.FindByPredicate(
-                [&](const FPlayableSketchRoom& Item) { return Item.RoomId == RoomId; });
-            const FPlayableSketchSavedPlacement* Saved = GraphAsset->SavedLayout.Rooms.FindByPredicate(
-                [&](const FPlayableSketchSavedPlacement& Item) { return Item.RoomId == RoomId; });
+            const FPlayableSketchRoom *Source = GraphAsset->Graph.Rooms.FindByPredicate(
+                [&](const FPlayableSketchRoom &Item) { return Item.RoomId == RoomId; });
+            const FPlayableSketchSavedPlacement *Saved =
+                GraphAsset->SavedLayout.Rooms.FindByPredicate(
+                    [&](const FPlayableSketchSavedPlacement &Item) {
+                        return Item.RoomId == RoomId;
+                    });
 
             if (Source && (Source->PositionMode == EPlayableSketchPositionMode::Locked || Saved))
             {
-                const FVector2D Min = Source->PositionMode == EPlayableSketchPositionMode::Locked ? Source->PositionCm : Saved->MinCm;
-                Issue.PositionCm = FVector(Min.X + Source->WidthCm * 0.5, Min.Y + Source->DepthCm * 0.5, 25.0);
+                const FVector2D Min = Source->PositionMode == EPlayableSketchPositionMode::Locked
+                                          ? Source->PositionCm
+                                          : Saved->MinCm;
+                Issue.PositionCm =
+                    FVector(Min.X + Source->WidthCm * 0.5, Min.Y + Source->DepthCm * 0.5, 25.0);
                 Issue.ExtentCm = FVector(Source->WidthCm * 0.5, Source->DepthCm * 0.5, 25.0);
                 Issue.bHasPosition = !Issue.PositionCm.ContainsNaN();
                 break;
             }
 
-            const FPlayableSketchPlacedRoom* Previous = GeneratedFloorPlan.Rooms.FindByPredicate(
-                [&](const FPlayableSketchPlacedRoom& Item) { return Item.RoomId == RoomId; });
+            const FPlayableSketchPlacedRoom *Previous = GeneratedFloorPlan.Rooms.FindByPredicate(
+                [&](const FPlayableSketchPlacedRoom &Item) { return Item.RoomId == RoomId; });
             if (Previous)
             {
                 const FVector2D Center = (Previous->Bounds.Min + Previous->Bounds.Max) * 0.5;
@@ -824,40 +949,51 @@ void APlayableSketchLevelActor::AnnotateIssues()
 
 void APlayableSketchLevelActor::LogIssues() const
 {
-    for (const FPlayableSketchValidationIssue& Issue : LastIssues)
+    for (const FPlayableSketchValidationIssue &Issue : LastIssues)
     {
         FString Ids;
-        for (const FGuid& Id : Issue.ElementIds) Ids += Id.ToString() + TEXT(" ");
+        for (const FGuid &Id : Issue.ElementIds)
+            Ids += Id.ToString() + TEXT(" ");
         UE_LOG(LogTemp, Warning, TEXT("[%s] Severity=%d IDs=%s Position=%s Message=%s"),
-            *Issue.Code.ToString(), static_cast<int32>(Issue.Severity), *Ids,
-            Issue.bHasPosition ? *Issue.PositionCm.ToString() : TEXT("Unknown"), *Issue.Message);
+               *Issue.Code.ToString(), static_cast<int32>(Issue.Severity), *Ids,
+               Issue.bHasPosition ? *Issue.PositionCm.ToString() : TEXT("Unknown"), *Issue.Message);
     }
 }
 
 void APlayableSketchLevelActor::DrawValidationIssues()
 {
-    if (!GetWorld()) return;
+    if (!GetWorld())
+        return;
     const FTransform Transform = GetActorTransform();
     const FVector Scale = Transform.GetScale3D().GetAbs();
 
-    for (const FPlayableSketchValidationIssue& Issue : LastIssues)
+    for (const FPlayableSketchValidationIssue &Issue : LastIssues)
     {
-        if (!Issue.bHasPosition) continue;
+        if (!Issue.bHasPosition)
+            continue;
         const FVector Position = Transform.TransformPosition(Issue.PositionCm);
-        const FColor Color = Issue.Severity == EPlayableSketchIssueSeverity::Error ? FColor::Red : FColor::Yellow;
-        DrawDebugBox(GetWorld(), Position, Issue.ExtentCm * Scale, Transform.GetRotation(), Color, false, -1.0f, 0, 3.0f);
+        const FColor Color =
+            Issue.Severity == EPlayableSketchIssueSeverity::Error ? FColor::Red : FColor::Yellow;
+        DrawDebugBox(GetWorld(), Position, Issue.ExtentCm * Scale, Transform.GetRotation(), Color,
+                     false, -1.0f, 0, 3.0f);
     }
 }
 
 void APlayableSketchLevelActor::ValidateCurrentDesign()
 {
+    if (LayoutSource == EPlayableSketchLayoutSource::ImportedExplicitLayout)
+    {
+        ValidateExplicitDesign();
+        return;
+    }
     if (!GraphAsset)
     {
         FailStage(TEXT("PS-I001"), TEXT("GraphAsset is not assigned."));
         return;
     }
 
-    LastIssues = FPlayableSketchValidation::ValidateInput(GraphAsset->Graph, GetValidationSettings());
+    LastIssues =
+        FPlayableSketchValidation::ValidateInput(GraphAsset->Graph, GetValidationSettings());
     if (FPlayableSketchValidation::HasErrors(LastIssues))
     {
         InvalidatePreview(LastIssues, TEXT("Validation failed. Preview cleared."));
@@ -875,19 +1011,23 @@ void APlayableSketchLevelActor::ValidateCurrentDesign()
     TArray<FPlayableSketchGeometryDescriptor> Pieces;
     if (BuildCandidate(Candidate, Pieces))
     {
-        bPreviewStale = !GeneratedFloorPlan.Rooms.IsEmpty() && PublishedSignature != GetSourceSignature();
-        PreviewStatus = bPreviewStale
-            ? TEXT("Design is valid, but displayed preview is stale. Rebuild Geometry.")
-            : TEXT("Design validation passed. Validation did not publish new geometry.");
+        bPreviewStale =
+            !GeneratedFloorPlan.Rooms.IsEmpty() && PublishedSignature != GetSourceSignature();
+        PreviewStatus =
+            bPreviewStale
+                ? TEXT("Design is valid, but displayed preview is stale. Rebuild Geometry.")
+                : TEXT("Design validation passed. Validation did not publish new geometry.");
         UE_LOG(LogTemp, Display, TEXT("Current design validation passed."));
     }
 }
 
-void APlayableSketchLevelActor::OnConstruction(const FTransform& Transform)
+void APlayableSketchLevelActor::OnConstruction(const FTransform &Transform)
 {
     Super::OnConstruction(Transform);
 
-    if (GraphAsset && GetWorld() && !GetWorld()->IsGameWorld() && bAutoRebuildGeometry)
+    if ((GraphAsset || (LayoutSource == EPlayableSketchLayoutSource::ImportedExplicitLayout &&
+                        ImportedLayoutAsset)) &&
+        GetWorld() && !GetWorld()->IsGameWorld() && bAutoRebuildGeometry)
     {
         RebuildLocalGeometry();
     }
@@ -897,8 +1037,10 @@ void APlayableSketchLevelActor::OnConstruction(const FTransform& Transform)
 void APlayableSketchLevelActor::PostEditUndo()
 {
     Super::PostEditUndo();
+    ExplicitSettingsAsset = nullptr;
     LastAttemptSignature.Reset();
-    if (bAutoRebuildGeometry) RebuildLocalGeometry();
+    if (bAutoRebuildGeometry)
+        RebuildLocalGeometry();
 }
 #endif
 
@@ -920,34 +1062,47 @@ FPlayableSketchNavigationSettings APlayableSketchLevelActor::GetNavigationSettin
 
 void APlayableSketchLevelActor::ResetNavigation()
 {
+    ExplicitNavigationResult = FPlayableSketchExplicitNavigationReport();
     NavigationResult = FPlayableSketchNavigationResult();
     bNavigationCurrent = false;
     PreviewPathPoints.Reset();
     NavigationReport = TEXT("No current navigation analysis.");
 }
 
-void APlayableSketchLevelActor::RefreshNavigation(const TArray<FPlayableSketchGeometryDescriptor>& Pieces)
+void APlayableSketchLevelActor::RefreshNavigation(
+    const TArray<FPlayableSketchGeometryDescriptor> &Pieces)
 {
     ResetNavigation();
-    if (!GetActorScale3D().Equals(FVector::OneVector, 0.0001)
-        || !GetActorQuat().GetUpVector().Equals(FVector::UpVector, 0.0001))
+    if (!GetActorScale3D().Equals(FVector::OneVector, 0.0001) ||
+        !GetActorQuat().GetUpVector().Equals(FVector::UpVector, 0.0001))
     {
-        NavigationReport = TEXT("Navigation requires unit Actor scale and a horizontal floor (yaw rotation is supported).");
+        NavigationReport = TEXT(
+            "Navigation requires unit Actor scale and a horizontal floor (yaw rotation is supported).");
         return;
     }
     FString Error;
-    bNavigationCurrent = GraphAsset && FPlayableSketchNavigation::Analyze(GeneratedFloorPlan, Pieces,
-        GraphAsset->Graph.StartRoomId, GraphAsset->Graph.GoalRoomId, GetNavigationSettings(), NavigationResult, Error);
-    NavigationReport = bNavigationCurrent ? NavigationResult.Summary() : TEXT("Navigation analysis failed: ") + Error;
-    if (bNavigationCurrent) PreviewPathPoints = NavigationResult.PathPoints;
+    bNavigationCurrent =
+        GraphAsset &&
+        FPlayableSketchNavigation::Analyze(
+            GeneratedFloorPlan, Pieces, GraphAsset->Graph.StartRoomId, GraphAsset->Graph.GoalRoomId,
+            GetNavigationSettings(), NavigationResult, Error);
+    NavigationReport = bNavigationCurrent ? NavigationResult.Summary()
+                                          : TEXT("Navigation analysis failed: ") + Error;
+    if (bNavigationCurrent)
+        PreviewPathPoints = NavigationResult.PathPoints;
     UE_LOG(LogTemp, Display, TEXT("%s"), *NavigationReport);
 }
 
 void APlayableSketchLevelActor::AnalyzeNavigation()
 {
+    if (LayoutSource == EPlayableSketchLayoutSource::ImportedExplicitLayout)
+    {
+        ReportExplicitNavigation();
+        return;
+    }
     ResetNavigation();
-    if (!GraphAsset || GeneratedFloorPlan.Rooms.IsEmpty() || bPreviewStale
-        || PublishedSignature != GetSourceSignature() || !ComponentRegistry.IsHealthy(*this))
+    if (!GraphAsset || GeneratedFloorPlan.Rooms.IsEmpty() || bPreviewStale ||
+        PublishedSignature != GetSourceSignature() || !ComponentRegistry.IsHealthy(*this))
     {
         NavigationReport = TEXT("Rebuild the current valid geometry before analyzing navigation.");
         UE_LOG(LogTemp, Warning, TEXT("%s"), *NavigationReport);
@@ -955,7 +1110,8 @@ void APlayableSketchLevelActor::AnalyzeNavigation()
     }
     TArray<FPlayableSketchGeometryDescriptor> Pieces;
     FString Error;
-    if (!FPlayableSketchWallGeometry::Generate(GeneratedFloorPlan, GetValidationSettings().Walls, Pieces, Error))
+    if (!FPlayableSketchWallGeometry::Generate(GeneratedFloorPlan, GetValidationSettings().Walls,
+                                               Pieces, Error))
     {
         NavigationReport = TEXT("Navigation geometry failed: ") + Error;
         return;
@@ -965,8 +1121,19 @@ void APlayableSketchLevelActor::AnalyzeNavigation()
 
 void APlayableSketchLevelActor::ExportNavigationReport()
 {
+    if (LayoutSource == EPlayableSketchLayoutSource::ImportedExplicitLayout)
+    {
+        VerifyExplicitPawnTraversal();
+        const FString Filename = FPaths::ConvertRelativePathToFull(
+            FPaths::ProjectSavedDir() / TEXT("Navigation/ExplicitNavigationReport.json"));
+        IFileManager::Get().MakeDirectory(*FPaths::GetPath(Filename), true);
+        if (FFileHelper::SaveStringToFile(ExplicitNavigationResult.Json(), *Filename))
+            NavigationExportPath = Filename;
+        return;
+    }
     AnalyzeNavigation();
-    if (!bNavigationCurrent) return;
+    if (!bNavigationCurrent)
+        return;
     FPlayableSketchNavigationSample Sample;
     Sample.Name = GetName();
     Sample.Seed = GraphAsset->Graph.Seed;
@@ -974,52 +1141,60 @@ void APlayableSketchLevelActor::ExportNavigationReport()
     Sample.ConnectionCount = GeneratedFloorPlan.Corridors.Num();
     Sample.Settings = GetNavigationSettings();
     Sample.Result = NavigationResult;
-    const FString Filename = FPaths::ConvertRelativePathToFull(FPaths::ProjectSavedDir() / TEXT("Navigation/NavigationReport.json"));
+    const FString Filename = FPaths::ConvertRelativePathToFull(
+        FPaths::ProjectSavedDir() / TEXT("Navigation/NavigationReport.json"));
     FString Error;
-    if (FPlayableSketchNavigation::ExportJson({ Sample }, Filename, Error))
+    if (FPlayableSketchNavigation::ExportJson({Sample}, Filename, Error))
     {
         NavigationExportPath = Filename;
         UE_LOG(LogTemp, Display, TEXT("Navigation report exported: %s"), *Filename);
     }
-    else UE_LOG(LogTemp, Warning, TEXT("%s"), *Error);
+    else
+        UE_LOG(LogTemp, Warning, TEXT("%s"), *Error);
 }
 
 void APlayableSketchLevelActor::RunNavigationExamples()
 {
     TArray<FPlayableSketchNavigationSample> Samples;
     FString Error;
-    const FString Filename = FPaths::ConvertRelativePathToFull(FPaths::ProjectSavedDir() / TEXT("Navigation/NavigationExamples.json"));
-    if (!FPlayableSketchNavigationExamples::Run(Samples, Error)
-        || !FPlayableSketchNavigation::ExportJson(Samples, Filename, Error))
+    const FString Filename = FPaths::ConvertRelativePathToFull(
+        FPaths::ProjectSavedDir() / TEXT("Navigation/NavigationExamples.json"));
+    if (!FPlayableSketchNavigationExamples::Run(Samples, Error) ||
+        !FPlayableSketchNavigation::ExportJson(Samples, Filename, Error))
     {
         UE_LOG(LogTemp, Warning, TEXT("Navigation examples failed: %s"), *Error);
         return;
     }
     NavigationExportPath = Filename;
-    for (const auto& Sample : Samples)
+    for (const auto &Sample : Samples)
         UE_LOG(LogTemp, Display, TEXT("%s: %s"), *Sample.Name, *Sample.Result.Summary());
     UE_LOG(LogTemp, Display, TEXT("Five fixed-layout navigation examples exported: %s"), *Filename);
 }
 
 void APlayableSketchLevelActor::DrawNavigationGrid()
 {
-    if (!bShowNavigationGrid || !bNavigationCurrent || !GetWorld() || bPreviewStale
-        || PublishedSignature != GetSourceSignature() || !GetActorScale3D().Equals(FVector::OneVector, 0.0001)
-        || !GetActorQuat().GetUpVector().Equals(FVector::UpVector, 0.0001)) return;
+    if (!bShowNavigationGrid || !bNavigationCurrent || !GetWorld() || bPreviewStale ||
+        PublishedSignature != GetSourceSignature() ||
+        !GetActorScale3D().Equals(FVector::OneVector, 0.0001) ||
+        !GetActorQuat().GetUpVector().Equals(FVector::UpVector, 0.0001))
+        return;
     const FTransform Transform = GetActorTransform();
     const double Half = NavigationResult.CellSizeCm * 0.45;
     const FVector Extent(Half, Half, 1.0);
-    // Visualization is bounded independently of the analysis grid.
+
     const int32 Count = NavigationResult.Dimensions.X * NavigationResult.Dimensions.Y;
     const int32 Stride = FMath::Max(1, FMath::DivideAndRoundUp(Count, 5000));
     for (int32 Index = 0; Index < Count; Index += Stride)
     {
-        const FIntPoint Cell(Index % NavigationResult.Dimensions.X, Index / NavigationResult.Dimensions.X);
+        const FIntPoint Cell(Index % NavigationResult.Dimensions.X,
+                             Index / NavigationResult.Dimensions.X);
         const bool bWalkable = NavigationResult.WalkableCells.Contains(Cell);
-        if (!bWalkable && !bShowBlockedNavigationCells) continue;
+        if (!bWalkable && !bShowBlockedNavigationCells)
+            continue;
         const FVector2D Center = NavigationResult.CellCenter(Cell);
         DrawDebugBox(GetWorld(), Transform.TransformPosition(FVector(Center.X, Center.Y, 5.0)),
-            Extent, Transform.GetRotation(), bWalkable ? FColor::Cyan : FColor::Red, false, -1.0f, 0, 1.0f);
+                     Extent, Transform.GetRotation(), bWalkable ? FColor::Cyan : FColor::Red, false,
+                     -1.0f, 0, 1.0f);
     }
 }
 
@@ -1033,9 +1208,11 @@ void APlayableSketchLevelActor::TestRebuildEquivalence()
     const auto PreviousValues = ComponentRegistry.Capture();
     const auto PreviousPointers = ComponentRegistry.GetPointers();
     RebuildLocalGeometry();
-    if (bPreviewStale || PublishedSignature != GetSourceSignature() || GeneratedFloorPlan.Rooms.IsEmpty())
+    if (bPreviewStale || PublishedSignature != GetSourceSignature() ||
+        GeneratedFloorPlan.Rooms.IsEmpty())
     {
-        UE_LOG(LogTemp, Error, TEXT("Equivalence cannot run: current design is invalid or unpublished."));
+        UE_LOG(LogTemp, Error,
+               TEXT("Equivalence cannot run: current design is invalid or unpublished."));
         return;
     }
     const bool bWasLocal = LastRebuildReport.StartsWith(TEXT("Mode=Local"));
@@ -1046,35 +1223,37 @@ void APlayableSketchLevelActor::TestRebuildEquivalence()
     int32 StableCount = 0;
     if (bWasLocal)
     {
-        for (const auto& Pair : PreviousValues)
+        for (const auto &Pair : PreviousValues)
         {
-            const FString* NewValue = LocalValues.Find(Pair.Key);
-            if (!NewValue || *NewValue != Pair.Value) continue;
-            const auto* OldPointer = PreviousPointers.Find(Pair.Key);
-            const auto* NewPointer = LocalPointers.Find(Pair.Key);
-            if (!OldPointer || !NewPointer || *OldPointer != *NewPointer) bPassed = false;
-            else ++StableCount;
+            const FString *NewValue = LocalValues.Find(Pair.Key);
+            if (!NewValue || *NewValue != Pair.Value)
+                continue;
+            const auto *OldPointer = PreviousPointers.Find(Pair.Key);
+            const auto *NewPointer = LocalPointers.Find(Pair.Key);
+            if (!OldPointer || !NewPointer || *OldPointer != *NewPointer)
+                bPassed = false;
+            else
+                ++StableCount;
         }
     }
-    auto Fingerprint = [](const FPlayableSketchFloorPlan& Plan)
-    {
+    auto Fingerprint = [](const FPlayableSketchFloorPlan &Plan) {
         TArray<FString> Lines;
-        auto RectText = [](const FPlayableSketchRect& R)
-        {
-            return FString::Printf(TEXT("%.17g,%.17g,%.17g,%.17g"), R.Min.X, R.Min.Y, R.Max.X, R.Max.Y);
+        auto RectText = [](const FPlayableSketchRect &R) {
+            return FString::Printf(TEXT("%.17g,%.17g,%.17g,%.17g"), R.Min.X, R.Min.Y, R.Max.X,
+                                   R.Max.Y);
         };
-        auto DoorText = [](const FPlayableSketchDoorEndpoint& D)
-        {
+        auto DoorText = [](const FPlayableSketchDoorEndpoint &D) {
             return FString::Printf(TEXT("%s/%d/%.17g/%.17g/%.17g"), *D.RoomId.ToString(),
-                static_cast<int32>(D.WallSide), D.PositionCm.X, D.PositionCm.Y, D.WidthCm);
+                                   static_cast<int32>(D.WallSide), D.PositionCm.X, D.PositionCm.Y,
+                                   D.WidthCm);
         };
-        for (const FPlayableSketchPlacedRoom& R : Plan.Rooms)
+        for (const FPlayableSketchPlacedRoom &R : Plan.Rooms)
             Lines.Add(TEXT("Room/") + R.RoomId.ToString() + TEXT("/") + RectText(R.Bounds));
-        for (const FPlayableSketchCorridor& C : Plan.Corridors)
+        for (const FPlayableSketchCorridor &C : Plan.Corridors)
         {
             const FString Prefix = TEXT("Connection/") + C.ConnectionId.ToString();
             Lines.Add(Prefix + TEXT("/Doors/") + DoorText(C.DoorA) + TEXT("/") + DoorText(C.DoorB));
-            for (const FPlayableSketchRect& R : C.Footprints)
+            for (const FPlayableSketchRect &R : C.Footprints)
                 Lines.Add(Prefix + TEXT("/Footprint/") + RectText(R));
         }
         Lines.Sort();
@@ -1083,24 +1262,29 @@ void APlayableSketchLevelActor::TestRebuildEquivalence()
     const FString LocalPlan = Fingerprint(GeneratedFloorPlan);
     RebuildGeometry();
     const auto FullValues = ComponentRegistry.Capture();
-    bPassed = bPassed && !bPreviewStale && PublishedSignature == GetSourceSignature()
-        && LocalPlan == Fingerprint(GeneratedFloorPlan)
-        && LocalValues.Num() == FullValues.Num()
-        && ComponentRegistry.IsHealthy(*this) && ComponentRegistry.Verify(Error);
-    for (const auto& Pair : LocalValues)
+    bPassed = bPassed && !bPreviewStale && PublishedSignature == GetSourceSignature() &&
+              LocalPlan == Fingerprint(GeneratedFloorPlan) &&
+              LocalValues.Num() == FullValues.Num() && ComponentRegistry.IsHealthy(*this) &&
+              ComponentRegistry.Verify(Error);
+    for (const auto &Pair : LocalValues)
     {
-        const FString* Full = FullValues.Find(Pair.Key);
-        if (!Full || *Full != Pair.Value) bPassed = false;
+        const FString *Full = FullValues.Find(Pair.Key);
+        if (!Full || *Full != Pair.Value)
+            bPassed = false;
     }
-    // Full must replace the old components, including their physics state.
+
     const auto FullPointers = ComponentRegistry.GetPointers();
-    for (const auto& Pair : LocalPointers)
+    for (const auto &Pair : LocalPointers)
     {
-        const UStaticMeshComponent* Old = Pair.Value.Get();
-        if (Old && Old->IsRegistered()) bPassed = false;
-        const auto* FullPointer = FullPointers.Find(Pair.Key);
-        if (FullPointer && *FullPointer == Pair.Value) bPassed = false;
+        const UStaticMeshComponent *Old = Pair.Value.Get();
+        if (Old && Old->IsRegistered())
+            bPassed = false;
+        const auto *FullPointer = FullPointers.Find(Pair.Key);
+        if (FullPointer && *FullPointer == Pair.Value)
+            bPassed = false;
     }
-    UE_LOG(LogTemp, Display, TEXT("%s: Rebuild equivalence. LocalRan=%d StableComponents=%d Pieces=%d %s"),
-        bPassed ? TEXT("PASS") : TEXT("FAIL"), bWasLocal, StableCount, LocalValues.Num(), *Error);
+    UE_LOG(LogTemp, Display,
+           TEXT("%s: Rebuild equivalence. LocalRan=%d StableComponents=%d Pieces=%d %s"),
+           bPassed ? TEXT("PASS") : TEXT("FAIL"), bWasLocal, StableCount, LocalValues.Num(),
+           *Error);
 }

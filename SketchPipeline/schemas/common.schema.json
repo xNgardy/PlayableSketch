@@ -1,0 +1,974 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:playablesketch:common:1",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+    },
+    "point": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": -1000000000.0,
+        "maximum": 1000000000.0
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "positive": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1000000000.0
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "image_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "image_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "legacy_draft_path": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "image_path",
+        "image_sha256",
+        "legacy_draft_path"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "enum": [
+            "manual_annotation",
+            "derived",
+            "configured",
+            "user_correction",
+            "ocr",
+            "line_detection"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "method",
+        "evidence_ids",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "wall_thickness_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000000.0
+        },
+        "wall_height_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000000.0
+        },
+        "door_height_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000000.0
+        },
+        "floor_thickness_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000000.0
+        },
+        "source": {
+          "enum": [
+            "configured"
+          ]
+        }
+      },
+      "required": [
+        "wall_thickness_cm",
+        "wall_height_cm",
+        "door_height_cm",
+        "floor_thickness_cm",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "issue": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^SKETCH_[A-Z0-9_]+$"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning"
+          ]
+        },
+        "element_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "element_ids",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "vertex": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "position_cm": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -1000000000.0,
+                "maximum": 1000000000.0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "state": {
+          "enum": [
+            "confirmed",
+            "derived",
+            "inferred",
+            "missing",
+            "conflicting"
+          ]
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "enum": [
+                "manual_annotation",
+                "derived",
+                "configured",
+                "user_correction",
+                "ocr",
+                "line_detection"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "method",
+            "evidence_ids",
+            "note"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "position_cm",
+        "state",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "wall": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "start_vertex_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "end_vertex_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "axis": {
+          "enum": [
+            "x",
+            "y"
+          ]
+        },
+        "thickness_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000000.0
+        },
+        "height_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000000.0
+        },
+        "region_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "enum": [
+                "manual_annotation",
+                "derived",
+                "configured",
+                "user_correction",
+                "ocr",
+                "line_detection"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "method",
+            "evidence_ids",
+            "note"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "start_vertex_id",
+        "end_vertex_id",
+        "axis",
+        "thickness_cm",
+        "height_cm",
+        "region_ids",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "region": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "boundary_vertex_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 4,
+          "uniqueItems": true
+        },
+        "boundary_wall_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+          },
+          "minItems": 4,
+          "uniqueItems": true
+        },
+        "role": {
+          "enum": [
+            "none",
+            "start",
+            "goal"
+          ]
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "enum": [
+                "manual_annotation",
+                "derived",
+                "configured",
+                "user_correction",
+                "ocr",
+                "line_detection"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "method",
+            "evidence_ids",
+            "note"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "boundary_vertex_ids",
+        "boundary_wall_ids",
+        "role",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "opening": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "wall_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "type": {
+          "enum": [
+            "door",
+            "open_passage"
+          ]
+        },
+        "center_offset_cm": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000.0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "clear_width_cm": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1000000000.0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "clear_height_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000000.0
+        },
+        "connected_entities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "room",
+                  "corridor"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "state": {
+          "enum": [
+            "confirmed",
+            "derived",
+            "inferred",
+            "missing",
+            "conflicting"
+          ]
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "enum": [
+                "manual_annotation",
+                "derived",
+                "configured",
+                "user_correction",
+                "ocr",
+                "line_detection"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "method",
+            "evidence_ids",
+            "note"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "wall_id",
+        "type",
+        "center_offset_cm",
+        "clear_width_cm",
+        "clear_height_cm",
+        "connected_entities",
+        "state",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "passage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "opening_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "connected_entities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "room",
+                  "corridor"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "type": {
+          "enum": [
+            "door",
+            "open_passage"
+          ]
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "enum": [
+                "manual_annotation",
+                "derived",
+                "configured",
+                "user_correction",
+                "ocr",
+                "line_detection"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "method",
+            "evidence_ids",
+            "note"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "opening_id",
+        "connected_entities",
+        "type",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "dimension": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+        },
+        "value_cm": {
+          "anyOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1000000000.0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "basis": {
+          "enum": [
+            "wall_centerline",
+            "clear_opening",
+            "center_offset",
+            "edge_offset"
+          ]
+        },
+        "target": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "const": "region_span"
+                },
+                "region_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "axis": {
+                  "enum": [
+                    "x",
+                    "y"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "region_id",
+                "axis"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "const": "wall_chain"
+                },
+                "wall_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "type",
+                "wall_ids"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "const": "opening_width"
+                },
+                "opening_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+                }
+              },
+              "required": [
+                "type",
+                "opening_id"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "const": "opening_offset"
+                },
+                "opening_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "region_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "side": {
+                  "enum": [
+                    "north",
+                    "south",
+                    "east",
+                    "west"
+                  ]
+                },
+                "reference": {
+                  "enum": [
+                    "min_corner",
+                    "max_corner"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "opening_id",
+                "region_id",
+                "side",
+                "reference"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "const": "unassigned"
+                }
+              },
+              "required": [
+                "type"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "const": "opening_separation"
+                },
+                "from_opening_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+                },
+                "to_opening_id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+                }
+              },
+              "required": [
+                "type",
+                "from_opening_id",
+                "to_opening_id"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "confirmed",
+            "derived",
+            "inferred",
+            "missing",
+            "conflicting"
+          ]
+        },
+        "span_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "enum": [
+                "manual_annotation",
+                "derived",
+                "configured",
+                "user_correction",
+                "ocr",
+                "line_detection"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "method",
+            "evidence_ids",
+            "note"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "value_cm",
+        "basis",
+        "target",
+        "state",
+        "span_label",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "layout": {
+      "type": "object",
+      "properties": {
+        "vertices": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:playablesketch:common:1#/$defs/vertex"
+          },
+          "minItems": 0
+        },
+        "walls": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:playablesketch:common:1#/$defs/wall"
+          },
+          "minItems": 0
+        },
+        "rooms": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:playablesketch:common:1#/$defs/region"
+          },
+          "minItems": 0
+        },
+        "corridors": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:playablesketch:common:1#/$defs/region"
+          },
+          "minItems": 0
+        },
+        "openings": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:playablesketch:common:1#/$defs/opening"
+          },
+          "minItems": 0
+        },
+        "passages": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:playablesketch:common:1#/$defs/passage"
+          },
+          "minItems": 0
+        },
+        "dimensions": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:playablesketch:common:1#/$defs/dimension"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "vertices",
+        "walls",
+        "rooms",
+        "corridors",
+        "openings",
+        "passages",
+        "dimensions"
+      ],
+      "additionalProperties": false
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "metric": {
+          "enum": [
+            "not_run",
+            "passed",
+            "failed"
+          ]
+        },
+        "validator_version": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tolerance_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000000000.0
+        },
+        "engine_geometry": {
+          "const": "not_run"
+        },
+        "navigation": {
+          "const": "not_run"
+        }
+      },
+      "required": [
+        "metric",
+        "validator_version",
+        "tolerance_cm",
+        "engine_geometry",
+        "navigation"
+      ],
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "accepted"
+          ]
+        },
+        "reviewer": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "reviewer"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

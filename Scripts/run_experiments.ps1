@@ -36,7 +36,6 @@ try {
 if (-not (Test-Path -LiteralPath $Raw)) { throw "Runner did not produce raw results. Logs: $WorkDirectory" }
 if ($PreviousHash -and (Get-FileHash -LiteralPath $Raw).Hash -eq $PreviousHash) { throw "Raw results were not refreshed. Logs: $WorkDirectory" }
 $Report = Join-Path $WorkDirectory 'test-report\index.json'
-# Preserve/analyze fresh raw failures before reporting an automation failure.
 & $PythonExe $Analyzer --raw $Raw --metadata $Metadata --report $Report --output $OutputDirectory
 if ($LASTEXITCODE -ne 0) { throw 'Result validation/export failed.' }
 $TestReport = Get-Content -Raw -LiteralPath $Report | ConvertFrom-Json

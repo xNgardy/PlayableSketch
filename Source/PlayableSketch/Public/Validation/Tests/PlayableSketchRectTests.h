@@ -4,6 +4,6 @@
 
 class PLAYABLESKETCH_API FPlayableSketchRectTests
 {
-public:
+  public:
     static void Run();
 };

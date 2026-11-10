@@ -6,6 +6,8 @@
 
 class PLAYABLESKETCH_API FPlayableSketchLayoutGenerator
 {
-public:
-    static bool Generate(const FPlayableSketchGraph& Graph, int32 GridStepCm, int32 RoomGapCm, FPlayableSketchFloorPlan& OutFloorPlan, FString& OutError, int32 MaxPlacementAttempts = 128);
+  public:
+    static bool Generate(const FPlayableSketchGraph &Graph, int32 GridStepCm, int32 RoomGapCm,
+                         FPlayableSketchFloorPlan &OutFloorPlan, FString &OutError,
+                         int32 MaxPlacementAttempts = 128);
 };

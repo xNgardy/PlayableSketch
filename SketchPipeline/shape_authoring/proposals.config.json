@@ -1,0 +1,17 @@
+{
+  "version": "shape-proposals/1.0",
+  "max_side": 256,
+  "region_thresholds": [0.5, 0.4, 0.6],
+  "region_min_area_fraction": 0.006,
+  "region_min_rectangular_fill": 0.65,
+  "region_max_aspect_ratio": 12,
+  "snap_max_fraction": 0.025,
+  "opening_min_fraction": 0.035,
+  "opening_max_fraction": 0.4,
+  "gap_ink_max_fraction": 0.35,
+  "tick_min_raw_support": 0.45,
+  "tick_model_threshold": 0.25,
+  "interface_model_threshold": 0.45,
+  "worker_timeout_seconds": 45,
+  "review_required": true
+}

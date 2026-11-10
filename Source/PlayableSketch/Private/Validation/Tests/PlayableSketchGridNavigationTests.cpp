@@ -1,29 +1,31 @@
 #include "Validation/Tests/PlayableSketchGridNavigationTests.h"
 
-bool FPlayableSketchGridNavigationTests::Run(const FPlayableSketchFloorPlan& FloorPlan, const FGuid& StartRoomId, const FGuid& GoalRoomId, int32 GridStepCm, FPlayableSketchGridPath& OutPath)
+bool FPlayableSketchGridNavigationTests::Run(const FPlayableSketchFloorPlan &FloorPlan,
+                                             const FGuid &StartRoomId, const FGuid &GoalRoomId,
+                                             int32 GridStepCm, FPlayableSketchGridPath &OutPath)
 {
     int32 PassedCount = 0;
     int32 TotalCount = 0;
 
-    auto Check = [&PassedCount, &TotalCount](const TCHAR* Name, bool bPassed)
+    auto Check = [&PassedCount, &TotalCount](const TCHAR *Name, bool bPassed) {
+        ++TotalCount;
+
+        if (bPassed)
         {
-            ++TotalCount;
+            ++PassedCount;
 
-            if (bPassed)
-            {
-                ++PassedCount;
-
-                UE_LOG(LogTemp, Display, TEXT("[PASS] %s"), Name);
-            }
-            else
-            {
-                UE_LOG(LogTemp, Error, TEXT("[FAIL] %s"), Name);
-            }
-        };
+            UE_LOG(LogTemp, Display, TEXT("[PASS] %s"), Name);
+        }
+        else
+        {
+            UE_LOG(LogTemp, Error, TEXT("[FAIL] %s"), Name);
+        }
+    };
 
     FString Error;
 
-    bool bSuccess = FPlayableSketchGridNavigation::FindPath(FloorPlan, StartRoomId, GoalRoomId, GridStepCm, OutPath, Error);
+    bool bSuccess = FPlayableSketchGridNavigation::FindPath(FloorPlan, StartRoomId, GoalRoomId,
+                                                            GridStepCm, OutPath, Error);
 
     Check(TEXT("Start can reach Goal through floor cells"), bSuccess && !OutPath.Points.IsEmpty());
 
@@ -53,9 +55,11 @@ bool FPlayableSketchGridNavigationTests::Run(const FPlayableSketchFloorPlan& Flo
 
     FPlayableSketchGridPath Repeated;
 
-    bSuccess = FPlayableSketchGridNavigation::FindPath(FloorPlan, StartRoomId, GoalRoomId, GridStepCm, Repeated, Error);
+    bSuccess = FPlayableSketchGridNavigation::FindPath(FloorPlan, StartRoomId, GoalRoomId,
+                                                       GridStepCm, Repeated, Error);
 
-    Check(TEXT("Repeated search produces the same path"), bSuccess && Repeated.Points == OutPath.Points);
+    Check(TEXT("Repeated search produces the same path"),
+          bSuccess && Repeated.Points == OutPath.Points);
 
     FPlayableSketchPlacedRoom RoomA;
     RoomA.RoomId = FGuid(1, 0, 0, 0);
@@ -71,16 +75,20 @@ bool FPlayableSketchGridNavigationTests::Run(const FPlayableSketchFloorPlan& Flo
 
     FPlayableSketchGridPath FailedPath;
 
-    bSuccess = FPlayableSketchGridNavigation::FindPath(Disconnected, RoomA.RoomId, RoomB.RoomId, 50, FailedPath, Error);
+    bSuccess = FPlayableSketchGridNavigation::FindPath(Disconnected, RoomA.RoomId, RoomB.RoomId, 50,
+                                                       FailedPath, Error);
 
-    Check(TEXT("Disconnected floors return no path"), !bSuccess && FailedPath.Points.IsEmpty() && Error.Contains(TEXT("No floor grid path")));
+    Check(TEXT("Disconnected floors return no path"),
+          !bSuccess && FailedPath.Points.IsEmpty() && Error.Contains(TEXT("No floor grid path")));
 
-    bSuccess = FPlayableSketchGridNavigation::FindPath(FloorPlan, StartRoomId, GoalRoomId, 0, FailedPath, Error);
+    bSuccess = FPlayableSketchGridNavigation::FindPath(FloorPlan, StartRoomId, GoalRoomId, 0,
+                                                       FailedPath, Error);
 
     Check(TEXT("Zero grid step is rejected"), !bSuccess && !Error.IsEmpty());
 
     UE_LOG(LogTemp, Display, TEXT("Grid navigation tests: %d/%d passed."), PassedCount, TotalCount);
-    UE_LOG(LogTemp, Display, TEXT("Floor path: Points=%d WalkableCells=%d VisitedCells=%d"), OutPath.Points.Num(), OutPath.WalkableCellCount, OutPath.VisitedCellCount);
+    UE_LOG(LogTemp, Display, TEXT("Floor path: Points=%d WalkableCells=%d VisitedCells=%d"),
+           OutPath.Points.Num(), OutPath.WalkableCellCount, OutPath.VisitedCellCount);
 
     return PassedCount == TotalCount;
 }

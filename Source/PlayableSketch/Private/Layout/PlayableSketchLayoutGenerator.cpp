@@ -2,14 +2,18 @@
 #include "Layout/PlayableSketchPlacementSearch.h"
 #include "SpatialGraph/PlayableSketchGraphValidator.h"
 
-bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph, int32 GridStepCm, int32 RoomGapCm, FPlayableSketchFloorPlan& OutFloorPlan, FString& OutError, int32 MaxPlacementAttempts)
+bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph &Graph, int32 GridStepCm,
+                                              int32 RoomGapCm,
+                                              FPlayableSketchFloorPlan &OutFloorPlan,
+                                              FString &OutError, int32 MaxPlacementAttempts)
 {
     OutFloorPlan = FPlayableSketchFloorPlan();
     OutError.Reset();
 
     if (GridStepCm <= 0 || RoomGapCm < 0 || MaxPlacementAttempts <= 0)
     {
-        OutError = TEXT("GridStepCm and MaxPlacementAttempts must be positive. RoomGapCm cannot be negative.");
+        OutError = TEXT(
+            "GridStepCm and MaxPlacementAttempts must be positive. RoomGapCm cannot be negative.");
         return false;
     }
 
@@ -33,7 +37,7 @@ bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph,
 
         TArray<FGuid> NeighborIds;
 
-        for (const FPlayableSketchConnection& Connection : Graph.Connections)
+        for (const FPlayableSketchConnection &Connection : Graph.Connections)
         {
             if (Connection.RoomAId == CurrentRoomId)
             {
@@ -45,12 +49,10 @@ bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph,
             }
         }
 
-        NeighborIds.Sort([](const FGuid& A, const FGuid& B)
-            {
-                return A.ToString() < B.ToString();
-            });
+        NeighborIds.Sort(
+            [](const FGuid &A, const FGuid &B) { return A.ToString() < B.ToString(); });
 
-        for (const FGuid& NeighborId : NeighborIds)
+        for (const FGuid &NeighborId : NeighborIds)
         {
             if (!DiscoveredRoomIds.Contains(NeighborId))
             {
@@ -60,11 +62,13 @@ bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph,
         }
     }
 
-    for (const FPlayableSketchRoom& Room : Graph.Rooms)
+    for (const FPlayableSketchRoom &Room : Graph.Rooms)
     {
         if (!DiscoveredRoomIds.Contains(Room.RoomId))
         {
-            OutError = FString::Printf(TEXT("Placement failed: Room %s is not reachable from Start."), *Room.RoomId.ToString());
+            OutError =
+                FString::Printf(TEXT("Placement failed: Room %s is not reachable from Start."),
+                                *Room.RoomId.ToString());
             return false;
         }
     }
@@ -73,7 +77,7 @@ bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph,
 
     TArray<FPlayableSketchPlacedRoom> Occupied;
 
-    for (const FPlayableSketchRoom& Room : Graph.Rooms)
+    for (const FPlayableSketchRoom &Room : Graph.Rooms)
     {
         if (Room.PositionMode != EPlayableSketchPositionMode::Locked)
         {
@@ -82,19 +86,23 @@ bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph,
 
         FPlayableSketchPlacedRoom LockedRoom;
         LockedRoom.RoomId = Room.RoomId;
-        LockedRoom.Bounds = FPlayableSketchRect(Room.PositionCm, Room.PositionCm + FVector2D(Room.WidthCm, Room.DepthCm));
+        LockedRoom.Bounds = FPlayableSketchRect(
+            Room.PositionCm, Room.PositionCm + FVector2D(Room.WidthCm, Room.DepthCm));
 
         if (!LockedRoom.Bounds.IsValid())
         {
-            OutError = FString::Printf(TEXT("Invalid Locked position: Room %s."), *Room.RoomId.ToString());
+            OutError =
+                FString::Printf(TEXT("Invalid Locked position: Room %s."), *Room.RoomId.ToString());
             return false;
         }
 
-        for (const FPlayableSketchPlacedRoom& Existing : Occupied)
+        for (const FPlayableSketchPlacedRoom &Existing : Occupied)
         {
             if (!LockedRoom.Bounds.HasRequiredGap(Existing.Bounds, RoomGapCm))
             {
-                OutError = FString::Printf(TEXT("Locked Rooms overlap or violate RoomGapCm: %s and %s."), *Room.RoomId.ToString(), *Existing.RoomId.ToString());
+                OutError =
+                    FString::Printf(TEXT("Locked Rooms overlap or violate RoomGapCm: %s and %s."),
+                                    *Room.RoomId.ToString(), *Existing.RoomId.ToString());
                 return false;
             }
         }
@@ -104,16 +112,15 @@ bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph,
 
     double NextX = 0.0;
 
-    for (const FGuid& RoomId : Queue)
+    for (const FGuid &RoomId : Queue)
     {
-        const FPlayableSketchRoom* SourceRoom = Graph.Rooms.FindByPredicate([&RoomId](const FPlayableSketchRoom& Room)
-            {
-                return Room.RoomId == RoomId;
-            });
+        const FPlayableSketchRoom *SourceRoom = Graph.Rooms.FindByPredicate(
+            [&RoomId](const FPlayableSketchRoom &Room) { return Room.RoomId == RoomId; });
 
         if (!SourceRoom)
         {
-            OutError = FString::Printf(TEXT("Placement failed: Room %s was not found."), *RoomId.ToString());
+            OutError = FString::Printf(TEXT("Placement failed: Room %s was not found."),
+                                       *RoomId.ToString());
             return false;
         }
 
@@ -125,11 +132,14 @@ bool FPlayableSketchLayoutGenerator::Generate(const FPlayableSketchGraph& Graph,
         if (SourceRoom->PositionMode == EPlayableSketchPositionMode::Locked)
         {
             PlacedRoom.RoomId = RoomId;
-            PlacedRoom.Bounds = FPlayableSketchRect(SourceRoom->PositionCm, SourceRoom->PositionCm + SizeCm);
+            PlacedRoom.Bounds =
+                FPlayableSketchRect(SourceRoom->PositionCm, SourceRoom->PositionCm + SizeCm);
         }
         else
         {
-            if (!FPlayableSketchPlacementSearch::FindPlacement(RoomId, SizeCm, PreferredMinCm, Occupied, GridStepCm, RoomGapCm, MaxPlacementAttempts, PlacedRoom, OutError))
+            if (!FPlayableSketchPlacementSearch::FindPlacement(
+                    RoomId, SizeCm, PreferredMinCm, Occupied, GridStepCm, RoomGapCm,
+                    MaxPlacementAttempts, PlacedRoom, OutError))
             {
                 return false;
             }

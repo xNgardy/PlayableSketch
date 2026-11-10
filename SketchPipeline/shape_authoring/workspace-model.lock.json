@@ -1,0 +1,19 @@
+{
+  "version": "shape-workspace-model/2.0",
+  "architecture": "hybrid-unet-yolo11/1.0",
+  "checkpoint_path": "SketchPipeline/shape_authoring/models/hybrid-unet-yolo11-v1/model-lock.json",
+  "checkpoint_sha256": "3adbaae267587bd155fcf8119c5887028820637b4c4b426b4e82007877e33755",
+  "python_path": "Saved/Runtime/hybrid-v1/python/bin/python",
+  "required_profile": "hybrid",
+  "normalize_ink": false,
+  "review_required": true,
+  "human_automation_ready": false,
+  "experimental": true,
+  "workspace_default": true,
+  "model_promoted_to_default": true,
+  "activation_requested_by_user": true,
+  "activation_date": "2026-11-10",
+  "previous_model_lock": "SketchPipeline/shape_authoring/dinov2-candidate.lock.json",
+  "report_path": "Docs/hybrid_unet_yolo11_training_2026_11_09.md",
+  "integration_verification_path": "Docs/hybrid_integration_2026_11_10.md"
+}

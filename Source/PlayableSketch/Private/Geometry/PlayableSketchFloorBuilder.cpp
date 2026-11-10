@@ -5,22 +5,22 @@
 
 namespace
 {
-    const FName GeneratedFloorTag(TEXT("PlayableSketch.GeneratedFloor"));
+const FName GeneratedFloorTag(TEXT("PlayableSketch.GeneratedFloor"));
 
-    struct FFloorPiece
-    {
-        FPlayableSketchRect Bounds;
-        FGuid SourceId;
-        bool bRoom = false;
-    };
+struct FFloorPiece
+{
+    FPlayableSketchRect Bounds;
+    FGuid SourceId;
+    bool bRoom = false;
+};
 }
 
-void FPlayableSketchFloorBuilder::Clear(AActor& Owner)
+void FPlayableSketchFloorBuilder::Clear(AActor &Owner)
 {
-    TArray<UStaticMeshComponent*> Components;
+    TArray<UStaticMeshComponent *> Components;
     Owner.GetComponents<UStaticMeshComponent>(Components);
 
-    for (UStaticMeshComponent* Component : Components)
+    for (UStaticMeshComponent *Component : Components)
     {
         if (IsValid(Component) && Component->ComponentHasTag(GeneratedFloorTag))
         {
@@ -30,12 +30,13 @@ void FPlayableSketchFloorBuilder::Clear(AActor& Owner)
     }
 }
 
-TArray<FPlayableSketchRect> FPlayableSketchFloorBuilder::BuildCorridorFloorRects(const TArray<FPlayableSketchRect>& Footprints)
+TArray<FPlayableSketchRect> FPlayableSketchFloorBuilder::BuildCorridorFloorRects(
+    const TArray<FPlayableSketchRect> &Footprints)
 {
     TArray<double> XEdges;
     TArray<double> YEdges;
 
-    for (const FPlayableSketchRect& Footprint : Footprints)
+    for (const FPlayableSketchRect &Footprint : Footprints)
     {
         XEdges.AddUnique(Footprint.Min.X);
         XEdges.AddUnique(Footprint.Max.X);
@@ -52,31 +53,34 @@ TArray<FPlayableSketchRect> FPlayableSketchFloorBuilder::BuildCorridorFloorRects
     {
         int32 RunStart = INDEX_NONE;
 
-        auto AddRun = [&](int32 RunEnd)
+        auto AddRun = [&](int32 RunEnd) {
+            const FPlayableSketchRect Rect(FVector2D(XEdges[RunStart], YEdges[YIndex]),
+                                           FVector2D(XEdges[RunEnd], YEdges[YIndex + 1]));
+
+            for (FPlayableSketchRect &Existing : Result)
             {
-                const FPlayableSketchRect Rect(FVector2D(XEdges[RunStart], YEdges[YIndex]), FVector2D(XEdges[RunEnd], YEdges[YIndex + 1]));
-
-                for (FPlayableSketchRect& Existing : Result)
+                if (Existing.Min.X == Rect.Min.X && Existing.Max.X == Rect.Max.X &&
+                    Existing.Max.Y == Rect.Min.Y)
                 {
-                    if (Existing.Min.X == Rect.Min.X && Existing.Max.X == Rect.Max.X && Existing.Max.Y == Rect.Min.Y)
-                    {
-                        Existing.Max.Y = Rect.Max.Y;
-                        return;
-                    }
+                    Existing.Max.Y = Rect.Max.Y;
+                    return;
                 }
+            }
 
-                Result.Add(Rect);
-            };
+            Result.Add(Rect);
+        };
 
         for (int32 XIndex = 0; XIndex + 1 < XEdges.Num(); ++XIndex)
         {
-            const FVector2D Center(XEdges[XIndex] + (XEdges[XIndex + 1] - XEdges[XIndex]) * 0.5, YEdges[YIndex] + (YEdges[YIndex + 1] - YEdges[YIndex]) * 0.5);
+            const FVector2D Center(XEdges[XIndex] + (XEdges[XIndex + 1] - XEdges[XIndex]) * 0.5,
+                                   YEdges[YIndex] + (YEdges[YIndex + 1] - YEdges[YIndex]) * 0.5);
 
             bool bCovered = false;
 
-            for (const FPlayableSketchRect& Footprint : Footprints)
+            for (const FPlayableSketchRect &Footprint : Footprints)
             {
-                if (Center.X > Footprint.Min.X && Center.X < Footprint.Max.X && Center.Y > Footprint.Min.Y && Center.Y < Footprint.Max.Y)
+                if (Center.X > Footprint.Min.X && Center.X < Footprint.Max.X &&
+                    Center.Y > Footprint.Min.Y && Center.Y < Footprint.Max.Y)
                 {
                     bCovered = true;
                     break;
@@ -104,11 +108,13 @@ TArray<FPlayableSketchRect> FPlayableSketchFloorBuilder::BuildCorridorFloorRects
     return Result;
 }
 
-bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloorPlan& FloorPlan, double ThicknessCm, FString& OutError)
+bool FPlayableSketchFloorBuilder::Build(AActor &Owner, const FPlayableSketchFloorPlan &FloorPlan,
+                                        double ThicknessCm, FString &OutError)
 {
     OutError.Reset();
 
-    if (!Owner.GetWorld() || !Owner.GetRootComponent() || !FMath::IsFinite(ThicknessCm) || ThicknessCm <= 0.0 || FloorPlan.Rooms.IsEmpty())
+    if (!Owner.GetWorld() || !Owner.GetRootComponent() || !FMath::IsFinite(ThicknessCm) ||
+        ThicknessCm <= 0.0 || FloorPlan.Rooms.IsEmpty())
     {
         OutError = TEXT("Invalid floor build input or missing Actor root.");
         return false;
@@ -116,7 +122,7 @@ bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloo
 
     TArray<FFloorPiece> Pieces;
 
-    for (const FPlayableSketchPlacedRoom& Room : FloorPlan.Rooms)
+    for (const FPlayableSketchPlacedRoom &Room : FloorPlan.Rooms)
     {
         if (!Room.RoomId.IsValid() || !Room.Bounds.IsValid())
         {
@@ -132,7 +138,7 @@ bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloo
         Pieces.Add(Piece);
     }
 
-    for (const FPlayableSketchCorridor& Corridor : FloorPlan.Corridors)
+    for (const FPlayableSketchCorridor &Corridor : FloorPlan.Corridors)
     {
         if (!Corridor.ConnectionId.IsValid() || Corridor.Footprints.IsEmpty())
         {
@@ -140,7 +146,7 @@ bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloo
             return false;
         }
 
-        for (const FPlayableSketchRect& Footprint : Corridor.Footprints)
+        for (const FPlayableSketchRect &Footprint : Corridor.Footprints)
         {
             if (!Footprint.IsValid())
             {
@@ -151,7 +157,7 @@ bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloo
 
         const TArray<FPlayableSketchRect> FloorRects = BuildCorridorFloorRects(Corridor.Footprints);
 
-        for (const FPlayableSketchRect& Rect : FloorRects)
+        for (const FPlayableSketchRect &Rect : FloorRects)
         {
             FFloorPiece Piece;
             Piece.Bounds = Rect;
@@ -161,7 +167,7 @@ bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloo
         }
     }
 
-    UStaticMesh* CubeMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Cube.Cube"));
+    UStaticMesh *CubeMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Cube.Cube"));
 
     if (!CubeMesh)
     {
@@ -181,7 +187,7 @@ bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloo
 
     Clear(Owner);
 
-    for (const FFloorPiece& Piece : Pieces)
+    for (const FFloorPiece &Piece : Pieces)
     {
         const FVector2D SizeCm = Piece.Bounds.Max - Piece.Bounds.Min;
         const FVector2D CenterCm = Piece.Bounds.Min + SizeCm * 0.5;
@@ -190,7 +196,8 @@ bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloo
         const FVector CenterLocation(CenterCm.X, CenterCm.Y, -ThicknessCm * 0.5);
         const FVector Location = CenterLocation - MeshCenter * Scale;
 
-        UStaticMeshComponent* Component = NewObject<UStaticMeshComponent>(&Owner, NAME_None, RF_Transient);
+        UStaticMeshComponent *Component =
+            NewObject<UStaticMeshComponent>(&Owner, NAME_None, RF_Transient);
 
         if (!Component)
         {
@@ -211,14 +218,18 @@ bool FPlayableSketchFloorBuilder::Build(AActor& Owner, const FPlayableSketchFloo
         Component->SetCanEverAffectNavigation(false);
 
         Component->ComponentTags.Add(GeneratedFloorTag);
-        Component->ComponentTags.Add(FName(Piece.bRoom ? TEXT("PlayableSketch.RoomFloor") : TEXT("PlayableSketch.CorridorFloor")));
-        Component->ComponentTags.Add(FName(*FString::Printf(TEXT("%s=%s"), Piece.bRoom ? TEXT("RoomId") : TEXT("ConnectionId"), *Piece.SourceId.ToString())));
+        Component->ComponentTags.Add(FName(Piece.bRoom ? TEXT("PlayableSketch.RoomFloor")
+                                                       : TEXT("PlayableSketch.CorridorFloor")));
+        Component->ComponentTags.Add(FName(
+            *FString::Printf(TEXT("%s=%s"), Piece.bRoom ? TEXT("RoomId") : TEXT("ConnectionId"),
+                             *Piece.SourceId.ToString())));
 
         Owner.AddInstanceComponent(Component);
         Component->RegisterComponent();
     }
 
-    UE_LOG(LogTemp, Display, TEXT("Floors generated: Rooms=%d Connections=%d MeshComponents=%d"), FloorPlan.Rooms.Num(), FloorPlan.Corridors.Num(), Pieces.Num());
+    UE_LOG(LogTemp, Display, TEXT("Floors generated: Rooms=%d Connections=%d MeshComponents=%d"),
+           FloorPlan.Rooms.Num(), FloorPlan.Corridors.Num(), Pieces.Num());
 
     return true;
 }

@@ -30,12 +30,12 @@ struct PLAYABLESKETCH_API FPlayableSketchRoom
 {
     GENERATED_BODY()
 
-public:
-    FPlayableSketchRoom()
-        : RoomId(FGuid::NewGuid())
+  public:
+    FPlayableSketchRoom() : RoomId(FGuid::NewGuid())
     {
     }
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Identity", meta = (IgnoreForMemberInitializationTest))
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Identity",
+              meta = (IgnoreForMemberInitializationTest))
     FGuid RoomId;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Room")
@@ -50,12 +50,15 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Placement")
     EPlayableSketchPositionMode PositionMode = EPlayableSketchPositionMode::Auto;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Placement", meta = (EditCondition = "PositionMode == EPlayableSketchPositionMode::Locked"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Placement",
+              meta = (EditCondition = "PositionMode == EPlayableSketchPositionMode::Locked"))
     FVector2D PositionCm = FVector2D::ZeroVector;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dimensions", meta = (ClampMin = "1", UIMin = "100"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dimensions",
+              meta = (ClampMin = "1", UIMin = "100"))
     int32 WidthCm = 600;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dimensions", meta = (ClampMin = "1", UIMin = "100"))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dimensions",
+              meta = (ClampMin = "1", UIMin = "100"))
     int32 DepthCm = 600;
 };

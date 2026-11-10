@@ -1,0 +1,1237 @@
+{
+  "schema_version": "playablesketch-shape-authoring/2.0",
+  "document_id": "shape_contract_example",
+  "revision_id": "revision_1",
+  "parent_revision_id": null,
+  "policy_version": "shape-sizing/1.0",
+  "image_evidence": {
+    "source": {
+      "image_path": "synthetic-contract-only.png",
+      "image_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "width_px": 400,
+      "height_px": 400
+    },
+    "working_size_px": [
+      400,
+      400
+    ],
+    "original_to_working": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "working_to_original": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "normalization_bounds_px": [
+      0,
+      0,
+      400,
+      400
+    ],
+    "items": []
+  },
+  "topology": {
+    "regions": [
+      {
+        "id": "room_a",
+        "name": "Room A",
+        "type": "room",
+        "wall_ids": [
+          "w00_10",
+          "w10_11",
+          "w01_11",
+          "w00_01"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              0
+            ],
+            [
+              200,
+              0
+            ],
+            [
+              200,
+              200
+            ],
+            [
+              0,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.5,
+              0.0
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              0.0,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "room_b",
+        "name": "Room B",
+        "type": "room",
+        "wall_ids": [
+          "w10_20",
+          "w20_21",
+          "w11_21",
+          "w10_11"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              0
+            ],
+            [
+              400,
+              0
+            ],
+            [
+              400,
+              200
+            ],
+            [
+              200,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              0.0
+            ],
+            [
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.5
+            ],
+            [
+              0.5,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "corridor_a",
+        "name": "Corridor A",
+        "type": "corridor_segment",
+        "wall_ids": [
+          "w01_11",
+          "w11_12",
+          "w02_12",
+          "w01_02"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              200
+            ],
+            [
+              200,
+              200
+            ],
+            [
+              200,
+              400
+            ],
+            [
+              0,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              0.5
+            ],
+            [
+              0.5,
+              0.5
+            ],
+            [
+              0.5,
+              1.0
+            ],
+            [
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "corridor_b",
+        "name": "Corridor B",
+        "type": "corridor_segment",
+        "wall_ids": [
+          "w11_21",
+          "w21_22",
+          "w12_22",
+          "w11_12"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              200
+            ],
+            [
+              400,
+              200
+            ],
+            [
+              400,
+              400
+            ],
+            [
+              200,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              0.5
+            ],
+            [
+              1.0,
+              0.5
+            ],
+            [
+              1.0,
+              1.0
+            ],
+            [
+              0.5,
+              1.0
+            ]
+          ]
+        }
+      }
+    ],
+    "junctions": [
+      {
+        "id": "j00",
+        "type": "corner",
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              0
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "j10",
+        "type": "t",
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              0
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              0.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "j20",
+        "type": "corner",
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              400,
+              0
+            ]
+          ],
+          "points_normalized": [
+            [
+              1.0,
+              0.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "j01",
+        "type": "t",
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "j11",
+        "type": "cross",
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "j21",
+        "type": "t",
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              400,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              1.0,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "j02",
+        "type": "corner",
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "j12",
+        "type": "t",
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              1.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "j22",
+        "type": "corner",
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              400,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              1.0,
+              1.0
+            ]
+          ]
+        }
+      }
+    ],
+    "walls": [
+      {
+        "id": "w00_10",
+        "type": "wall",
+        "start_junction_id": "j00",
+        "end_junction_id": "j10",
+        "entity_ids": [
+          "room_a"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              0
+            ],
+            [
+              200,
+              0
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.5,
+              0.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w10_11",
+        "type": "wall",
+        "start_junction_id": "j10",
+        "end_junction_id": "j11",
+        "entity_ids": [
+          "room_a",
+          "room_b"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              0
+            ],
+            [
+              200,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              0.0
+            ],
+            [
+              0.5,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w01_11",
+        "type": "interface",
+        "start_junction_id": "j01",
+        "end_junction_id": "j11",
+        "entity_ids": [
+          "room_a",
+          "corridor_a"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              200
+            ],
+            [
+              200,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              0.5
+            ],
+            [
+              0.5,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w00_01",
+        "type": "wall",
+        "start_junction_id": "j00",
+        "end_junction_id": "j01",
+        "entity_ids": [
+          "room_a"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w10_20",
+        "type": "wall",
+        "start_junction_id": "j10",
+        "end_junction_id": "j20",
+        "entity_ids": [
+          "room_b"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              0
+            ],
+            [
+              400,
+              0
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              0.0
+            ],
+            [
+              1.0,
+              0.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w20_21",
+        "type": "wall",
+        "start_junction_id": "j20",
+        "end_junction_id": "j21",
+        "entity_ids": [
+          "room_b"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              400,
+              0
+            ],
+            [
+              400,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w11_21",
+        "type": "interface",
+        "start_junction_id": "j11",
+        "end_junction_id": "j21",
+        "entity_ids": [
+          "room_b",
+          "corridor_b"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              200
+            ],
+            [
+              400,
+              200
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              0.5
+            ],
+            [
+              1.0,
+              0.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w11_12",
+        "type": "interface",
+        "start_junction_id": "j11",
+        "end_junction_id": "j12",
+        "entity_ids": [
+          "corridor_a",
+          "corridor_b"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              200
+            ],
+            [
+              200,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              0.5
+            ],
+            [
+              0.5,
+              1.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w02_12",
+        "type": "wall",
+        "start_junction_id": "j02",
+        "end_junction_id": "j12",
+        "entity_ids": [
+          "corridor_a"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              400
+            ],
+            [
+              200,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              1.0
+            ],
+            [
+              0.5,
+              1.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w01_02",
+        "type": "wall",
+        "start_junction_id": "j01",
+        "end_junction_id": "j02",
+        "entity_ids": [
+          "corridor_a"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              0,
+              200
+            ],
+            [
+              0,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.0,
+              0.5
+            ],
+            [
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w21_22",
+        "type": "wall",
+        "start_junction_id": "j21",
+        "end_junction_id": "j22",
+        "entity_ids": [
+          "corridor_b"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              400,
+              200
+            ],
+            [
+              400,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              1.0,
+              0.5
+            ],
+            [
+              1.0,
+              1.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "w12_22",
+        "type": "wall",
+        "start_junction_id": "j12",
+        "end_junction_id": "j22",
+        "entity_ids": [
+          "corridor_b"
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [
+            [
+              200,
+              400
+            ],
+            [
+              400,
+              400
+            ]
+          ],
+          "points_normalized": [
+            [
+              0.5,
+              1.0
+            ],
+            [
+              1.0,
+              1.0
+            ]
+          ]
+        }
+      }
+    ],
+    "openings": [
+      {
+        "id": "connection_rooms_opening1",
+        "type": "door",
+        "support_wall_id": "w10_11",
+        "entity_ids": [
+          "room_a",
+          "room_b"
+        ],
+        "placement": {
+          "reference_junction_id": "j10",
+          "direction": "toward_end",
+          "near_edge_normalized": 0.15,
+          "interval_normalized": [
+            0.15,
+            0.35
+          ]
+        },
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [],
+          "points_normalized": []
+        }
+      },
+      {
+        "id": "connection_rooms_opening2",
+        "type": "door",
+        "support_wall_id": "w10_11",
+        "entity_ids": [
+          "room_a",
+          "room_b"
+        ],
+        "placement": {
+          "reference_junction_id": "j10",
+          "direction": "toward_end",
+          "near_edge_normalized": 0.6,
+          "interval_normalized": [
+            0.6,
+            0.8
+          ]
+        },
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [],
+          "points_normalized": []
+        }
+      },
+      {
+        "id": "connection_left_opening1",
+        "type": "open_passage",
+        "support_wall_id": "w01_11",
+        "entity_ids": [
+          "room_a",
+          "corridor_a"
+        ],
+        "placement": {
+          "reference_junction_id": "j01",
+          "direction": "toward_end",
+          "near_edge_normalized": 0.05,
+          "interval_normalized": [
+            0.05,
+            0.95
+          ]
+        },
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [],
+          "points_normalized": []
+        }
+      },
+      {
+        "id": "connection_bend_opening1",
+        "type": "open_passage",
+        "support_wall_id": "w11_12",
+        "entity_ids": [
+          "corridor_a",
+          "corridor_b"
+        ],
+        "placement": {
+          "reference_junction_id": "j11",
+          "direction": "toward_end",
+          "near_edge_normalized": 0.05,
+          "interval_normalized": [
+            0.05,
+            0.95
+          ]
+        },
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [],
+          "points_normalized": []
+        }
+      },
+      {
+        "id": "connection_right_opening1",
+        "type": "open_passage",
+        "support_wall_id": "w11_21",
+        "entity_ids": [
+          "corridor_b",
+          "room_b"
+        ],
+        "placement": {
+          "reference_junction_id": "j11",
+          "direction": "toward_end",
+          "near_edge_normalized": 0.05,
+          "interval_normalized": [
+            0.05,
+            0.95
+          ]
+        },
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [],
+          "points_normalized": []
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "connection_rooms",
+        "entity_ids": [
+          "room_a",
+          "room_b"
+        ],
+        "opening_ids": [
+          "connection_rooms_opening1",
+          "connection_rooms_opening2"
+        ],
+        "shared_span_normalized": [
+          0,
+          1
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [],
+          "points_normalized": []
+        }
+      },
+      {
+        "id": "connection_left",
+        "entity_ids": [
+          "room_a",
+          "corridor_a"
+        ],
+        "opening_ids": [
+          "connection_left_opening1"
+        ],
+        "shared_span_normalized": [
+          0,
+          1
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [],
+          "points_normalized": []
+        }
+      },
+      {
+        "id": "connection_bend",
+        "entity_ids": [
+          "corridor_a",
+          "corridor_b"
+        ],
+        "opening_ids": [
+          "connection_bend_opening1"
+        ],
+        "shared_span_normalized": [
+          0,
+          1
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [],
+          "points_normalized": []
+        }
+      },
+      {
+        "id": "connection_right",
+        "entity_ids": [
+          "corridor_b",
+          "room_b"
+        ],
+        "opening_ids": [
+          "connection_right_opening1"
+        ],
+        "shared_span_normalized": [
+          0,
+          1
+        ],
+        "geometry": {
+          "origin": "user",
+          "state": "confirmed",
+          "evidence_ids": [],
+          "points_px": [],
+          "points_normalized": []
+        }
+      }
+    ]
+  },
+  "physical_design": {
+    "units": "cm",
+    "anchor": {
+      "junction_id": "j00",
+      "position_cm": [
+        0,
+        0
+      ]
+    },
+    "orientation_degrees": 0,
+    "values": [
+      {
+        "id": "size_room_a_width_cm",
+        "entity_id": "room_a",
+        "parameter": "width_cm",
+        "value": 500,
+        "origin": "preset",
+        "locked": false,
+        "previous_suggestion": {
+          "value": 500,
+          "origin": "preset",
+          "revision_id": "revision_1"
+        },
+        "authoring_revision_id": "revision_1",
+        "binding_revision_id": "revision_1",
+        "state": "current"
+      },
+      {
+        "id": "size_room_a_depth_cm",
+        "entity_id": "room_a",
+        "parameter": "depth_cm",
+        "value": 400,
+        "origin": "preset",
+        "locked": false,
+        "previous_suggestion": {
+          "value": 400,
+          "origin": "preset",
+          "revision_id": "revision_1"
+        },
+        "authoring_revision_id": "revision_1",
+        "binding_revision_id": "revision_1",
+        "state": "current"
+      },
+      {
+        "id": "size_corridor_a_length_cm",
+        "entity_id": "corridor_a",
+        "parameter": "length_cm",
+        "value": 400,
+        "origin": "preset",
+        "locked": false,
+        "previous_suggestion": {
+          "value": 400,
+          "origin": "preset",
+          "revision_id": "revision_1"
+        },
+        "authoring_revision_id": "revision_1",
+        "binding_revision_id": "revision_1",
+        "state": "current"
+      },
+      {
+        "id": "size_corridor_a_width_cm",
+        "entity_id": "corridor_a",
+        "parameter": "width_cm",
+        "value": 200,
+        "origin": "preset",
+        "locked": false,
+        "previous_suggestion": {
+          "value": 200,
+          "origin": "preset",
+          "revision_id": "revision_1"
+        },
+        "authoring_revision_id": "revision_1",
+        "binding_revision_id": "revision_1",
+        "state": "current"
+      },
+      {
+        "id": "size_connection_rooms_opening1_clear_width_cm",
+        "entity_id": "connection_rooms_opening1",
+        "parameter": "clear_width_cm",
+        "value": 120,
+        "origin": "preset",
+        "locked": false,
+        "previous_suggestion": {
+          "value": 120,
+          "origin": "preset",
+          "revision_id": "revision_1"
+        },
+        "authoring_revision_id": "revision_1",
+        "binding_revision_id": "revision_1",
+        "state": "current"
+      },
+      {
+        "id": "size_connection_rooms_opening1_near_edge_offset_cm",
+        "entity_id": "connection_rooms_opening1",
+        "parameter": "near_edge_offset_cm",
+        "value": 50,
+        "origin": "preset",
+        "locked": false,
+        "previous_suggestion": {
+          "value": 50,
+          "origin": "preset",
+          "revision_id": "revision_1"
+        },
+        "authoring_revision_id": "revision_1",
+        "binding_revision_id": "revision_1",
+        "state": "current"
+      },
+      {
+        "id": "size_global_wall_thickness_cm",
+        "entity_id": "global",
+        "parameter": "wall_thickness_cm",
+        "value": 20,
+        "origin": "preset",
+        "locked": false,
+        "previous_suggestion": {
+          "value": 20,
+          "origin": "preset",
+          "revision_id": "revision_1"
+        },
+        "authoring_revision_id": "revision_1",
+        "binding_revision_id": "revision_1",
+        "state": "current"
+      },
+      {
+        "id": "size_global_wall_height_cm",
+        "entity_id": "global",
+        "parameter": "wall_height_cm",
+        "value": 300,
+        "origin": "preset",
+        "locked": false,
+        "previous_suggestion": {
+          "value": 300,
+          "origin": "preset",
+          "revision_id": "revision_1"
+        },
+        "authoring_revision_id": "revision_1",
+        "binding_revision_id": "revision_1",
+        "state": "current"
+      }
+    ],
+    "acceptance": {
+      "status": "pending",
+      "revision_id": null,
+      "reviewer": null
+    }
+  }
+}
