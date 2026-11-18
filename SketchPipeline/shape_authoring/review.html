@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>PlayableSketch — Sketch to level</title>
+    <title>PlayableSketch | Floor plan workspace</title>
     <link rel="stylesheet" href="/workspace.css" />
     <script src="/workspace.js" defer></script>
   </head>
   <body>
     <header class="app-header">
-      <a class="brand" href="/" aria-label="PlayableSketch home"
+      <a id="home" class="brand" href="/" aria-label="PlayableSketch home"
         ><svg viewBox="0 0 32 32" aria-hidden="true">
           <path
             d="M4 5h24v22H4zM4 16h12V5m0 11v11m0-7h12"
@@ -19,52 +19,59 @@
           />
           <path d="M12 16h8" stroke="#f7f7f2" stroke-width="4" /></svg
         >Playable<span>Sketch</span></a
-      ><span class="header-caption">A little sketch. A world to explore.</span>
+      ><span class="header-caption">Floor plan workspace</span>
       <div class="header-actions">
-        <span class="local"><i></i> Local & private</span
+        <span class="local">Runs on your computer</span
         ><button id="theme-toggle" class="outline" aria-label="Toggle night mode">Night mode</button
         ><button id="new-sketch" class="subtle" hidden>New sketch</button>
       </div>
     </header>
     <section id="landing" class="landing">
+      <div class="landing-start">
+      <div class="landing-intro">
+        <p>Bring a drawing. Adjust the rooms and doors.<br class="desktop-break" /> Export a level for Unreal Engine.</p>
+      </div>
       <div class="upload-column">
         <div id="drop-zone" class="drop-zone">
-          <span class="upload-icon">↥</span>
-          <h1>Upload your sketch</h1>
-          <p>Drop an image here, or choose a file</p>
-          <button id="upload" class="primary">Upload sketch <span>↗</span></button
-          ><small>PNG or JPG · up to 20 MB · processed on your computer</small>
+          <h2>Start with a sketch</h2>
+          <p>Drop a photo or scan here.</p>
+          <button id="upload" class="primary">Choose image</button>
+          <small>PNG or JPG, up to 20 MB</small>
         </div>
-        <button id="sample" class="sample-button">
-          Just looking around? <strong>Use a sample →</strong>
-        </button>
         <p id="landing-error" class="error" role="alert"></p>
         <details class="drawing-guide">
-          <summary>What makes a good sketch?</summary>
-          <p>
-            Draw rooms from above, including rooms with bends. Leave a gap with a small tick at each
-            end for a door. Numbers are optional. One floor at a time.
-          </p>
+          <summary>How to draw rooms and doors</summary>
+          <p>Draw one floor from above. Leave a gap with a small tick at each end for each door. Rooms can have bends. Written dimensions are optional; you can set sizes in the editor.</p>
         </details>
       </div>
-      <section class="how-it-works" aria-labelledby="how-it-works-title">
-        <h2 id="how-it-works-title">How it works</h2>
-        <ol class="steps">
-          <li><span class="step-number">01</span><h3>Upload a drawing</h3><p>Choose a photo or scan of your floor plan. Mark doors with a gap and a small tick at each end.</p></li>
-          <li><span class="step-number">02</span><h3>Review your plan</h3><p>Check the suggested rooms and doors. Adjust the shapes, connections and sizes.</p></li>
-          <li><span class="step-number">03</span><h3>Build your level</h3><p>Confirm your plan, then export it for Unreal. Choose a start and goal for a playable level.</p></li>
-        </ol>
-        <p class="quiet">No measurements needed. Suggested sizes can be changed later.</p>
-      </section>
+      </div>
+      <figure class="sample-plan">
+        <div class="sample-heading"><span>Inside the sample</span><span>3 rooms / 2 doors</span></div>
+        <svg viewBox="0 0 600 420" role="img" aria-labelledby="sample-title sample-description">
+          <title id="sample-title">The editable sample floor plan</title>
+          <desc id="sample-description">Two large rooms connected through a narrow middle room, with a door in each dividing wall.</desc>
+          <g class="plan-fill"><path d="M60 70h200v280H60z"/><path d="M260 70h100v280H260z"/><path d="M360 70h200v280H360z"/></g>
+          <g class="plan-walls" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square">
+            <path d="M60 70h500v280H60zM260 70v100m0 50v130M360 70v170m0 50v60"/>
+            <path d="M251 170h18m-18 50h18m82 20h18m-18 50h18"/>
+          </g>
+          <g class="plan-doors" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"><path d="M260 175v40M360 245v40"/></g>
+          <g class="plan-labels" text-anchor="middle"><text x="160" y="215">Room 1</text><text x="310" y="155">Room 2</text><text x="460" y="215">Room 3</text></g>
+        </svg>
+        <figcaption>
+          <p>Try editing before you upload.<br /><span>This sample comes with rooms and doors ready to adjust.</span></p>
+          <button id="sample" class="sample-button">Open sample plan</button>
+        </figcaption>
+      </figure>
       <div id="recent" class="recent" hidden>
-        <div class="section-label">PICK UP WHERE YOU LEFT OFF</div>
+        <div class="section-label">Saved drawings</div>
         <div id="recent-list"></div>
       </div>
     </section>
     <input id="file" type="file" accept="image/png,image/jpeg" hidden />
     <section id="analysis" class="analysis" hidden>
       <div class="spinner"></div>
-      <div class="eyebrow">MAKING ROOM FOR YOUR IDEAS</div>
+      <div class="eyebrow">ROOM AND DOOR DETECTION</div>
       <h1>Analyzing your sketch…</h1>
       <p>Your image stays on this computer. You can edit every suggestion.</p>
       <button id="cancel" class="outline">Cancel analysis</button
@@ -80,7 +87,7 @@
         <span id="save-state" class="save-state" role="status">Saved</span>
         <div class="project-actions">
           <button id="settings-button" class="outline">Settings</button
-          ><button id="review-button" class="primary">Review plan <span>↗</span></button>
+          ><button id="review-button" class="primary">Review plan</button>
         </div>
       </div>
       <main class="work-grid">
@@ -90,8 +97,7 @@
           <div class="section-label doors-label">CONNECTIONS <span id="opening-count"></span></div>
           <div id="connections" class="entity-list"></div>
           <div class="side-note">
-            <span>✦</span>
-            <p>Make it yours.<br />Every suggestion is editable.</p>
+            <p>Rooms and doors are editable.<br />Select an item to change it.</p>
           </div>
           <details class="saved-drawings">
             <summary>Saved drawings</summary>
@@ -118,7 +124,7 @@
               aria-label="Editable plan. Use the entity list to select an item. Arrow keys move a selected room; Resize and arrow keys resize it."
             ></canvas>
             <div id="empty-state" class="empty-state" hidden>
-              <b>Your canvas, your rules.</b>
+              <b>No rooms in this plan.</b>
               <p>Add a room to begin.</p>
             </div>
             <div class="canvas-tools" role="toolbar" aria-label="Plan tools">
@@ -132,7 +138,7 @@
             </div>
           </div>
           <div class="canvas-caption">
-            <span id="canvas-hint">Select an item to make it yours.</span
+            <span id="canvas-hint">Select a room or door to edit it.</span
             ><span id="view-note">Original sketch with editable suggestions</span>
           </div>
           <div id="attention" class="attention" hidden>
@@ -162,8 +168,7 @@
           <div class="section-label">DETAILS <span id="size-state"></span></div>
           <div id="inspector-content">
             <div class="inspector-empty">
-              <span>↖</span>
-              <h2>A place for the details.</h2>
+              <h2>Nothing selected</h2>
               <p>Select a room or connection to adjust it.</p>
             </div>
           </div>
@@ -179,14 +184,14 @@
         </aside>
       </main>
       <footer>
-        <span id="status" role="status">Ready to shape your world.</span
-        ><span>Sketch freely. Build thoughtfully.</span>
+        <span id="status" role="status">Ready.</span
+        ><span>PlayableSketch · Floor plan editor</span>
       </footer>
     </section>
     <dialog id="settings">
       <form method="dialog" class="dialog-head">
         <div>
-          <div class="eyebrow">YOUR LEVEL</div>
+          <div class="eyebrow">PLAN</div>
           <h2>Plan settings</h2>
         </div>
         <button aria-label="Close settings">×</button>
@@ -200,7 +205,7 @@
     <dialog id="review">
       <form method="dialog" class="dialog-head">
         <div>
-          <div class="eyebrow">ONE LAST LOOK</div>
+          <div class="eyebrow">EXPORT</div>
           <h2>Review your plan</h2>
         </div>
         <button aria-label="Close review">×</button>

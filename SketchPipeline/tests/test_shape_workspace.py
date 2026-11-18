@@ -168,7 +168,7 @@ class WorkspaceTests(unittest.TestCase):
             with urlopen(base + "/api/bootstrap") as r:
                 token = json.load(r)["token"]
             for path, part in [
-                ("/", "Upload your sketch"),
+                ("/", 'id="upload"'),
                 ("/workspace.js", "sizeRequest"),
                 ("/workspace.css", ".work-grid"),
             ]:

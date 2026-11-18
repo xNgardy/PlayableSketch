@@ -541,13 +541,13 @@ function drawPane(view, rect) {
     ctx.fillStyle = selected
       ? dark
         ? "#83aff088"
-        : "#dce6bfb8"
+        : "#f4bc9ab8"
       : b.type === "room"
         ? plan
           ? dark
             ? "#344156"
-            : "#eee7d6"
-          : "#eee7d63a"
+            : "#e9eeeb"
+          : "#e9eeeb3a"
         : plan
           ? dark
             ? "#30465c"
@@ -559,11 +559,11 @@ function drawPane(view, rect) {
     ctx.closePath();
     ctx.fill();
     ctx.strokeStyle = selected
-      ? (dark ? "#9bbcf1" : "#607839")
+      ? (dark ? "#9bbcf1" : "#b44725")
       : plan
         ? dark
           ? "#a7bddb"
-          : "#44564a"
+          : "#39463e"
         : b.type === "room"
           ? "#9e9059"
           : "#76958c";
@@ -572,20 +572,20 @@ function drawPane(view, rect) {
     const labelAt = transform(labelPoint(b));
     if (c[0] - a[0] > 38 && c[1] - a[1] > 24) {
       ctx.textAlign = "center";
-      ctx.fillStyle = plan && dark ? "#e0eafa" : "#344233";
-      ctx.font = "10px system-ui";
+      ctx.fillStyle = plan && dark ? "#e0eafa" : "#28372e";
+      ctx.font = "13px system-ui";
       ctx.fillText(
         S.meta.state.names[b.id] || b.displayName || name(b.id),
         labelAt[0],
         labelAt[1] - 2,
       );
       if (plan && c[0] - a[0] > 65 && c[1] - a[1] > 38) {
-        ctx.font = "9px system-ui";
-        ctx.fillStyle = dark ? "#bccadd" : "#7c846f";
+        ctx.font = "12px system-ui";
+        ctx.fillStyle = dark ? "#bccadd" : "#5c6a61";
         ctx.fillText(
           ((X - x) / 100).toFixed(2) + " × " + ((Y - y) / 100).toFixed(2) + " m",
           labelAt[0],
-          labelAt[1] + 12,
+          labelAt[1] + 16,
         );
       }
     }
@@ -599,7 +599,7 @@ function drawPane(view, rect) {
         const a = transform(p);
         ctx.fillStyle = "#fff";
         ctx.fillRect(a[0] - 4, a[1] - 4, 8, 8);
-        ctx.strokeStyle = "#607839";
+        ctx.strokeStyle = "#b44725";
         ctx.strokeRect(a[0] - 4, a[1] - 4, 8, 8);
       }
     }
@@ -643,7 +643,7 @@ function drawPane(view, rect) {
   }
   ctx.restore();
   ctx.fillStyle = dark ? "#b8c8de" : "#7f8974";
-  ctx.font = "9px system-ui";
+  ctx.font = "12px system-ui";
   ctx.textAlign = "left";
   if (S.view === "compare")
     ctx.fillText(
@@ -666,7 +666,7 @@ function renderInspector() {
   $("size-state").textContent = S.sizePending ? "Updating…" : "";
   if (!entity) {
     root.innerHTML =
-      '<div class="inspector-empty"><span>↖</span><h2>A place for the details.</h2><p>Select a room or connection to adjust it.</p></div>';
+      '<div class="inspector-empty"><h2>Nothing selected</h2><p>Select a room or connection to adjust it.</p></div>';
     return;
   }
   const h = document.createElement("h2");
@@ -1360,7 +1360,7 @@ canvas.onpointermove = (event) => {
     requestAnimationFrame(() => {
       const pane = S.panes.find((p) => p.view === "sketch");
       if (!pane) return;
-      ctx.strokeStyle = "#607839";
+      ctx.strokeStyle = "#b44725";
       ctx.setLineDash([5, 3]);
       ctx.strokeRect(
         g.start[0] * pane.scale + pane.tx,
@@ -1855,7 +1855,8 @@ $("sample").onclick = async () => {
     $("sample").disabled = false;
   }
 };
-$("new-sketch").onclick = () => {
+function returnHome(event) {
+  event.preventDefault();
   if ((S.dirty || S.sizePending || S.metaPending) && !confirm("Leave unsaved changes?")) return;
   S.ticket++;
   S.busy = false;
@@ -1869,7 +1870,9 @@ $("new-sketch").onclick = () => {
   history.replaceState(null, "", "/");
   screen("landing");
   refreshJobs();
-};
+}
+$("new-sketch").onclick = returnHome;
+$("home").onclick = returnHome;
 $("jobs").onchange = () => {
   if ($("jobs").value) openJob($("jobs").value);
 };

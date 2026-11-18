@@ -75,6 +75,10 @@ node_modules/
 # Local datasets; distribute separately through Hugging Face
 /Data/
 
+# Local documentation
+/docs/
+/Docs/
+
 # Model and tensor artifacts
 *.npy
 *.npz
