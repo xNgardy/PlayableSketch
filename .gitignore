@@ -61,7 +61,7 @@ env/
 *.egg-info/
 node_modules/
 
-/Data/
+# Project-generated reports, exports, temporary files and test runs
 /output/
 /outputs/
 /tmp/
@@ -71,6 +71,11 @@ node_modules/
 *.bak
 *.swp
 *~
+
+# Local datasets; distribute separately through Hugging Face
+/Data/
+
+# Model and tensor artifacts
 *.npy
 *.npz
 *.pt

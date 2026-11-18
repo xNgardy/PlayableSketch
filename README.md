@@ -125,8 +125,10 @@ The packaged application is not included in the Git repository. To build the Unr
 | `Content/`, `Config/` | Unreal assets and project settings |
 | `Docs/` | Technical notes and evaluation reports |
 | `Experiments/` | Protocols and results from earlier Unreal experiments |
-| `Data/` | Local training data; excluded from Git |
+| `Data/` | Local datasets; excluded from Git, with separate Hugging Face distribution planned |
 | `Saved/` | Local environments, jobs, training and application outputs; excluded from Git |
+| `output/`, `outputs/` | Generated reports, exports and code packages; excluded from Git |
+| `tmp/`, `work/` | Temporary files, build logs, caches and test-run artifacts; excluded from Git |
 
 Uploaded drawings, edits and exports are stored under `Saved/ShapeFirst/workspace/jobs/`. Deleting this folder also deletes the saved plans.
 
